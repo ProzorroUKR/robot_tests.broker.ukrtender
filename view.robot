@@ -34,9 +34,6 @@ Resource  ukrtender.robot
 Отримати інформацію про value.amount
   ${value}=    Run Keyword If    '${mode}' == 'belowThreshold'    Get Value    xpath=//*[@name="tender[amount]"]
   ...          ELSE IF           '${mode}' != 'belowThreshold'    Get Value    xpath=//*[@name="tender[amount]"]
-#cat  ${return_value}=   Convert To Number   ${value}    2
-#cat  ${value1}=   Convert To Number   ${value}    
-#cat  ${return_value}=   convert_string_to_float  ${value1}
   ${return_value}=   convert_string_to_float  ${value}
   [return]  ${return_value}
 
@@ -46,12 +43,10 @@ Resource  ukrtender.robot
   ${value_open}=  Get Value           xpath=//*[@name='tender[rate_amount]']
   ${return_value}=    Set Variable If    '${type_tender}' == 'Допорогові закупівлі'    ${value_open}    ${value_below}
   ${return_value}=  Convert To Number    ${return_value}    2
-#cat  ${return_value}=  convert_string_to_float    ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про procurementMethodType
   ${return_value}=    Get Value    xpath=//*[@name='tender[procedure_type]']
-#cat  ${return_value}=    convert_type_tender    ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про value.currency
@@ -81,8 +76,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про complaintPeriod.endDate
   ${return_value}=    Get Value    xpath=//*[@name='tender[complaint_enddate]']
-#cat  ${return_value}=    ukrtender_service.parse_complaintPeriod_endDate    ${return_value}
-#cat  ${return_value}=    ukrtender_service.parse_complaintPeriod_date    ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про tenderPeriod.startDate
@@ -96,7 +89,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про tenderPeriod.endDate
   ${return_value}=  Get Value           xpath=//*[@name='tender[reception_to]']
-#cat  Log Many  CAT888 ${return_value}
   ${return_value}=  parse_date  ${return_value}
   [return]  ${return_value}
 
@@ -106,9 +98,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про tenderID
   ${return_value}=  Get Text           xpath=//*[@id="tender-information-external-id"]
-#cat исправлено  ${return_value}=  Get Text           xpath=//*[@id="tender-edit-external-id"]
-#cat  ${return_value}=  Get Substring  ${return_value}  19
-#cat  ${return_value}=  Convert To String  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про status
@@ -132,7 +121,6 @@ Resource  ukrtender.robot
   Run Keyword If    '${TEST_NAME}' == 'Можливість дочекатись дати початку періоду кваліфікації' and '${SUITE NAME}' == 'Tests Files.Complaints'   Wait Until Keyword Succeeds    800 s    20 s    subkeywords.Wait For QualificationsStandPeriod
   ${return_value}=    Get Value    xpath=//*[@name='tender[status]']
   Log Many  CAT888 ${return_value}
-#cat  ${return_value}=    ukrtender_service.convert_status    ${return_value}
   [return]  ${return_value}
 
 
@@ -192,7 +180,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[0].classification.scheme
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][dk_021_2015][scheme]"]
-#cat  ${return_value}=  Get Substring  ${return_value}  36  39
   ${return_value}=  Convert To String  ${return_value}
   [return]  ${return_value}
 
@@ -207,7 +194,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[0].additionalClassifications[0].scheme
   ${return_value}=  Get Text           xpath=//*[@name="tender[items][0][dk_moz_mnn][scheme]"]
-#cat  ${return_value}=  Get Substring  ${return_value}  36  40
   ${return_value}=  Convert To String  ${return_value}
   [return]  ${return_value}
 
@@ -222,19 +208,12 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[0].unit.name
   ${return_value}=  Get Value                     xpath=//*[@name="tender[items][0][unit_name]"]
-#cat  ${return_value}=  Get Text                     xpath=//*[@name="tender[items][0][unit]"]
-#cat  ${return_value}=  Get Substring                 ${return_value}  4
-#cat  ${return_value}=  Convert To String             ${return_value.replace(' ', '')}
   ${return_value}=  adapt_data.adapt_unit_name    ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].unit.code
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][unit]"]
-#cat  Log Many  CAT ${return_value}
-#cat  ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][unit]"]/@data-code
-#cat  ${return_value}=  Get Substring  ${return_value}  0  3
   ${return_value}=  Convert To String  ${return_value}
-#cat  Log Many  CAT1 ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].quantity
@@ -299,7 +278,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[1].classification.scheme
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][1][dk_021_2015][scheme]"]
-#cat  ${return_value}=  Get Substring  ${return_value}  36  39
   ${return_value}=  Convert To String  ${return_value}
   [return]  ${return_value}
 
@@ -309,7 +287,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[1].classification.description
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][1][dk_021_2015][title]"]
-#cat  Log Many  CAT888 ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[1].additionalClassifications[0].scheme
@@ -399,7 +376,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[2].classification.scheme
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][2][dk_021_2015][scheme]"]
-#cat  ${return_value}=  Get Substring  ${return_value}  36  39
   ${return_value}=  Convert To String  ${return_value}
   [return]  ${return_value}
 
@@ -409,7 +385,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[2].classification.description
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][2][dk_021_2015][title]"]
-#cat  Log Many  CAT888 ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[2].additionalClassifications[0].scheme
@@ -445,7 +420,6 @@ Resource  ukrtender.robot
   
 Отримати інформацію про tender_document.title
   ${return_value}=  Get Value           xpath=//*[@name='tender[documents]']
-#cat#cat  ${return_value}=  Get Text           xpath=(//*[@name='tender[documents]']//a[1])[2]
   [return]  ${return_value}
 
 Отримати інформацію про questions[0].title
@@ -491,7 +465,6 @@ Resource  ukrtender.robot
   Дочекатися І Клікнути    xpath=//a[@href="#tabs_desc_407_2"]
   Sleep  5
   ${return_value}=  Get Text  xpath=//h3[@id="tender-question-list-title-1"]
-#cat  ${return_value}=  Get Text  xpath=//*[@id="question"]/tr[1]/td[1]/span[1]
   [return]  ${return_value}
 
 Отримати інформацію про questions[1].description
@@ -524,7 +497,6 @@ Resource  ukrtender.robot
   Sleep  5
   Дочекатися І Клікнути    xpath=//h3[@id='tender-question-list-title-2']
   ${return_value}=  Get Text  xpath=//h3[@id="tender-question-list-title-2"]
-#cat  ${return_value}=  Get Text  xpath=//*[@id="question"]/tr[1]/td[1]/span[1]
   [return]  ${return_value}
 
 Отримати інформацію про questions[2].description
@@ -556,11 +528,8 @@ Resource  ukrtender.robot
   Run Keyword If  '${TEST_NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Reload Page
   Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
 #  Подивитись на учасників
-#cat  ${contract_button_is_not_visible}  Run Keyword And Return Status  Page Should Not Contain Element    xpath=//a[contains(.,'Контракт')]
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Оскарження результатів кваліфікації')]
-#  Run Keyword If  ${contract_button_is_visible}  ${return_value}  Get Value  id=edit-tender-award-contract-status-1
   ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-1"]
-#cat  ${return_value}  ukrtender_service.parse_complaintPeriod_endDate  ${complaintPeriod}
   ${return_value}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-1"]
   Run Keyword If  '${MODE}' in 'openua' and '${SUITE NAME}' == 'Tests Files.Complaints'  Дочекатися І Клікнути   xpath=//button[@id='edit-tender-award-supplier-cancel']
   Run Keyword If  '${MODE}' in "reporting negotiation"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
@@ -572,13 +541,9 @@ Resource  ukrtender.robot
   Run Keyword If  '${TEST_NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Reload Page
   Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
 #  Подивитись на учасників
-#cat  ${contract_button_is_not_visible}  Run Keyword And Return Status  Page Should Not Contain Element    xpath=//a[contains(.,'Контракт')]
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Оскарження результатів кваліфікації')]
-#  Run Keyword If  ${contract_button_is_visible}  ${return_value}  Get Value  id=edit-tender-award-contract-status-1
   ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
   ${return_value}    Set Variable  ${complaintPeriod}
-#cat #cat   ${return_value}  ukrtender_service.parse_complaintPeriod_endDate  ${complaintPeriod}
-#cat  ${return_value}  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
@@ -588,13 +553,9 @@ Resource  ukrtender.robot
   Run Keyword If  '${TEST_NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Reload Page
   Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
 #  Подивитись на учасників
-#cat  ${contract_button_is_not_visible}  Run Keyword And Return Status  Page Should Not Contain Element    xpath=//a[contains(.,'Контракт')]
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Оскарження результатів кваліфікації')]
-#  Run Keyword If  ${contract_button_is_visible}  ${return_value}  Get Value  id=edit-tender-award-contract-status-1
   ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-3"]
   ${return_value}    Set Variable  ${complaintPeriod}
-#cat #cat   ${return_value}  ukrtender_service.parse_complaintPeriod_endDate  ${complaintPeriod}
-#cat  ${return_value}  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
@@ -667,120 +628,84 @@ Resource  ukrtender.robot
   Подивитись на учасників
   Wait Until Element Is Visible  xpath=//*[@id='edit-tender-award-supplier-document-title-0']   90
   ${title}  Get Text  id=edit-tender-award-supplier-document-title-0
-#cat  Press Key  xpath=//button[@id='edit-tender-award-supplier-cancel']  \\selenium.webdriver.common.keys.ESCAPE  
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${title}
 
 Отримати інформацію про awards[0].status
 #cat  Подивитись на учасників
   ${status}  Get Text  id=edit-tender-award-supplier-status
   ${return_value}  Set Variable If  '${status}'=='переможець'  active  other status
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].contactPoint.telephone
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-telephone
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].contactPoint.name
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-name
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].contactPoint.email
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-email
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].address.countryName
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-country
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].address.locality
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-locality
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].address.postalCode
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-postalcode
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].address.region
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-region
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].address.streetAddress
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-street
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].identifier.scheme
 #cat  Подивитись на учасників
   ${country}  Get Text  id=edit-tender-award-supplier-contact-country
   ${return_value}  Set Variable If  '${country}'=='Україна'  UA-EDR  other
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].identifier.legalName
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-identifier-legalName
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].identifier.id
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-identifier-id
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].suppliers[0].name
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-identifier-legalName
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].value.valueAddedTaxIncluded
 #cat  Подивитись на учасників
   ${vat}  Get Text  id=edit-tender-award-value-valueAddedTaxIncluded
   ${return_value}  Set Variable If  '${vat}'=='1'  ${TRUE}  ${FALSE}
-#cat  ${return_value}  Set Variable If  '${vat}'=='true'  ${TRUE}  ${FALSE}
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].value.currency
 #cat  Подивитись на учасників
-#cat  ${currency}  Get Text  id=edit-tender-award-value-currency
-#cat  ${return_value}  Set Variable If  '${currency}'=='грн.'  UAH  other
   ${return_value}  Get Text  id=edit-tender-award-value-currency
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].value.amount
@@ -805,120 +730,84 @@ Resource  ukrtender.robot
   Подивитись на учасників
   Wait Until Element Is Visible  xpath=//*[@id='edit-tender-award-supplier-document-title-0']   90
   ${title}  Get Text  id=edit-tender-award-supplier-document-title-0
-#cat  Press Key  xpath=//button[@id='edit-tender-award-supplier-cancel']  \\selenium.webdriver.common.keys.ESCAPE  
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${title}
 
 Отримати інформацію про awards[1].status
 #cat  Подивитись на учасників
   ${status}  Get Text  id=edit-tender-award-supplier-status
   ${return_value}  Set Variable If  '${status}'=='переможець'  active  other status
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].contactPoint.telephone
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-telephone
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].contactPoint.name
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-name
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].contactPoint.email
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-email
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].address.countryName
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-country
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].address.locality
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-locality
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].address.postalCode
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-postalcode
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].address.region
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-region
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].address.streetAddress
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-contact-street
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].identifier.scheme
 #cat  Подивитись на учасників
   ${country}  Get Text  id=edit-tender-award-supplier-contact-country
   ${return_value}  Set Variable If  '${country}'=='Україна'  UA-EDR  other
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].identifier.legalName
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-identifier-legalName
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].identifier.id
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-identifier-id
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].suppliers[0].name
 #cat  Подивитись на учасників
   ${return_value}  Get Text  id=edit-tender-award-supplier-identifier-legalName
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].value.valueAddedTaxIncluded
 #cat  Подивитись на учасників
   ${vat}  Get Text  id=edit-tender-award-value-valueAddedTaxIncluded
   ${return_value}  Set Variable If  '${vat}'=='1'  ${TRUE}  ${FALSE}
-#cat  ${return_value}  Set Variable If  '${vat}'=='true'  ${TRUE}  ${FALSE}
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].value.currency
 #cat  Подивитись на учасників
-#cat  ${currency}  Get Text  id=edit-tender-award-value-currency
-#cat  ${return_value}  Set Variable If  '${currency}'=='грн.'  UAH  other
   ${return_value}  Get Text  id=edit-tender-award-value-currency
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про awards[1].value.amount
@@ -964,7 +853,6 @@ Resource  ukrtender.robot
 Отримати інформацію про contracts[0].value.amount
   Set Global Variable  ${contract_visible}   contract_visible
   Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat  ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
   Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
   :FOR    ${INDEX}    IN RANGE    1    15
   \  ${contract_value_is_visible}  Run Keyword And Return Status  Element Should Be Visible  xpath=//span[@id='edit-tender-dialog-contract-amount']
@@ -982,45 +870,26 @@ Resource  ukrtender.robot
   Log Many  CAT777 value= ${value} 
   ${return_value}  convert_string_to_float   ${value}
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
   
 Отримати інформацію про contracts[1].value.amount
   Set Global Variable  ${contract_visible}   contract_visible
   Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat  ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
   Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="1"]
   ${value_old}=  Get Element Attribute   xpath=//span[@id="edit-tender-dialog-contract-amount"]@data-value
   ${value}=  Очікування зміни відредагованої вартості угоди   ${value_old}   1
-#cat#cat  :FOR    ${INDEX}    IN RANGE    1    15
-#cat#cat  \  ${contract_value_is_visible}  Run Keyword And Return Status  Element Should Be Visible  xpath=//span[@id='edit-tender-dialog-contract-amount']
-#cat#cat  \  Exit For Loop If  ${contract_value_is_visible}
-#cat#cat  \  Sleep  15
-#cat#cat  \  Reload Page
-#cat#cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat#cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="1"]
-#cat#cat  :FOR    ${INDEX}    IN RANGE    1    7
-#cat#cat  \  Sleep  5
-#cat#cat  \  Reload Page
-#cat#cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat#cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="1"]
-#cat#cat  ${value}=  Get Element Attribute   xpath=//span[@id="edit-tender-dialog-contract-amount"]@data-value
   Log Many  CAT777 value= ${value} 
   ${return_value}  convert_string_to_float   ${value}
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про contracts[0].status
   Подивитись на учасників
-#cat  ${contract_button_is_not_visible}  Run Keyword And Return Status  Page Should Not Contain Element    xpath=//a[contains(.,'Контракт')]
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
-#  Run Keyword If  ${contract_button_is_visible}  ${return_value}  Get Value  id=edit-tender-award-contract-status-1
   Sleep  10
   ${return_value}  Get Value  id=edit-tender-award-contract-status-1
-#cat viewer - не работает  Run Keyword If  '${MODE}' in "belowThreshold"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   Run Keyword If  '${MODE}' in "reporting negotiation"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
@@ -1030,14 +899,10 @@ Resource  ukrtender.robot
   \  Sleep  5
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat  ${contract_button_is_not_visible}  Run Keyword And Return Status  Page Should Not Contain Element    xpath=//a[contains(.,'Контракт')]
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
-#  Run Keyword If  ${contract_button_is_visible}  ${return_value}  Get Value  id=edit-tender-award-contract-status-1
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  3
   ...  ELSE  Set Variable  2
   ${return_value}  Get Value  id=edit-tender-award-contract-status-${contract_num}
-#cat viewer - не работает  Run Keyword If  '${MODE}' in "belowThreshold"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   Run Keyword If  '${MODE}' in "reporting negotiation"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
@@ -1052,7 +917,6 @@ Resource  ukrtender.robot
   \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
   ${return_value}  Get Value  name=contract[signed_date]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat было?  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   [return]  ${return_value}
 
@@ -1069,10 +933,7 @@ Resource  ukrtender.robot
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
   ${return_value}  Get Value  name=contract[signed_date]
-#cat  Run Keyword If  '${MODE}' in "reporting negotiation"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
-#cat  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
-#cat#cat  ${return_value}=  parse_contract_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про contracts[0].period.startDate
@@ -1117,7 +978,6 @@ Resource  ukrtender.robot
   ${value}=  Get Value  xpath=//input[@name='contract[start_date]']
   Should Not Be Empty   ${value}  
   Wait Until Keyword Succeeds  20x  1s  Should Not Be Empty  xpath=//input[@name='contract[start_date]']
-#cat  Wait Until Keyword Succeeds  20x  1s  Value Should Not Be Empty  xpath=//input[@name='contract[start_date]']
   ${return_value}=  Get Value  xpath=//input[@name='contract[start_date]']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   [return]  ${return_value}
@@ -1127,15 +987,10 @@ Resource  ukrtender.robot
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
   ${return_value}  Get Value  name=contract[end_date]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про contracts[1].period.endDate
-#cat  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-#cat  ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
-#cat  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="1"]
   ${return_value}=  Get Value  xpath=//input[@name='contract[end_date]']
-#cat  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про lots[0].title
@@ -1203,11 +1058,6 @@ Resource  ukrtender.robot
   ${re_tenderer}=     Run Keyword If    '${TEST_NAME}' == 'Відображення опису нецінового показника на тендер'    Get Value  xpath=//*[@name='tender[nonprices][1][feature_description]']
   ${re_lot}=     Run Keyword If    '${TEST_NAME}' == 'Відображення опису нецінового показника на лот'    Get Value  xpath=//*[@name='tender[lots][0][features][1][feature_description]']
   ${re_item}=    Run Keyword If    '${TEST_NAME}' == 'Відображення опису нецінового показника на предмет'    Get Value  xpath=//*[@name='tender[items][0][features][1][feature_description]']
-#cat#cat  ${present}=  Run Keyword And Return Status    Element Should Be Visible   xpath=//*[@name='tender[items][0][features][1][feature_description]']
-#cat#cat  ${return_value}=  Run Keyword If    ${present}    Get Value  xpath=//*[@name='tender[items][0][features][1][feature_description]']
-#cat#cat  ...    ELSE    Get Value  xpath=//*[@name='tender[lots][0][features][1][feature_description]']
-#cat  ${return_value}  Get Value  xpath=//*[@name='tender[items][0][features][1][feature_description]']
-#cat   ${return_value}  Set Variable If  '${TEST NAME}'=='Відображення опису нецінового показника на предмет'  ${re_item}  ${re_lot}
   ${return_value}=  Run Keyword If    '${TEST NAME}' == 'Відображення опису нецінового показника на лот'    Set Variable	   ${re_lot}	
   ...  ELSE IF  '${TEST NAME}' == 'Відображення опису нецінового показника на тендер'    Set Variable	   ${re_tenderer}
   ...  ELSE IF  '${TEST NAME}' == 'Відображення опису нецінового показника на предмет'    Set Variable   ${re_item}	
@@ -1229,46 +1079,22 @@ Resource  ukrtender.robot
   ${re_item}=    Run Keyword If    '${TEST_NAME}' == 'Відображення відношення нецінового показника на предмет'    Get Value  xpath=//*[@name='tender[items][0][features][1][featureOf]']
   ${re_lot}=     Run Keyword If    '${TEST_NAME}' == 'Відображення відношення нецінового показника на лот'    Get Value  xpath=//*[@name='tender[lots][0][features][1][featureOf]']
   ${re_tenderer}=     Run Keyword If    '${TEST_NAME}' == 'Відображення відношення нецінового показника на тендер'    Get Value  xpath=//*[@name='tender[nonprices][1][featureOf]']
-#cat  ${return_value}  Set Variable If  '${TEST NAME}'=='Відображення відношення нецінового показника на предмет'  ${re_item}  ${re_lot}
-#cat#cat  ${present}=  Run Keyword And Return Status    Element Should Be Visible   xpath=//*[@name='tender[items][0][features][1][featureOf]']
-#cat#cat  ${return_value}=  Run Keyword If    ${present}    Get Value  xpath=//*[@name='tender[items][0][features][1][featureOf]']
-#cat#cat  ...    ELSE    Get Value  xpath=//*[@name='tender[lots][0][features][1][featureOf]']
-#cat  ${return_value}  Get Value  xpath=//*[@name='tender[items][0][features][1][featureOf]']
   ${return_value}=  Run Keyword If    '${TEST NAME}' == 'Відображення відношення нецінового показника на тендер'    Set Variable	   ${re_tenderer}
   ...  ELSE IF  '${TEST NAME}' == 'Відображення відношення нецінового показника на лот'    Set Variable	   ${re_lot}
   ...  ELSE IF  '${TEST NAME}' == 'Відображення відношення нецінового показника на предмет'    Set Variable   ${re_item}	
-#cat  ${return_value}=  Set Variable If    ${TEST NAME} == 'Відображення опису нецінового показника на лот'	   ${re_lot}	
-#cat  ...  ${TEST NAME} == 'Відображення опису нецінового показника на тендер'	   ${re_tenderer}
-#cat  ...  ${TEST NAME} == 'Відображення опису нецінового показника на предмет'   ${re_item}	
   Log Many  CAT888 features[3].featureOf ${return_value}
   [return]  ${return_value}    
 
 Отримати інформацію про qualifications[0].status
-#cat  Click Element  jquery=span:contains('Кваліфікація учасників')
-#cat  Wait Until Page Contains Element  id=mForm:qualificationData
-#cat  ${status}  Get Value  xpath=//*[@name='qualification[status]']
-#cat  ${return_value}  Get Value  xpath=//*[@id='tender-edit-prequalification-qualification-bid-status-0']
   ${return_value}  Get Value  xpath=//input[@id='tender-edit-prequalification-qualification-status-0']
-#cat  ${return_value}  Set Variable If  '${status}'=='Очікується кваліфікація'  pending  other
   [return]  ${return_value}
 
 Отримати інформацію про qualifications[1].status
-#cat  Click Element  jquery=span:contains('Кваліфікація учасників')
-#cat  Wait Until Page Contains Element  id=mForm:qualificationData
-#cat  ${status}  Get Value  xpath=//*[@name='qualification[status]']
-#cat  ${return_value}  Get Value  xpath=//*[@id='tender-edit-prequalification-qualification-bid-status-1']
-#cat  ${return_value}  Set Variable If  '${status}'=='Очікується кваліфікація'  pending  other
   ${return_value}  Get Value  xpath=//input[@id='tender-edit-prequalification-qualification-status-1']
   [return]  ${return_value}
 
 Отримати інформацію про qualificationPeriod.endDate
-#cat  :FOR    ${INDEX}    IN RANGE    1    11
-#cat  \  ${date_is_visible}  Run Keyword And Return Status  Element Should Be Visible  name=tender[qualification_period_end]
-#cat  \  Exit For Loop If  ${date_is_visible}
-#cat  \  Sleep  15
-#cat  \  Reload Page
   ${return_value}  Get Value  xpath=//*[@name='tender[qualification_period_end]']
-#cat  ${return_value}  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}  
 
 Отримати інформацію про auctionPeriod.startDate
@@ -1324,9 +1150,7 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про funders[0].name
-#cat  ${value}  Get Text  xpath=//*[@id='edit-tender-funder-list']/option[2]
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-#cat  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  World Bank  none
   ${return_value}=  Set Variable If  '${value}' == 'World Bank'  World Bank  none
   [return]  ${return_value}
 
@@ -1355,24 +1179,17 @@ Resource  ukrtender.robot
   [return]  ${return_value}
   
 Отримати інформацію про funders[0].identifier.id
-#cat  ${value}  Get Text  xpath=//*[@id='edit-tender-funder-list']/option[2]
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-#cat  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  44000  none
   ${return_value}=  Set Variable If  '${value}' == 'World Bank'  44000  none
   [return]  ${return_value}
 
 Отримати інформацію про funders[0].identifier.legalName
-#cat  ${value}  Get Text  xpath=//*[@id='edit-tender-funder-list']/option[2]
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][legal_name]']
-#cat  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  International Bank for Reconstruction and Development (IBRD)  none
-#cat  ${return_value}=  Set Variable If  '${value}' == 'Міжнародний банк реконструкції та розвитку (МБРР)'  International Bank for Reconstruction and Development (IBRD)  none
   ${return_value}=  Get Value  xpath=//input[@name='tender[funders][0][legal_name]']
   [return]  ${return_value}
   
 Отримати інформацію про funders[0].identifier.scheme
-#cat  ${value}  Get Text  xpath=//*[@id='edit-tender-funder-list']/option[2]
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-#cat  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  XM-DAC  none
   ${return_value}=  Set Variable If  '${value}' == 'World Bank'  XM-DAC  none
   [return]  ${return_value}
 
@@ -1390,15 +1207,6 @@ Resource  ukrtender.robot
 
 Отримати інформацію про fundingKind
   ${return_value}  Get Value  xpath=//input[@name='tender[funding_value]']
-#cat  :FOR   ${index}   IN RANGE    1    60
-#cat  \   ${return_value}=        Get Text        xpath=//input[@name='tender[funding_value]']
-#cat  \   Exit For Loop If      '${return_value}' != '${None}'
-#cat  \   Sleep  10
-#cat  \   Reload Page
-#cat  \   Sleep  2
-#cat  ...  Sleep  5
-#cat  ...  AND  Reload Page   
-#cat  ...  AND  ${return_value}  Get Value  xpath=//input[@name='tender[funding_value]']
   [return]  ${return_value}
 
 Отримати інформацію про yearlyPaymentsPercentageRange

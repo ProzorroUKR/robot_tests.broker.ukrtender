@@ -11,9 +11,7 @@ TZ = pytz.timezone('Europe/Kiev')
 
 def adapt_data(data):
     
-#cat    data['data']['procuringEntity']['name'] = 'testuser_tender_owner'
     data['data']['items'][0]['unit']['name'] = get_unit_name(data['data']['items'][0]['unit']['name'])
-#cat     data['data']['items'][0]['deliveryAddress']['region'] = get_unit_region(data['data']['items'][0]['deliveryAddress']['region'])
     data['data']['items'][0]['deliveryAddress']['region'] = get_delivery_region(data['data']['items'][0]['deliveryAddress']['region'])
     data['data']['items'][0]['deliveryAddress']['locality'] = convert_locality(data['data']['items'][0]['deliveryAddress']['locality'])
     data['data']['items'][0]['deliveryDate']['startDate'] = adapt_delivery_date(data['data']['items'][0]['deliveryDate']['startDate'])
@@ -31,11 +29,6 @@ def adapt_data_view(data):
 
 def download_file(url, file_name, output_dir):
     urllib.urlretrieve(url, ('{}/{}'.format(output_dir, file_name)))
-
-
-#def download_file(url, file_name):
-#    output_dir = BuiltIn().get_variable_value("${OUTPUT_DIR}")
-#    urllib.urlretrieve(url, os.path.join(output_dir, file_name))
 
 
 def get_type_field(field):
@@ -61,16 +54,6 @@ def get_type_field(field):
                        
 
 def get_delivery_region(region):
-#cat     if region == u"місто Київ":
-#cat         delivery_region = u"м.Київ"
-#cat     elif region == u"м.Київ":
-#cat         delivery_region = u"місто Київ"
-#cat     elif region == u"Дніпропетровська область":
-#cat         delivery_region = u"Днiпропетровська область"
-#cat     elif region == u"Рівненська область":
-#cat         delivery_region = u"Рiвненська область"
-#cat     else: delivery_region = region
-#cat     return delivery_region
      return region
 
 def convert_float_to_string(number):
@@ -86,23 +69,10 @@ def adapt_delivery_date(date):
 def parse_date(date_str):
     date = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
-#cat#cat    date = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
-#cat#cat    return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
-    
-#cat#cat	date_str = datetime.strptime(date_str, "%d.%m.%Y %H:%M")
-#cat#cat    date = datetime(date_str.year, date_str.month, date_str.day, date_str.hour, date_str.minute, date_str.second,
-#cat#cat                    date_str.microsecond)
-#cat#cat    date = TZ.localize(date).isoformat()
-#cat#cat	13.01.2018 17:26:25
-#cat#cat    return date
-
 
 def parse_item_date(date_str):
     date = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
-#cat#cat    date_str = datetime.strptime(date_str, "%d.%m.%Y")
-#cat#cat    date = datetime(date_str.year, date_str.month, date_str.day)
-#cat#cat    date = TZ.localize(date).isoformat()
     return date
 
 
@@ -127,14 +97,6 @@ def parse_complaintPeriod_date(date_string):
     return date
 
 def parse_complaintPeriod_endDate(date_str):
-#cat    if '-' in date_str:
-#cat        date_str = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-#cat    else:
-#cat        date_str = datetime.strptime(date_str, "%d.%m.%Y %H:%M")
-#cat    date = datetime(date_str.year, date_str.month, date_str.day, date_str.hour, date_str.minute, date_str.second,
-#cat                    date_str.microsecond)
-#cat    date = TZ.localize(date).isoformat()
-#catdatetime.strptime( "2009-11-12 23:18:53", "%Y-%m-%d %H:%M:%S" )
     date = TZ.localize(date_str).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
     return date
 
@@ -147,51 +109,12 @@ def capitalize_first_letter(string):
 
 def get_unit_name(name):
     value = {
-#cat        u'штуки': u'\tшт.\t',
-#cat        u'упаковка': u'\tупак.\t',
-#cat         u'набір': u'\tнаб.\t',
-#cat         u'кілограми': u'\tкг.\t'
     }
     value = value.get(name)
     if value:
         return value
     else:
         return name
-#cat def get_unit_region(region):
-#cat     value = {
-#cat         u'Вінницька область': u'Вінницька',
-#cat         u'Волинська область': u'Волинська',
-#cat         u'Дніпропетровська область': u'Дніпропетровська',
-#cat         u'Донецька область': u'Донецька',
-#cat         u'Житомирська область': u'Житомирська',
-#cat         u'Закарпатська область': u'Закарпатська',
-#cat         u'Запорізька область': u'Запорізька',
-#cat         u'Івано-Франківська область': u'Івано-Франківська',
-#cat         u'місто Київ': u'Київ',
-#cat         u'Київська область': u'Київська',
-#cat         u'Кіровоградська область': u'Кіровоградська',
-#cat         u'Луганська область': u'Луганська',
-#cat         u'Львівська область': u'Львівська',
-#cat         u'Миколаївська область': u'Миколаївська',
-#cat         u'Одеська область': u'Одеська',
-#cat         u'Полтавська область': u'Полтавська',
-#cat         u'Рівненська область': u'Рівненська',
-#cat         u'Севастополь область': u'Севастополь',
-#cat         u'Сумська область': u'\Сумська',
-#cat         u'Тернопільська область': u'\Тернопільська',
-#cat         u'Харківська область': u'Харківська',
-#cat         u'Херсонська область': u'Херсонська',
-#cat         u'Хмельницька область': u'Хмельницька',
-#cat         u'Черкаська область': u'Черкаська',
-#cat         u'Чернігівська область': u'Чернігівська',
-#cat         u'Чернівецька область': u'Чернівецька',
-#cat         u'АР Крим область': u'АР Крим'
-#cat     }
-#cat     value = value.get(region)
-#cat     if value:
-#cat         return value
-#cat     else:
-#cat         return region
 
 def convert_locality(name):
     string = name.upper()
@@ -342,12 +265,6 @@ def _is_visible(self, locator):
 def get_upload_file_path():
     return os.path.join(os.getcwd(), 'src/robot_tests.broker.ukrtender/testFileForUpload.txt')	
 	
-#catdef copyfile_qual(source, dest):
-#cat	shutil.copy(source,dest)
-#cat    return None
-#import shutil
-#shutil.copy('/homed-0a7c4b9edolorumossr7P.doc/cat/robot_tests/test_output/','src/robot_tests.broker.ukrtender/')
-
 def convert_cause_type(key):
     cause_type = {
         '1': 'artContestIP',
@@ -371,22 +288,14 @@ def convert_cause_type2(key):
     return cause_type[key]	
 
 def conc_class(des, id):
-#,tcn
     data = des + ' - ' + id
     return data	
 	
 def conc_class3(des, id, n):
-#,tcn
     data = des + ' (' + id + ' ' + n + ')'
     return data		
 
 def split_str(string):
-#,tcn
-#    start = string.find('tender[items][') + 1
-#    string = string.find('][lot]', start)
-#    end = s.find('][lot]', start)
-#    string = string.capitalize()
-#    return string
     parts = string.split('][', 2)
     return parts[1]
 
@@ -400,29 +309,12 @@ def split_complaint(string):
 	
 def parse_contract_date(date_string):
     return date_string.replace('+','.000000+')
-#cat    date_str = datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S")
-#cat    date_str -= timedelta(minutes=5)
-#cat    date = datetime(date_str.year, date_str.month, date_str.day, date_str.hour, date_str.minute, date_str.second, date_str.microsecond)
-#cat    date = TZ.localize(date).isoformat()
-#	date = date_str.replace('+','.000000+')
-#cat    if '-' in date_str:
-#cat        date_str = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-#cat    else:
-#cat        date_str = datetime.strptime(date_str, "%d.%m.%Y %H:%M")
-#cat    date = datetime(date_str.year, date_str.month, date_str.day, date_str.hour, date_str.minute, date_str.second,
-#cat                    date_str.microsecond)
-#cat    date = TZ.localize(date).isoformat()
-#catdatetime.strptime( "2018-07-18T03:08:36+03:00", "%Y-%m-%d %H:%M:%S" )
-#cat    return date
 
 def convert_time(date):
     date = datetime.strptime(date, "%d.%m.%Y %H:%M:%S")
-#cat    return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
-#cat  %f - миллисек %z +3000
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S')
 
 def data_zone(des):
-#,tcn
     data = des + '+03:00'
     return data		
 	

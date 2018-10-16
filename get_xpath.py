@@ -3,7 +3,6 @@
 def get_procurement_type_xpath(mode):
     procurement_type_xpath = {
         "belowThreshold": "//*[@value='belowThreshold']",
-#        "belowThreshold": "//*[@name='tender[procedure_type]_1']",
         "openua": "//*[@name='tender[procedure_type]_2']",
         "openeu": "//*[@name='tender[procedure_type]_3']",
         "negotiation": "//*[@name='tender[procedure_type]_6']"
@@ -54,32 +53,19 @@ def get_lot_xpath(field_name, lot_id, mode):
     return lot_xpath[field_name]
 
 
-#def get_feature_xpath(field_name, feature_id):
-#	xpath = {
-#	    'title': "//*[contains(@value, '" +feature_id+ "')]",
-#	    'description': "//*[contains(@value, '" +feature_id+ "')]/ancestor::tbody/tr[2]/td[2]/textarea",
-#	    'featureOf': "//*[contains(@value, '" +feature_id+ "')]/ancestor::tbody/tr[3]/td[2]//td[2]/div[1]/label"
-#	}
-#    return xpath[field_name]
-
-
 def get_document_xpath(field, doc_id):
 	doc_xpath = {
         'title': "//a[contains(., '"+ doc_id +"')]",
         'documentOf': "//a[contains(text(), '"+ doc_id +"')]@data-document-of",
-#cat        'title': "//*[@name='tender[documents]']//a[contains(text(), '"+ doc_id +"')]",
 	}
 	return doc_xpath[field]
 
 
 def get_question_xpath(field_name, question_id):
     question_xpath = {
-#cat        'title': "//div[contains(@data-prozorro-question-title, '" + question_id + "')]@data-prozorro-question-title",
         'title': "//h3[contains(., '" + question_id + "')]",
         'description': "//span[contains(@title-question-id, '" + question_id + "') and contains(@data-name,'question[description]')]",
         'answer': "//span[contains(@title-question-id, '" + question_id + "') and contains(@data-name,'question[answer]')]"
-#cat        'description': "(//span[contains(text(), '" + question_id + "')]//[contains(@data-name,'question[description]')]",
-#cat        'answer': "//span[contains(text(), '" + question_id + "')]//[contains(@data-name,'question[answer]')]"
     }
     return question_xpath[field_name]
 
@@ -103,8 +89,5 @@ def get_bid_xpath(field, lot_id):
     if field == 'status':
         xpath = "//*[@name='bid[status]']"
     else:
-#cat        xpath = "//*[contains(text(), '" + id + "')]//[contains(@name,'bid[common_cost]')]"
-#cat        xpath = "//*[@name,'bid[common_cost]']"
-#cat#cat    xpath = "//input[@class='edit-bid-lot-cost']"
         xpath = "//input[@id='edit-bid-lot-cost-0']"
     return xpath
