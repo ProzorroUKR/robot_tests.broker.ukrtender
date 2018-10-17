@@ -2973,6 +2973,11 @@ Position Should Equals
 Отримати інформацію із плану
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}
   Log Many  CAT888 ${field_name}
+  ${value}=  Run Keyword If  '${field_name}' == 'tender.procurementMethodType'  Get Value  xpath=//input[@name='plan[procedure_type]']
+  ...  ELSE IF  '${field_name}' == 'budget.amount'  Get Value  xpath=//input[@name='plan[amount]']
+  ...  ELSE IF  '${field_name}' == 'budget.currency'  Get Value  xpath=//input[@name='plan[currency]']
+  ...  ELSE IF  '${field_name}' == 'budget.description'  Get Value  xpath=//input[@name='plan[title]']
+  ...  ELSE IF  '${field_name}' == 'budget.id'  Get Value  xpath=//input[@name='plan[budget_id]']
   ...  ELSE IF  '${field_name}' == 'budget.project.id'  Get Value  xpath=//input[@name='plan[project_id]']
   ...  ELSE IF  '${field_name}' == 'budget.project.name'  Get Value  xpath=//input[@name='plan[project_name]']
   ...  ELSE IF  '${field_name}' == 'procuringEntity.name'  Get Value  xpath=//input[@name='plan[procuringentity_name]']
