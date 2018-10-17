@@ -130,12 +130,12 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[0].deliveryDate.startDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][reception_from]"]
-  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
+  ${return_value}=  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryDate.endDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][reception_to]"]
-  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
+  ${return_value}=  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryLocation.latitude
@@ -228,12 +228,12 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[1].deliveryDate.startDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][1][reception_from]"]
-  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
+  ${return_value}=  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[1].deliveryDate.endDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][1][reception_to]"]
-  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
+  ${return_value}=  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[1].deliveryLocation.latitude
@@ -326,12 +326,12 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[2].deliveryDate.startDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][2][reception_from]"]
-  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
+  ${return_value}=  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[2].deliveryDate.endDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][2][reception_to]"]
-  ${return_value}=  ukrtender_service.parse_item_date  ${return_value}
+  ${return_value}=  ukrtender_service.parse_date  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[2].deliveryLocation.latitude

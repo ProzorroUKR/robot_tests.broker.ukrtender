@@ -84,9 +84,9 @@ Login
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=  Run Keyword If  '${mode}' not in "open_esco"     Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=  Run Keyword If  '${mode}' not in "open_esco"     ukrtender_service.convert_item_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=  Run Keyword If  '${mode}' not in "open_esco"     ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=  Run Keyword If  '${mode}' not in "open_esco"       Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=  Run Keyword If  '${mode}' not in "open_esco"        ukrtender_service.convert_item_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=  Run Keyword If  '${mode}' not in "open_esco"        ukrtender_service.convert_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=      Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -157,9 +157,9 @@ Login
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_item_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_item_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -283,9 +283,9 @@ Login
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_item_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_item_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -404,9 +404,9 @@ Login
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_item_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_item_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -423,9 +423,9 @@ Login
  
   ${item_description_en2}=    Get From Dictionary    ${items[1]}    description_en
   ${delivery_start_date2}=    Get From Dictionary    ${items[1].deliveryDate}   startDate
-  ${delivery_start_date2}=    ukrtender_service.convert_item_date_to_string    ${delivery_start_date2}
+  ${delivery_start_date2}=    ukrtender_service.convert_date_to_string    ${delivery_start_date2}
   ${delivery_end_date21}=      Get From Dictionary   ${items[1].deliveryDate}   endDate
-  ${delivery_end_date2}=      ukrtender_service.convert_item_date_to_string  ${delivery_end_date21}
+  ${delivery_end_date2}=      ukrtender_service.convert_date_to_string  ${delivery_end_date21}
   ${item_delivery_country2}=     Get From Dictionary    ${items[1].deliveryAddress}    countryName
   ${item_delivery_region2}=      Get From Dictionary    ${items[1].deliveryAddress}    region
   ${item_delivery_region2}=     ukrtender_service.get_delivery_region    ${item_delivery_region2}
@@ -593,9 +593,9 @@ Login
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_item_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_item_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -725,9 +725,9 @@ Login
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_item_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_item_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -1199,8 +1199,8 @@ Set Multi Ids
 
 #Дабавить item 2
 # item 2
-  ${delivery_start_date2}=    ukrtender_service.convert_item_date_to_string    ${item.deliveryDate.startDate}
-  ${delivery_end_date2}=      ukrtender_service.convert_item_date_to_string  ${item.deliveryDate.endDate}
+  ${delivery_start_date2}=    ukrtender_service.convert_date_to_string    ${item.deliveryDate.startDate}
+  ${delivery_end_date2}=      ukrtender_service.convert_date_to_string  ${item.deliveryDate.endDate}
   ${item_delivery_region2}=     ukrtender_service.get_delivery_region    ${item.deliveryAddress.region}
   Дочекатися І Клікнути    xpath=//a[contains(.,'Додати позицію')]
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
@@ -1287,8 +1287,8 @@ Set Multi Ids
 #Дабавить item 3
 # item 3
   ${index_item}=  Set Variable  ${Count1}
-  ${delivery_start_date2}=    ukrtender_service.convert_item_date_to_string    ${item.deliveryDate.startDate}
-  ${delivery_end_date2}=      ukrtender_service.convert_item_date_to_string  ${item.deliveryDate.endDate}
+  ${delivery_start_date2}=    ukrtender_service.convert_date_to_string    ${item.deliveryDate.startDate}
+  ${delivery_end_date2}=      ukrtender_service.convert_date_to_string  ${item.deliveryDate.endDate}
   ${item_delivery_region2}=     ukrtender_service.get_delivery_region    ${item.deliveryAddress.region}
   Дочекатися І Клікнути    xpath=//a[@id='edit-tender-item-add-button-1']
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]

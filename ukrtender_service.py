@@ -70,19 +70,8 @@ def parse_date(date_str):
     date = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
-def parse_item_date(date_str):
-    date = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
-    return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
-    return date
-
 
 def convert_date_to_string(date):
-    date = dateutil.parser.parse(date)
-    date = date.strftime("%d.%m.%Y %H:%M")
-    return date
-
-
-def convert_item_date_to_string(date):
     date = dateutil.parser.parse(date)
     date = date.strftime("%d.%m.%Y %H:%M")
     return date

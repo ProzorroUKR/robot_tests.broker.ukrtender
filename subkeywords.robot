@@ -42,8 +42,8 @@ Library  get_xpath.py
     ...      ELSE IF           '${field}' == 'quantity'     Convert To Number    ${value}
     ...      ELSE IF           '${field}' == 'deliveryLocation.latitude'    Convert To Number    ${value}
     ...      ELSE IF           '${field}' == 'deliveryLocation.longitude'    Convert To Number    ${value}
-    ...      ELSE IF           '${field}' == 'deliveryDate.startDate'    ukrtender_service.parse_item_date    ${value}
-    ...      ELSE IF           '${field}' == 'deliveryDate.endDate'    ukrtender_service.parse_item_date    ${value}
+    ...      ELSE IF           '${field}' == 'deliveryDate.startDate'    ukrtender_service.parse_date    ${value}
+    ...      ELSE IF           '${field}' == 'deliveryDate.endDate'    ukrtender_service.parse_date    ${value}
     ...      ELSE               Set Variable    ${value}
   [return]  ${value}
 
