@@ -425,10 +425,7 @@ Switch new lot
 Отримати дані з bid open
   [Arguments]  ${field}
   ${xpath}=    get_xpath.get_bid_xpath    ${field}    @{ID}
-  Log Many  CAT1 ${xpath}
-  Log Many  CAT1-ID ${ID}
-  ${value}=  Run Keyword If    '${field}' != 'status'    Get Value    xpath=${xpath}
-  ...        ELSE IF           '${field}' == 'status'    Get Value    xpath=${xpath}
+  ${value}=    Get Value    xpath=${xpath}
   ${return_value}=  Run Keyword If    '${field}' != 'status'    Convert To Number    ${value}
   ...        ELSE IF           '${field}' == 'status'      Convert To String           ${value}
   [return]  ${return_value}

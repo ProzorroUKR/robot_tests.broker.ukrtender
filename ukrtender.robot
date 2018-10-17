@@ -97,10 +97,6 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=  Run Keyword If  '${mode}' not in "open_esco"          convert_float_to_string  ${budget}
@@ -114,7 +110,7 @@ Login
   #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
   #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 
-  Selenium2Library.Switch Browser     ${ARGUMENTS[0]}
+  Switch Browser     ${ARGUMENTS[0]}
   Дочекатися І Клікнути  xpath=//nav[@id="site-navigation"]/descendant::a[@class="menu-tenders"]
   Дочекатися І Клікнути  xpath=//a[contains(.,'Нова закупівля')]
   Дочекатися І Клікнути   xpath=//*[@name='tender[procedure_type]']
@@ -178,22 +174,14 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=        convert_float_to_string  ${budget}
  
-  #${dkpp_desc}=     Get From Dictionary   ${items[0].additionalClassifications[0]}   description
-  #${dkpp_id}=       Get From Dictionary   ${items[0].additionalClassifications[0]}  id
   ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 ##### Дубляж  
   Select From List By Value  xpath=//*[@name='tender[procedure_type]']  belowThreshold
   ${acc}=      Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"   Get From Dictionary   ${prepared_tender_data}    procurementMethodDetails
@@ -314,22 +302,14 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=        convert_float_to_string  ${budget}
  
-  #${dkpp_desc}=     Get From Dictionary   ${items[0].additionalClassifications[0]}   description
-  #${dkpp_id}=       Get From Dictionary   ${items[0].additionalClassifications[0]}  id
   ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
   ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 ##### Дубляж  
   ${title_en}=  Run Keyword If  '${mode}'=='openeu'  Get From Dictionary    ${prepared_tender_data}               title_en
@@ -443,10 +423,6 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=        convert_float_to_string  ${budget}
@@ -636,22 +612,14 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=        convert_float_to_string  ${budget}
  
-  #${dkpp_desc}=     Get From Dictionary   ${items[0].additionalClassifications[0]}   description
-  #${dkpp_id}=       Get From Dictionary   ${items[0].additionalClassifications[0]}  id
   ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
   ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 ##### Дубляж  
   ${title_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'  Get From Dictionary    ${prepared_tender_data}               title_en
@@ -776,22 +744,14 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=        convert_float_to_string  ${budget}
  
-  #${dkpp_desc}=     Get From Dictionary   ${items[0].additionalClassifications[0]}   description
-  #${dkpp_id}=       Get From Dictionary   ${items[0].additionalClassifications[0]}  id
   ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
   ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 ##### Дубляж  
   ${title_en}=  Run Keyword If  '${mode}' in 'openeu openua_defense'  Get From Dictionary    ${prepared_tender_data}               title_en
@@ -905,22 +865,14 @@ Login
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
   ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${cpv_id}=           Get From Dictionary   ${items[0].classification}         id
-  ${cpv_id_1}=           Get Substring    ${cpv_id}   0   3
-  ${dkpp_id}=        Convert To String     000
-  ${dkpp_id}=        Convert To String     03100000-2
   ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
   ${dkpp_id1}=        Convert To String     Не визначено
  
-  #${dkpp_desc}=     Get From Dictionary   ${items[0].additionalClassifications[0]}   description
-  #${dkpp_id}=       Get From Dictionary   ${items[0].additionalClassifications[0]}  id
   ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
 #cat когда правильно заработает ${unit_name}=        Convert To String     послуга
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
   ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 ##### Дубляж  
   ${title_en}=  Run Keyword If  '${procurement_type}'=='esco'  Get From Dictionary    ${prepared_tender_data}               title_en
@@ -1114,20 +1066,20 @@ Login
 
 Оновити сторінку з тендером
   [Arguments]  ${username}  ${tender_uaid}
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   ukrtender.Пошук тендера по ідентифікатору    ${username}   ${tender_uaid}
 
 
 Отримати інформацію із тендера
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
-  Selenium2Library.Switch browser   ${username}
+  Switch Browser   ${username}
   Run Keyword If  '${fieldname}' == 'stage2TenderID'  ukrtender.Пошук тендера по ідентифікатору    ${username}   ${tender_uaid}
   Run Keyword And Return  view.Отримати інформацію про ${fieldname}
 
 
 Внести зміни в тендер
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   Run Keyword If    '${TEST_NAME}' == 'Неможливість редагувати однопредметний тендер менше ніж за 2 дні до завершення періоду подання пропозицій'    Fail  "Неможливість редагувати однопредметний тендер менше ніж за 2 дні до завершення періоду подання пропозицій"
   Run Keyword If  '${fieldname}' == 'tenderPeriod.endDate'  subkeywords.Змінити дату  ${fieldvalue}
@@ -1411,6 +1363,10 @@ Set Multi Ids
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-lot-remove-button-${lot_index}']
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
 
+Отримати документ до лоту
+  [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${doc_id}
+  ${file_name}=    ukrtender.Отримати документ    ${username}  ${tender_uaid}  ${doc_id}
+  [return]  ${file_name}
 
 
 #                                    FEATURES OPERATIONS                                    #
@@ -1655,7 +1611,7 @@ Get Last Feature Index
   ${title}=         Get From Dictionary   ${question.data}   title
   ${description}=   Get From Dictionary   ${question.data}   description
 
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   Sleep  5
   ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
   Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
@@ -1672,7 +1628,7 @@ Get Last Feature Index
   ${title}=         Get From Dictionary   ${question.data}   title
   ${description}=   Get From Dictionary   ${question.data}   description
 
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   Sleep  5
   ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
   Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
@@ -1694,7 +1650,7 @@ Get Last Feature Index
   ${title}=         Get From Dictionary   ${question.data}   title
   ${description}=   Get From Dictionary   ${question.data}   description
 
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   Sleep  5
   ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
   Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
@@ -1711,7 +1667,7 @@ Get Last Feature Index
 
 Отримати інформацію із запитання
   [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
-  Selenium2Library.Switch browser   ${username}
+  Switch Browser   ${username}
   ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
 #cat  Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
   Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
@@ -1728,7 +1684,7 @@ Get Last Feature Index
 Відповісти на запитання
   [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
   ${answer}=     Get From Dictionary    ${answer_data.data}    answer
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   ${tender_status}=    Get Value    xpath=//*[@name='tender[status]']
   Run Keyword If  '${tender_status}' != 'active.enquiries' and '${mode}' == 'belowThreshold'  Fail    "Період уточнень закінчився"
@@ -1970,7 +1926,7 @@ Get Last Feature Index
 
 Отримати інформацію із скарги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${field_name}  ${award_index}=${None}
-  Selenium2Library.Switch browser   ${username}
+  Switch Browser   ${username}
 
   Run Keyword If    "${TEST_NAME}" == "Відображення кінцевих статусів двох останніх вимог"    Sleep  290
   ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
@@ -2139,9 +2095,9 @@ Get Last Feature Index
 
 Отримати посилання на аукціон для учасника
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}=${Empty}
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Wait Until Element Is Visible    xpath=//a[contains(text(), 'https://auction-sandbox.prozorro.gov.ua/']    30
+  Wait Until Element Is Visible    xpath=//a[contains(@href,'https://auction-sandbox.prozorro.gov.ua/')]    30
   Sleep  2
   ${auction_url}=    Get Element Attribute    xpath=//a[contains(text(), 'https://auction-sandbox.prozorro.gov.ua/')]@href
   [return]  ${auction_url}
@@ -2149,9 +2105,9 @@ Get Last Feature Index
 
 Отримати посилання на аукціон для глядача
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}=${Empty}
-  Selenium2Library.Switch Browser    ${username}
+  Switch Browser    ${username}
   ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Wait Until Element Is Visible    xpath=//a[contains(text(), 'https://auction-sandbox.prozorro.gov.ua/']    30
+  Wait Until Element Is Visible    xpath=//a[contains(@href,'https://auction-sandbox.prozorro.gov.ua/')]    30
   Sleep  2
   ${auction_url}=    Get Element Attribute    xpath=//a[contains(text(), 'https://auction-sandbox.prozorro.gov.ua/')]@href
   [return]  ${auction_url}
