@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ukr+en@er$777#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 *** Settings ***
 
@@ -101,14 +101,10 @@ Login
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=  Run Keyword If  '${mode}' not in "open_esco"          convert_float_to_string  ${budget}
  
-  #${dkpp_desc}=     Get From Dictionary   ${items[0].additionalClassifications[0]}   description
-  #${dkpp_id}=       Get From Dictionary   ${items[0].additionalClassifications[0]}  id
   ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  #${name_en}=    Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  #${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
 
   Switch Browser     ${ARGUMENTS[0]}
   Дочекатися І Клікнути  xpath=//nav[@id="site-navigation"]/descendant::a[@class="menu-tenders"]
@@ -241,8 +237,6 @@ Login
   Input text                          xpath=//*[@name='tender[items][0][address]']  ${item_delivery_address_street_address}
   Input text                          xpath=//*[@name='tender[items][0][latitude]']  ${latitude}
   Input text                          xpath=//*[@name='tender[items][0][longitude]']  ${longitude}
-  #Execute Javascript    $('#mForm:lotItems0:delLoc1').val('${latitude}')
-  #Execute Javascript    $('#mForm:lotItems0:delLoc2').val('${longitude}')
 
   Log Many  CAT below_funders====${mode} NUMBER_OF_LOTS==${NUMBER_OF_LOTS}
   ${lot_value_amount}=     Run Keyword If  ${NUMBER_OF_LOTS} == 1      convert_float_to_string  ${prepared_tender_data.lots[0].value.amount}
@@ -1151,7 +1145,6 @@ Set Multi Ids
 Отримати інформацію із предмету
   [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${field_name}
   Switch browser    ${username}
-  #Run Keyword If    '${TEST_NAME}' == 'Відображення опису номенклатури у новому лоті'    Sleep  45
   Wait Until Keyword Succeeds  5 x  10 s  Run Keywords
   ...  Reload Page
   ...  AND  Wait Until Page Contains Element  xpath=//input[contains(@value,"${item_id}")]
