@@ -421,6 +421,11 @@ Login
   ${dkpp_id1}=        Convert To String     Не визначено
   ${budget2}=        convert_float_to_string  ${budget}
  
+  ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
+  ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
+  ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
+
+# item 2
   ${item_description_en2}=    Get From Dictionary    ${items[1]}    description_en
   ${delivery_start_date2}=    Get From Dictionary    ${items[1].deliveryDate}   startDate
   ${delivery_start_date2}=    ukrtender_service.convert_date_to_string    ${delivery_start_date2}
@@ -1690,7 +1695,8 @@ Get Last Feature Index
   Click Element                      xpath=//a[contains(@data-prozorro-id,'${question_id}')]
   Input Text    xpath=//textarea[@name="answer[description]"]    ${answer}
   Sleep  2
-  Дочекатися І Клікнути                      xpath=//button[text()="Дати відповідь"]
+  Дочекатися І Клікнути    xpath=//button[@id='tender-question-list-add-answer-button']
+#  Дочекатися І Клікнути                      xpath=//button[text()="Дати відповідь"]
 
 #                                CLAIMS                                 #
 
