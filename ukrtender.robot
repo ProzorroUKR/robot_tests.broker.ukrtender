@@ -1503,6 +1503,18 @@ Set Multi Ids
   Input Text   xpath=//*[@name='tender[nonprices][0][enum][${index}][value]']   ${value}
 
 
+Додати нецінові критерії2
+  [Arguments]  ${tender_data}
+  ${features}=   Get From Dictionary   ${tender_data.data}   features
+  ${features_length}=   Get Length   ${features}
+  ${i}  Set Variable  ${0}
+  :FOR   ${index}   IN RANGE   ${features_length}
+  \   Log Many  CAT888 ${features[${index}].featureOf}
+  \   Run Keyword If  '${features[${index}].featureOf}' == 'tenderer'   ukrtender.Додати неціновий показник на тендер при створенні  ${EMPTY}  ${EMPTY}  ${features}
+  \   Run Keyword If  '${features[${index}].featureOf}' == 'item'   ukrtender.Додати неціновий показник на предмет при створенні  ${EMPTY}  ${EMPTY}  ${features}  ${EMPTY}
+  \   Run Keyword If  '${features[${index}].featureOf}' == 'lot'   ukrtender.Додати неціновий показник на лот при створенні  ${EMPTY}  ${EMPTY}  ${features}  ${EMPTY}
+
+
 Додати нецінові критерії
   [Arguments]  ${tender_data}
   ${features}=   Get From Dictionary   ${tender_data.data}   features
