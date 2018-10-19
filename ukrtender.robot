@@ -986,7 +986,7 @@ Login
   Sleep  4
   Log Many  CAT888 ${items[${index}].additionalClassifications[0].description}
   ${present_inn}=  Run Keyword And Return Status    Element Should Be Visible   xpath=//div[contains(text(),'${items[${index}].additionalClassifications[0].description}')]
-  Run Keyword If    ${present_inn}    Дочекатися І Клікнути                       xpath=//div[contains(text(),'${items[${index}].additionalClassifications[0].description}')]
+  Run Keyword If    ${present_inn}    Дочекатися І Клікнути                       xpath=//div[contains(text(),'${items[${index}].additionalClassifications[0].description}') and contains(@class,'ui-menu-item-wrapper')]
 #cat#cat  ATX
   Log Many  CAT888 ${items[${index}].additionalClassifications[1].description}
   ${con_class}=  Run Keyword If  '${items[${index}].additionalClassifications[1].scheme}' == 'ATC'   conc_class  ${items[${index}].additionalClassifications[1].description}  ${items[${index}].additionalClassifications[1].id}
@@ -997,7 +997,7 @@ Login
   ...  AND  Input Text  xpath=//input[@name='add_classificator[dk_moz_atx][title]']   ${items[${index}].additionalClassifications[1].description}
   Sleep  4
   ${present_atx}=  Run Keyword And Return Status    Element Should Be Visible   xpath=//div[contains(text(),'${con_class}')]
-  Run Keyword If    ${present_atx}    Дочекатися І Клікнути                       xpath=//div[contains(text(),'${con_class}')]
+  Run Keyword If    ${present_atx}    Дочекатися І Клікнути                       xpath=//div[contains(text(),'${con_class}') and contains(@class,'ui-menu-item-wrapper')]
 
   Sleep  2
   Дочекатися І Клікнути  xpath=//button[contains(.,'Додати класифікатори')]
