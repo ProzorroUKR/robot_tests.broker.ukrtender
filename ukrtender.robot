@@ -1769,6 +1769,8 @@ Get Last Feature Index
   Sleep  9
   Дочекатися І Клікнути    xpath=//a[contains(.,'Опубліковати') and contains(@data-complaint-id,'${complaintID}')]
   Sleep  5
+  ${complaint_select}=   Convert To String     complaint
+  Run Keyword If    '${TEST_NAME}' == 'Можливість створити скаргу про виправлення визначення переможця'    Select From List By Value  xpath=//select[@id='complaint-edit-dialog-claimtype']  ${complaint_select}
   Дочекатися І Клікнути    xpath=//button[@id='tender-complaint-edit-button']
 
   [return]  ${complaintID}
