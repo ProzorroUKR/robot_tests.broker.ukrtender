@@ -886,6 +886,9 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про contracts[0].status
+  :FOR    ${INDEX}    IN RANGE    1    15
+  \  Sleep  5
+  \  Reload Page
   Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
   Sleep  10

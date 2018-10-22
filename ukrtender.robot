@@ -2255,7 +2255,7 @@ Get Last Feature Index
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-award-qualification-form-document-type']  ${qual_doc}
   Дочекатися І Клікнути  xpath=//input[@name='award_qualification[qualified]']
-  Дочекатися І Клікнути  name=award_qualification[eligible]
+#cat  Дочекатися І Клікнути  name=award_qualification[eligible]
   Дочекатися І Клікнути  xpath=//button[contains(.,'Підтвердити рішення')]
   Накласти ЄЦП
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
@@ -2341,10 +2341,11 @@ Get Last Feature Index
   Run Keyword If  '${MODE}' in 'belowThreshold'  Sleep  30
   Sleep  5
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
-  ...  ELSE IF  "${SUITE_NAME}" == "Tests Files.Complaints" or '${MODE}'=='belowThreshold'  Set Variable  0
+  ...  ELSE IF  "${SUITE_NAME}" == "Tests Files.Complaints" or '${MODE}' in 'belowThreshold reporting negotiation'  Set Variable  0
   ...  ELSE  Set Variable  1
   Run Keyword If  '${MODE}' in 'belowThreshold'     Wait Until Keyword Succeeds    120 s    20 s    subkeywords.Wait For ContractButton   ${contract_num}
   Дочекатися І Клікнути  xpath=//a[contains(.,'Підписати контракт') and contains(@data-index,"${contract_num}")]
+  Sleep  3
   ${dc_input}  Evaluate  datetime.datetime.now().strftime("%d.%m.%Y %H:%M")  datetime
   Input Text  xpath=//input[@name='activate_contract[number]']  777
   Run Keyword If  '${MODE}' not in 'openua openeu open_competitive_dialogue openua_defense'  Input Text  xpath=//input[@name='activate_contract[purchase_date]']  ${dc_input}
