@@ -2157,6 +2157,7 @@ Get Last Feature Index
   Run Keyword If  '${mode}' in 'belowThreshold openua open_esco open_competitive_dialogue'   Run Keywords
   ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+  ...  AND  Sleep  10
   ...  AND  Run Keyword If    ${award_num}==2  Sleep  10
   ...  AND  Run Keyword If    ${award_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-go-button-1']
   ...  AND  Run Keyword If    ${award_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-go-button-2']
