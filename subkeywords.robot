@@ -283,6 +283,14 @@ Wait For AwardButton2
   Sleep  5
   Wait Until Element Is Visible    xpath=//a[@id='edit-tender-award-item-go-button-2']
   
+Wait For AwardButton1
+  Reload Page
+  Execute Javascript    tenderInformation.refreshTender()
+  Sleep  3
+  Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Sleep  5
+  Wait Until Element Is Visible    xpath=//a[@id='edit-tender-award-item-go-button-1']
+  
   
 Wait For Status
   Reload Page
