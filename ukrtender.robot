@@ -2028,6 +2028,7 @@ Get Last Feature Index
   Run Keyword If    '${mode}' == 'openeu'    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If    '${mode}' == 'openua_defense'    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If    '${mode}' == 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником на другому етапі"    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
+  Run Keyword If    '${mode}' == 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником на другому етапі"    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If    '${mode}' == 'open_esco'    subkeywords.Подати цінову пропозицію для esco    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути    xpath=//input[@value='Подати пропозицію']
   Run Keyword If  "Неможливість подати цінову пропозицію без прив" in "${TEST_NAME}"  Fail  "Неможливість подати цінову пропозицію без прив’язки до лоту користувачем"
@@ -2103,6 +2104,7 @@ Get Last Feature Index
   Run Keyword If    ${present}    Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Log Many  CAT111 ${present}
   Run Keyword If    "${TEST_NAME}" == "Відображення зміни статусу першої пропозиції після редагування інформації про тендер"    Wait Until Keyword Succeeds  420 s  15 s  subkeywords.Wait For Status
+  Run Keyword If    "${TEST_NAME}" == "Відображення зміни статусу другої пропозиції після редагування інформації про тендер"    Wait Until Keyword Succeeds  420 s  15 s  subkeywords.Wait For Status
   ${return_value}=    Run Keyword If    '${mode}' == 'belowThreshold'    subkeywords.Отримати дані з bid below
   ...    ELSE IF                      '${mode}' != 'belowThreshold'    subkeywords.Отримати дані з bid open    ${field}
   [return]  ${return_value}
