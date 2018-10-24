@@ -103,14 +103,17 @@ Resource  ukrtender.robot
 Отримати інформацію про status
   Log Many  CAT777 ${TEST_NAME}
   Run Keyword If    '${TEST_NAME}' == 'Неможливість завантажити документ першим учасником після закінчення прийому пропозицій'  Wait Until Keyword Succeeds  480 s  20 s  subkeywords.Wait For EndEnquire
+  Run Keyword If    '${TEST_NAME}' == 'Неможливість завантажити документ другим учасником після закінчення прийому пропозицій'  Wait Until Keyword Succeeds  480 s  20 s  subkeywords.Wait For EndEnquire
   Run Keyword If    '${TEST_NAME}' == 'Неможливість задати запитання на тендер після закінчення періоду прийому пропозицій'    Wait Until Keyword Succeeds    480 s    20 s    subkeywords.Wait For EndEnquire
   Run Keyword If    '${TEST_NAME}' == 'Неможливість задати запитання на тендер після закінчення періоду уточнень'    Sleep  30
   Run Keyword If    '${TEST_NAME}' == 'Неможливість задати запитання на тендер після закінчення періоду уточнень'    Reload Page
   Run Keyword If    '${TEST_NAME}' == 'Можливість вичитати посилання на аукціон для глядача'    Reload Page
   #Run Keyword If    '${TEST_NAME}' == 'Неможливість задати запитання на тендер після закінчення періоду уточнень'  Wait Until Keyword Succeeds  480 s  20 s  subkeywords.Wait For EndEnquire
   Run Keyword If    '${TEST_NAME}' == 'Можливість подати пропозицію першим учасником'      Wait Until Keyword Succeeds    480 s    20 s    subkeywords.Wait For TenderPeriod
+  Run Keyword If    '${TEST_NAME}' == 'Можливість подати пропозицію другим учасником'      Wait Until Keyword Succeeds    480 s    20 s    subkeywords.Wait For TenderPeriod
   Run Keyword If    '${TEST_NAME}' == 'Відображення дати закінчення періоду блокування перед початком аукціону'    Wait Until Keyword Succeeds    80 s    20 s    subkeywords.Wait For AuctionPeriod
   Run Keyword If    '${TEST_NAME}' == 'Можливість підтвердити першу пропозицію кваліфікації'    Wait Until Keyword Succeeds    80 s    20 s    subkeywords.Wait For PreQualificationPeriod
+  Run Keyword If    '${TEST_NAME}' == 'Можливість підтвердити другу пропозицію кваліфікації'    Wait Until Keyword Succeeds    80 s    20 s    subkeywords.Wait For PreQualificationPeriod
   Run Keyword If    '${TEST_NAME}' == 'Можливість дочекатися завершення роботи мосту'    Wait Until Keyword Succeeds    80 s    20 s    subkeywords.Wait For CompletePeriod
 #cat  Run Keyword If    '${TEST_NAME}' == 'Можливість дочекатися початку періоду очікування'    Wait Until Keyword Succeeds    600 s    20 s    subkeywords.Wait For PreQualificationsStandPeriod
   Run Keyword If    '${TEST_NAME}' == 'Можливість дочекатися початку періоду очікування'    Wait Until Keyword Succeeds    600 s    20 s    subkeywords.Wait For ActiveStage2Pending
@@ -1037,12 +1040,12 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про features[3].title
-  ${re_tenderer}=     Run Keyword If    '${TEST_NAME}' == 'Відображення опису нецінового показника на тендер'    Get Value  xpath=//*[@name='tender[nonprices][1][feature_name]']
-  ${re_lot}=     Run Keyword If    '${TEST_NAME}' == 'Відображення опису нецінового показника на лот'    Get Value  xpath=//*[@name='tender[lots][0][features][1][feature_name]']
-  ${re_item}=    Run Keyword If    '${TEST_NAME}' == 'Відображення опису нецінового показника на предмет'    Get Value  xpath=//*[@name='tender[items][0][features][1][feature_name]']
-  ${return_value}=  Run Keyword If    '${TEST NAME}' == 'Відображення опису нецінового показника на лот'    Set Variable	   ${re_lot}	
-  ...  ELSE IF  '${TEST NAME}' == 'Відображення опису нецінового показника на тендер'    Set Variable	   ${re_tenderer}
-  ...  ELSE IF  '${TEST NAME}' == 'Відображення опису нецінового показника на предмет'    Set Variable   ${re_item}	
+  ${re_tenderer}=     Run Keyword If    '${TEST_NAME}' == 'Відображення заголовку нецінового показника на тендер'    Get Value  xpath=//*[@name='tender[nonprices][1][feature_name]']
+  ${re_lot}=     Run Keyword If    '${TEST_NAME}' == 'Відображення заголовку нецінового показника на лот'    Get Value  xpath=//*[@name='tender[lots][0][features][1][feature_name]']
+  ${re_item}=    Run Keyword If    '${TEST_NAME}' == 'Відображення заголовку нецінового показника на предмет'    Get Value  xpath=//*[@name='tender[items][0][features][1][feature_name]']
+  ${return_value}=  Run Keyword If    '${TEST NAME}' == 'Відображення заголовку нецінового показника на лот'    Set Variable	   ${re_lot}	
+  ...  ELSE IF  '${TEST NAME}' == 'Відображення заголовку нецінового показника на тендер'    Set Variable	   ${re_tenderer}
+  ...  ELSE IF  '${TEST NAME}' == 'Відображення заголовку нецінового показника на предмет'    Set Variable   ${re_item}	
   [return]  ${return_value}
 
 Отримати інформацію про features[0].description
