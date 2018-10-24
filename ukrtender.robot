@@ -1772,7 +1772,7 @@ Get Last Feature Index
   ${complaint_select}=   Convert To String     complaint
   Run Keyword If    '${TEST_NAME}' == 'Можливість створити скаргу про виправлення визначення переможця'    Select From List By Value  xpath=//select[@id='complaint-edit-dialog-claimtype']  ${complaint_select}
   Дочекатися І Клікнути    xpath=//button[@id='tender-complaint-edit-button']
-  Sleep  5
+  Sleep  30
 
   [return]  ${complaintID}
 
@@ -1800,7 +1800,7 @@ Get Last Feature Index
   Дочекатися І Клікнути    xpath=//a[contains(.,'Опубліковати') and contains(@data-complaint-id,'${complaintID}')]
   Sleep  5
   Дочекатися І Клікнути    xpath=//button[@id='tender-complaint-edit-button']
-  Sleep  5
+  Sleep  30
 
   [return]  ${complaintID}
 
@@ -2154,10 +2154,10 @@ Get Last Feature Index
 
 Підтвердити постачальника
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
+  Sleep  30
   Run Keyword If  '${mode}' in 'belowThreshold openua open_esco open_competitive_dialogue'   Run Keywords
   ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-  ...  AND  Sleep  10
   ...  AND  Run Keyword If    ${award_num}==2  Sleep  10
   ...  AND  Run Keyword If    ${award_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-go-button-1']
   ...  AND  Run Keyword If    ${award_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-go-button-2']
