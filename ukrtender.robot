@@ -2159,7 +2159,7 @@ Get Last Feature Index
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   Run Keyword If    ${award_num}==0   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For AwardButton1
   Run Keyword If    ${award_num}==1   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For AwardButton2
-  Run Keyword If  '${mode}' in 'belowThreshold openua open_esco open_competitive_dialogue'   Run Keywords
+  Run Keyword If  '${mode}' in 'belowThreshold openua open_esco open_competitive_dialogue openua_defense'   Run Keywords
   ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   ...  AND  Run Keyword If    ${award_num}==2  Sleep  10
