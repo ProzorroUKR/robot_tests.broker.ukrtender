@@ -1091,6 +1091,11 @@ Resource  ukrtender.robot
   Log Many  CAT888 features[3].featureOf ${return_value}
   [return]  ${return_value}    
 
+Отримати інформацію про enquiryPeriod.clarificationsUntil
+  ${return_value}  Get Value  xpath=//input[@name='tender[enquiry_period][clarifications_until]']
+  ${return_value}=  parse_date  ${return_value}
+  [return]  ${return_value}
+
 Отримати інформацію про qualifications[0].status
   ${return_value}  Get Value  xpath=//input[@id='tender-edit-prequalification-qualification-status-0']
   [return]  ${return_value}
@@ -1234,4 +1239,5 @@ Resource  ukrtender.robot
   ${value}  Get Value  xpath=//input[@name='tender[lots][0][yearly_payment_percentage_range]']
   ${return_value}=   convert_string_to_float  ${value}
   [return]  ${return_value}
+
   
