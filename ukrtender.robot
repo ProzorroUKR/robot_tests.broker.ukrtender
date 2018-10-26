@@ -2029,14 +2029,23 @@ Get Last Feature Index
   Run Keyword If    '${mode}' == 'openua_defense'    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If    '${mode}' == 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником на другому етапі"    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If    '${mode}' == 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником на другому етапі"    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
+  Run Keyword If    '${mode}' == 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником на другому етапі"    subkeywords.Подати цінову пропозицію для open    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If    '${mode}' == 'open_esco'    subkeywords.Подати цінову пропозицію для esco    ${bid}    ${lots_ids}    ${features_ids}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути    xpath=//input[@value='Подати пропозицію']
   Run Keyword If  "Неможливість подати цінову пропозицію без прив" in "${TEST_NAME}"  Fail  "Неможливість подати цінову пропозицію без прив’язки до лоту користувачем"
   Log Many  CAT888 ==${TEST_NAME}
   Log Many  CAT888bid ==${bid}
 #cat для КД_en
-  Run Keyword If  '${SUITE NAME}' != 'Tests Files.Complaints' and '${mode}' == 'open_competitive_dialogue'    Run Keywords
-  ...  Run Keyword If  ${NUMBER_OF_LOTS} == 1 and '${DIALOGUE_TYPE}' == 'EU'   Set Suite Variable    @{ID}    ${lots_ids}
+#cat  Run Keyword If  '${SUITE NAME}' != 'Tests Files.Complaints' and '${mode}' == 'open_competitive_dialogue'    Run Keywords
+#cat  ...  Run Keyword If  ${NUMBER_OF_LOTS} == 1 and '${DIALOGUE_TYPE}' == 'EU'   Set Suite Variable    @{ID}    ${lots_ids}
+  Run Keyword If  ${NUMBER_OF_LOTS}==1 and '${mode}' == 'open_competitive_dialogue' and '${DIALOGUE_TYPE}' == 'EU'  Set Suite Variable    @{ID}    ${lots_ids}
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+
   Run Keyword If  ${NUMBER_OF_LOTS}==1 and "Неможливість подати цінову пропозицію без прив" not in "${TEST_NAME}" and '${mode}' not in 'open_esco'  Дочекатися І Клікнути    xpath=//input[@id='edit-bid-lot-add-0']
   Run Keyword If  '${mode}' in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@value,'Подати пропозицію')]
   
