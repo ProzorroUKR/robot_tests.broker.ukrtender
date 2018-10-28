@@ -290,8 +290,15 @@ Wait For AwardButton1
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   Sleep  5
   Wait Until Element Is Visible    xpath=//a[@id='edit-tender-award-item-go-button-1']
-  
-  
+   
+Wait For ComplaintButton
+  Reload Page
+  Execute JavaScript                  window.scrollTo(0, 0)
+  Sleep  3
+  Click Element    xpath=//span[contains(.,'Вимоги')]
+  Sleep  5
+  Page Should Contain Element    xpath=//a[@id='tender-complaint-edit-button-popup']
+
 Wait For Status
   Reload Page
   Sleep  3

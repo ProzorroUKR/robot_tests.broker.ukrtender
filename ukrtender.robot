@@ -1755,6 +1755,7 @@ Get Last Feature Index
   Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
   Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
   Sleep  2
+  Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For ComplaintButton
   Дочекатися І Клікнути    xpath=//a[@id='tender-complaint-edit-button-popup']
   Sleep  5
   #Wait Until Element Is Visible    xpath=//span[text()='Обрати']    30
@@ -1780,6 +1781,7 @@ Get Last Feature Index
 Створити вимогу про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${lot_id}  ${document}=${None}
   ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For ComplaintButton
   Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
   Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
   Sleep  2
@@ -2038,7 +2040,7 @@ Get Last Feature Index
 #cat для КД_en
 #cat  Run Keyword If  '${SUITE NAME}' != 'Tests Files.Complaints' and '${mode}' == 'open_competitive_dialogue'    Run Keywords
 #cat  ...  Run Keyword If  ${NUMBER_OF_LOTS} == 1 and '${DIALOGUE_TYPE}' == 'EU'   Set Suite Variable    @{ID}    ${lots_ids}
-  Run Keyword If  ${NUMBER_OF_LOTS}==1 and '${mode}' == 'open_competitive_dialogue' and '${DIALOGUE_TYPE}' == 'EU'  Set Suite Variable    @{ID}    ${lots_ids}
+#cat  Run Keyword If  ${NUMBER_OF_LOTS}==1 and '${mode}' == 'open_competitive_dialogue' and '${DIALOGUE_TYPE}' == 'EU'  Set Suite Variable    @{ID}    ${lots_ids}
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
@@ -2363,7 +2365,7 @@ Get Last Feature Index
   ...  ELSE  Set Variable  1
   Run Keyword If  '${MODE}' in 'belowThreshold'     Wait Until Keyword Succeeds    120 s    20 s    subkeywords.Wait For ContractButton   ${contract_num}
   Дочекатися І Клікнути  xpath=//a[contains(.,'Підписати контракт') and contains(@data-index,"${contract_num}")]
-  Sleep  3
+  Sleep  15
   ${dc_input}  Evaluate  datetime.datetime.now().strftime("%d.%m.%Y %H:%M")  datetime
   Input Text  xpath=//input[@name='activate_contract[number]']  777
   Run Keyword If  '${MODE}' not in 'openua openeu open_competitive_dialogue openua_defense'  Input Text  xpath=//input[@name='activate_contract[purchase_date]']  ${dc_input}
