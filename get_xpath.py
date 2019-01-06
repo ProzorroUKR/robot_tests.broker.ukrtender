@@ -84,8 +84,9 @@ def get_claims_xpath(field_name):
 	return claims_xpath[field_name]
 
 
-def get_bid_xpath(field, lot_id):
-    id = lot_id[0]
+def get_bid_xpath(field):
+#def get_bid_xpath(field, lot_id):
+#    id = lot_id[0]
     if field == 'status':
         xpath = "//*[@name='bid[status]']"
     else:

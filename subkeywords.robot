@@ -13,7 +13,8 @@ Library  get_xpath.py
 Змінити дату
   [Arguments]  ${fieldvalue}
   Clear Element Text    xpath=//*[@name="tender[reception_to]"]
-  ${endDate}=           ukrtender_service.convert_date_to_string    ${fieldvalue}
+  ${endDate}=           ukrtender_service.convert_date_to_string_contr    ${fieldvalue}
+#cat  ${endDate}=           ukrtender_service.convert_date_to_string    ${fieldvalue}
   Input Text            xpath=//*[@name="tender[reception_to]"]    ${endDate}
 
 Змінити опис
@@ -291,6 +292,30 @@ Wait For AwardButton1
   Sleep  5
   Wait Until Element Is Visible    xpath=//a[@id='edit-tender-award-item-go-button-1']
    
+Wait For EscapePrequalificationButton1
+  Reload Page
+  Execute Javascript    tenderInformation.refreshTender()
+  Sleep  3
+  Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Sleep  5
+  Wait Until Element Is Visible    xpath=//a[@id='edit-tender-award-item-escape-button-1']
+   
+Wait For EscapePrequalificationButton2
+  Reload Page
+  Execute Javascript    tenderInformation.refreshTender()
+  Sleep  3
+  Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Sleep  5
+  Wait Until Element Is Visible    xpath=//a[@id='edit-tender-award-item-escape-button-2']
+   
+Wait For QualificationButton
+  Reload Page
+  Execute Javascript    tenderInformation.refreshTender()
+  Sleep  3
+  Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Sleep  5
+  Wait Until Element Is Visible    xpath=//a[contains(.,'Кваліфікація')]
+   
 Wait For ComplaintButton
   Reload Page
   Execute JavaScript                  window.scrollTo(0, 0)
@@ -298,6 +323,15 @@ Wait For ComplaintButton
   Click Element    xpath=//span[contains(.,'Вимоги')]
   Sleep  5
   Page Should Contain Element    xpath=//a[@id='tender-complaint-edit-button-popup']
+
+Wait For QuestionID
+  [Arguments]  ${questionID}
+  Reload Page
+  Execute JavaScript                  window.scrollTo(0, 0)
+  Sleep  3
+  Click Element    xpath=//span[text()='Питання та відповіді']
+  Sleep  5
+  Page Should Contain Element    xpath=//a[contains(@data-prozorro-id,'${question_id}')]
 
 Wait For Status
   Reload Page
@@ -439,7 +473,8 @@ Switch new lot
 
 Отримати дані з bid open
   [Arguments]  ${field}
-  ${xpath}=    get_xpath.get_bid_xpath    ${field}    @{ID}
+  ${xpath}=    get_xpath.get_bid_xpath    ${field}
+#  ${xpath}=    get_xpath.get_bid_xpath    ${field}    @{ID}
   ${value}=    Get Value    xpath=${xpath}
   ${return_value}=  Run Keyword If    '${field}' != 'status'    Convert To Number    ${value}
   ...        ELSE IF           '${field}' == 'status'      Convert To String           ${value}

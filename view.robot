@@ -545,7 +545,23 @@ Resource  ukrtender.robot
   Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
 #  Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Оскарження результатів кваліфікації')]
+
+#cat  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
+#cat  Run Keyword If   '${complaintPeriod}' == ''  Wait Until Keyword Succeeds
+#cat  ...  3x
+#cat  ...  AND  10s
+#cat  ...  AND  Reload Page
+#cat  ...  AND  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+#cat  ...  AND  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
   ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${complaintPeriod}' != ''    Exit For Loop
+  \  Sleep  5
+  \  Reload Page
+  \  Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
+  \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
+  
+#cat  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-2"]
   ${return_value}    Set Variable  ${complaintPeriod}
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
@@ -558,6 +574,13 @@ Resource  ukrtender.robot
 #  Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Оскарження результатів кваліфікації')]
   ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-3"]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${complaintPeriod}' != ''    Exit For Loop
+  \  Sleep  5
+  \  Reload Page
+  \  Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
+  \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-3"]
+#cat  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-3"]
   ${return_value}    Set Variable  ${complaintPeriod}
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
@@ -824,7 +847,6 @@ Resource  ukrtender.robot
   ...  AND  Дочекатися І Клікнути              xpath=//input[@value='Пропозиції']
   ...  AND  Дочекатися І Клікнути              xpath=//a[@id='edit-tender-award-item-supplier-2']
   ${value}  Get Text  id=edit-tender-award-value-amount
-  Capture Page Screenshot
   ${return_value}  convert_string_to_float   ${value}
   Log Many  CAT777 ${return_value} До первой отмены
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
@@ -844,7 +866,6 @@ Resource  ukrtender.robot
   ...  AND  Дочекатися І Клікнути              xpath=//input[@value='Пропозиції']
   ...  AND  Дочекатися І Клікнути              xpath=//a[@id='edit-tender-award-item-supplier-3']
   ${value}  Get Text  id=edit-tender-award-value-amount
-  Capture Page Screenshot
   ${return_value}  convert_string_to_float   ${value}
   Log Many  CAT777 ${return_value} До первой отмены
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
@@ -916,11 +937,14 @@ Resource  ukrtender.robot
 Отримати інформацію про contracts[0].dateSigned
   Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт') and @data-index="0"]
-  :FOR    ${INDEX}    IN RANGE    1    15
+  ${contract_signed_date}=  Get Value  name=contract[signed_date]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${contract_signed_date}' != ''    Exit For Loop
   \  Sleep  5
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
+  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
+  \  ${contract_signed_date}=  Get Value  name=contract[signed_date]
   ${return_value}  Get Value  name=contract[signed_date]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
@@ -933,11 +957,14 @@ Resource  ukrtender.robot
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
   ...  ELSE  Set Variable  1
   Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
-  :FOR    ${INDEX}    IN RANGE    1    15
+  ${contract_signed_date}=  Get Value  name=contract[signed_date]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${contract_signed_date}' != ''    Exit For Loop
   \  Sleep  5
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
+  \  ${contract_signed_date}=  Get Value  name=contract[signed_date]
   ${return_value}  Get Value  name=contract[signed_date]
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   [return]  ${return_value}
@@ -945,19 +972,29 @@ Resource  ukrtender.robot
 Отримати інформацію про contracts[0].period.startDate
   Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
-  :FOR    ${INDEX}    IN RANGE    1    15
-  \  ${contract_start_date_not_empty}  Run Keyword And Return Status  Should Not Be Empty  xpath=//input[@name='contract[start_date]']
-  \  Exit For Loop If  ${contract_start_date_not_empty}
+  ${contract_start_date}=  Get Value  name=contract[start_date]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${contract_start_date}' != ''    Exit For Loop
   \  Sleep  5
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
-  :FOR    ${INDEX}    IN RANGE    1    3
-  \  Sleep  5
-  \  Reload Page
-  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
-  ${return_value}  Get Value  name=contract[start_date]
+  \  ${contract_start_date}=  Get Value  name=contract[start_date]
+  ${return_value}    Get Value  name=contract[start_date]
+
+#cat  :FOR    ${INDEX}    IN RANGE    1    15
+#cat  \  ${contract_start_date_not_empty}  Run Keyword And Return Status  Should Not Be Empty  xpath=//input[@name='contract[start_date]']
+#cat  \  Exit For Loop If  ${contract_start_date_not_empty}
+#cat  \  Sleep  5
+#cat  \  Reload Page
+#cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+#cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
+#cat  :FOR    ${INDEX}    IN RANGE    1    3
+#cat  \  Sleep  5
+#cat  \  Reload Page
+#cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+#cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
+#cat  ${return_value}  Get Value  name=contract[start_date]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
@@ -969,21 +1006,28 @@ Resource  ukrtender.robot
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
   ...  ELSE  Set Variable  1
   Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
-  :FOR    ${INDEX}    IN RANGE    1    15
-  \  ${contract_start_date_not_empty}  Run Keyword And Return Status  Should Not Be Empty  xpath=//input[@name='contract[start_date]']
-  \  Exit For Loop If  ${contract_start_date_not_empty}
+  ${contract_start_date}=  Get Value  name=contract[start_date]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${contract_start_date}' != ''    Exit For Loop
   \  Sleep  5
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
-  :FOR    ${INDEX}    IN RANGE    1    3
-  \  Sleep  5
-  \  Reload Page
-  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
-  ${value}=  Get Value  xpath=//input[@name='contract[start_date]']
-  Should Not Be Empty   ${value}  
-  Wait Until Keyword Succeeds  20x  1s  Should Not Be Empty  xpath=//input[@name='contract[start_date]']
+  \  ${contract_start_date}=  Get Value  name=contract[start_date]
+  ${return_value}    Get Value  name=contract[start_date]
+
+#cat  :FOR    ${INDEX}    IN RANGE    1    15
+#cat  \  ${contract_start_date_not_empty}  Run Keyword And Return Status  Should Not Be Empty  xpath=//input[@name='contract[start_date]']
+#cat  \  Exit For Loop If  ${contract_start_date_not_empty}
+#cat  \  Sleep  5
+#cat  \  Reload Page
+#cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+#cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
+#cat  :FOR    ${INDEX}    IN RANGE    1    3
+#cat  \  Sleep  5
+#cat  \  Reload Page
+#cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+#cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
   ${return_value}=  Get Value  xpath=//input[@name='contract[start_date]']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   [return]  ${return_value}
@@ -1240,4 +1284,7 @@ Resource  ukrtender.robot
   ${return_value}=   convert_string_to_float  ${value}
   [return]  ${return_value}
 
+Отримати інформацію про mainProcurementCategory
+  ${return_value}=  Get Value  xpath=//input[@name='tender[main_procurement_category]']
+  [return]  ${return_value}
   
