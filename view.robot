@@ -590,7 +590,7 @@ Resource  ukrtender.robot
 Подивитись на учасників
   Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   Run Keyword If  '${MODE}' in 'reporting negotiation openua_defense'  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-award-item-supplier-1']
-  Run Keyword If  '${MODE}' in 'openua openeu' and '${SUITE NAME}' != 'Tests Files.Complaints'  Дочекатися І Клікнути                       Visible edit-tender-award-item-supplier  a[@id='edit-tender-award-item-supplier-2']
+  Run Keyword If  '${MODE}' in 'openua openeu' and '${SUITE NAME}' != 'Tests Files.Complaints'  Visible edit-tender-award-item-supplier  a[@id='edit-tender-award-item-supplier-2']
   Run Keyword If  '${MODE}' in 'openua openeu' and '${SUITE NAME}' != 'Tests Files.Complaints'  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-award-item-supplier-2']
   Run Keyword If  '${MODE}' in 'openua' and '${SUITE NAME}' == 'Tests Files.Complaints'  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-award-item-supplier-1']
 
