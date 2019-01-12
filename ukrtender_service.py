@@ -238,6 +238,9 @@ def convert_float_to_string(number):
 
     return '{0:.2f}'.format(float(number))
 	
+def convert_float_to_string2(number):
+
+    return repr(float(number));
 
 def convert_string_to_float(number):
 
@@ -304,7 +307,8 @@ def convert_time(date):
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S')
 
 def data_zone(des):
-    data = des + '+03:00'
+    data = des + '+02:00'
+#cat    data = des + '+03:00'
     return data		
 	
 def get_value_minimalStepPercentage(value):
