@@ -996,7 +996,7 @@ Resource  ukrtender.robot
 #cat  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
 #cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
 #cat  ${return_value}  Get Value  name=contract[start_date]
-  Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
+  Run Keyword If  '${MODE}' in "reporting negotiation openua openeu openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
 #cat12_01_2019  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
