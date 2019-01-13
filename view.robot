@@ -940,7 +940,7 @@ Resource  ukrtender.robot
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт') and @data-index="0"]
   ${contract_signed_date}=  Get Value  name=contract[signed_date]
   :FOR    ${INDEX}    IN RANGE    1    30
-  \  Run Keyword If    '${contract_signed_date}' != ''    Exit For Loop
+  \  Run Keyword If    '${contract_signed_date}' != '' or '${contract_signed_date}' != 'None'    Exit For Loop
   \  Sleep  5
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
