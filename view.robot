@@ -534,7 +534,14 @@ Resource  ukrtender.robot
 #  Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Оскарження результатів кваліфікації')]
   ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-1"]
-  ${return_value}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-1"]
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${complaintPeriod}' != ''    Exit For Loop
+  \  Sleep  5
+  \  Reload Page
+  \  Run Keyword If  '${TEST NAME}'=='Відображення закінчення періоду подачі скарг на пропозицію'  Подивитись на учасників
+  \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-1"]
+#cat  ${return_value}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-1"]
+  ${return_value}    Set Variable  ${complaintPeriod}
   Run Keyword If  '${MODE}' in 'openua' and '${SUITE NAME}' == 'Tests Files.Complaints'  Дочекатися І Клікнути   xpath=//button[@id='edit-tender-award-supplier-cancel']
   Run Keyword If  '${MODE}' in "reporting negotiation openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
