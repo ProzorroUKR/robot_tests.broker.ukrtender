@@ -942,9 +942,9 @@ Resource  ukrtender.robot
   Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Capture Page Screenshot
   Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
-#cat  Run Keyword If  '${MODE}' in "openua_defense"   Sleep  3 
+  Run Keyword If  '${MODE}' in "openua_defense"   Sleep  3 
   Capture Page Screenshot
-  Wait Until Element Is Visible  xpath=//span[@id='edit-tender-dialog-contract-signed-date']   10
+#cat  Wait Until Element Is Visible  xpath=//span[@id='edit-tender-dialog-contract-signed-date']   10
   ${contract_signed_date}=  Get Value  name=contract[signed_date]
   Capture Page Screenshot
   :FOR    ${INDEX}    IN RANGE    1    30
