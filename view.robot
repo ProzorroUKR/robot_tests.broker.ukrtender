@@ -959,9 +959,9 @@ Resource  ukrtender.robot
   Capture Page Screenshot
 #cat  ${contract_signed_date}=  get_invisible_value  //input[@name="contract[signed_date]"]
   ${return_value}  Get Value  name=contract[signed_date]
-  Run Keyword If  '${MODE}' in "reporting negotiation openua openeu openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
+  Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Capture Page Screenshot
-  Run Keyword If  '${MODE}' not in "openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
+  Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   [return]  ${return_value}
 
 Отримати інформацію про contracts[1].dateSigned
