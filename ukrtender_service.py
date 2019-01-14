@@ -1,4 +1,5 @@
 # coding=utf-8
+from robot.libraries.BuiltIn import BuiltIn
 from datetime import datetime, timedelta
 import dateutil.parser
 import pytz
@@ -246,6 +247,19 @@ def convert_string_to_float(number):
 
     return float(number)
 #cat    return float("{0:.2f}".format(number))	
+
+def get_library():
+    return BuiltIn().get_library_instance('Selenium2Library')
+
+
+def get_webdriver_instance():
+    return get_library()._current_browser()
+
+	
+def get_invisible_value(locator):
+    element = get_library()._element_find(locator, False, True)
+    value = get_webdriver_instance().execute_script('return jQuery(arguments[0]).value();', element)
+    return value
 
 
 def _is_visible(self, locator):
