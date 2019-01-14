@@ -1,4 +1,5 @@
 # coding=utf-8
+from robot.libraries.BuiltIn import BuiltIn
 from datetime import datetime, timedelta
 import dateutil.parser
 import pytz
@@ -238,11 +239,27 @@ def convert_float_to_string(number):
 
     return '{0:.2f}'.format(float(number))
 	
+def convert_float_to_string2(number):
+
+    return repr(float(number));
 
 def convert_string_to_float(number):
 
     return float(number)
 #cat    return float("{0:.2f}".format(number))	
+
+def get_library():
+    return BuiltIn().get_library_instance('Selenium2Library')
+
+
+def get_webdriver_instance():
+    return get_library()._current_browser()
+
+	
+def get_invisible_value(locator):
+    element = get_library()._element_find(locator, False, True)
+    value = get_webdriver_instance().execute_script('return jQuery(arguments[0]).value();', element)
+    return value
 
 
 def _is_visible(self, locator):
@@ -304,7 +321,8 @@ def convert_time(date):
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S')
 
 def data_zone(des):
-    data = des + '+03:00'
+    data = des + '+02:00'
+#cat    data = des + '+03:00'
     return data		
 	
 def get_value_minimalStepPercentage(value):

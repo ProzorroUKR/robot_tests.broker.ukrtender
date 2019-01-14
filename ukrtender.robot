@@ -105,6 +105,7 @@ Login
   ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
   ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
   ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
+  ${mainProcurementCategory}=                  Get From Dictionary    ${prepared_tender_data}               mainProcurementCategory
 
   Switch Browser     ${ARGUMENTS[0]}
   Дочекатися І Клікнути  xpath=//nav[@id="site-navigation"]/descendant::a[@class="menu-tenders"]
@@ -123,11 +124,28 @@ Login
    ...  ELSE IF  "${mode}" in "open_esco"   Заповнити поля для esco  ${ARGUMENTS[1]}
   
   Sleep  3
+  Execute Javascript  quinta.showLoader()
   Дочекатися І Клікнути                       xpath=//*[text()="Оголосити закупівлю"]
-  Sleep  15
+#cat  Sleep  15
+  Sleep  5
+  ${loader_visible}=  Get Value  xpath=//input[@name="loader_exists"]
+#  Run Keyword If  "${loader_visible}" == "1"  Waiting for sync
+  Waiting for sync
+#cat  Wait Until Element Is Not Visible  xpath=//div[@id="loading"]  100
+  Sleep  5
   ${tender_UAid}=  Get Text  xpath=//a[@id="tender-information-external-id"]
+  :FOR    ${INDEX}    IN RANGE    1    15
+  \  Run Keyword If    '${tender_UAid}' != ''    Exit For Loop
+  \  Sleep  10
+  \  ${tender_UAid}=  Get Text  xpath=//a[@id="tender-information-external-id"]
   [Return]  ${tender_UAid}
 
+Waiting for sync
+  ${loader_visible}=  Get Value  xpath=//input[@name="loader_exists"]
+  :FOR    ${INDEX}    IN RANGE    1    25
+  \  Run Keyword If    '${loader_visible}' != '1'    Exit For Loop
+  \  Sleep  10
+  \  ${loader_visible}=  Get Value  xpath=//input[@name="loader_exists"]
 
 Заповнити поля для допорогової закупівлі
 #cat переносим в допороговую
@@ -202,6 +220,8 @@ Login
   Click Element  name=tender[rate_amount]
   LOG  list("${step_rate}")
   Input text  name=tender[rate_amount]  ${step_rate}
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
   Input text                          xpath=//*[@name="tender[specification_period_start]"]  ${enquiry_period_start_date}
   Input text                          xpath=//*[@name="tender[specification_period]"]  ${enquiry_period_end_date}
   Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
@@ -319,10 +339,14 @@ Login
   Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"  Execute Javascript  quinta.skipAuction()
   Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${procurement_type}
   Дочекатися І Клікнути  name=tender[multi_lot]
+#cat  Run Keyword If  ${tender_meat}  Execute Javascript    quinta.loadTender( '{ "lots": [{"id":"${lots[0].id}"}], "items": [{"id":"${items[0].id}"}], "features": [{"code": "${features[0].code}","featureOf": "${features[0].featureOf}", "relatedItem": "${features[0].relatedItem}"}, {"code": "${features[1].code}", "featureOf": "${features[1].featureOf}"}, {"code": "${features[2].code}", "featureOf": "${features[2].featureOf}", "relatedItem": "${features[2].relatedItem}"}] }')
+#cat  Run Keyword If  ${tender_meat}  Execute Javascript    $('input[name="tender[lots][0][id]"]').val( '${lots[0].id}"}], "items' );
   Input text                          name=tender[lots][0][name]   ${lot_title}
   Input text                          name=tender[lots][0][description]   ${lot_desc}
   Input text                          name=tender[lots][0][amount]   ${lot_value_amount2}
   Input text                          name=tender[lots][0][minimal_step]   ${lot_step_rate2}
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
 
   Дочекатися І Клікнути               name=tender[name]  
   Input text                          name=tender[name]     ${title}
@@ -487,6 +511,8 @@ Login
   Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${prepared_tender_data.procuringEntity.name}
 
   Input text                          name=tender[amount]   ${budget2}
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
   
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
   Input text                          name=tender[items][0][dk_021_2015][title]    ${dk_21_desc}
@@ -651,6 +677,9 @@ Login
   Click Element  name=tender[rate_amount]
   ${step_rate3}=        convert_float_to_string  ${prepared_tender_data.minimalStep.amount}
   Input text  name=tender[rate_amount]  ${step_rate3}
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
+
   Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
@@ -777,12 +806,15 @@ Login
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
 
   Input text                          name=tender[amount]   ${budget2}
-  Sleep  10
+#cat  Sleep  10
   Click Element  name=tender[rate_amount]
-  Sleep  2
-  LOG  list("${step_rate}")
+#cat  Sleep  2
+#cat  LOG  list("${step_rate}")
   Input text  name=tender[rate_amount]  ${step_rate}
-  Sleep  2
+#cat  Sleep  2
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
+
   Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
@@ -801,16 +833,16 @@ Login
 
   Sleep  2
   Input text                          name=tender[items][0][item_name]    ${item_description}
-  Sleep  2
+#cat  Sleep  2
   Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
   Input text                          name=tender[items][0][item_quantity]   ${quantity}
   Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
   Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
   Click Element                       xpath=//*[@name='tender[items][0][region]']
   
-  Sleep  2
+#cat  Sleep  2
   Select From List By Label  xpath=//*[@name='tender[items][0][region]']  ${item_delivery_region}
-  Sleep  2
+#cat  Sleep  2
   Click Element                       xpath=//*[@name='tender[items][0][country]']
   Select From List By Label  xpath=//*[@name='tender[items][0][country]']  ${item_delivery_country}
   
@@ -821,7 +853,7 @@ Login
   Input text                          xpath=//*[@name='tender[items][0][longitude]']  ${longitude}
 
   Select From List By Label  xpath=//select[@name='tender[items][0][lot]']   Лот 1
-  Sleep  2
+#cat  Sleep  2
   Run Keyword if   '${mode}' == 'multi'   Додати предмет   items
 
   Run Keyword If  '${mode}' == 'openua_defense'   Run Keywords
@@ -894,6 +926,9 @@ Login
   Input text                          xpath=//input[@name='tender[lots][0][minimal_step_percentage]']  ${minimalStepPercentage1}
   Input text                          xpath=//input[@name='tender[lots][0][yearly_payment_percentage_range]']  ${yearlyPaymentsPercentageRange1}
 
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
+  
   Дочекатися І Клікнути               name=tender[name]  
   Input text                          name=tender[name]     ${title}
   Input text                          name=tender[description]     ${description}
@@ -1061,31 +1096,47 @@ Login
   ...  Click Element  xpath=//input[@id='purchase-button-search-1']
   ...  AND  Wait Until Element Is Visible  xpath=//a[contains(@data-tenderid, '${tender_uaid}')]  10
   Click Element    xpath=//a[contains(@data-tenderid, '${tender_uaid}')]
+  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-action"]
+  :FOR    ${INDEX}    IN RANGE    1    5
+  \  Run Keyword If    '${complaintPeriod}' == ''    Exit For Loop
+  \  Sleep  5
+  \  Reload Page
+  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
+  \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-action"]
 
-
+  
 Оновити сторінку з тендером
   [Arguments]  ${username}  ${tender_uaid}
   Switch Browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}   ${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору    ${username}   ${tender_uaid}
+  Reload Page
 
 
 Отримати інформацію із тендера
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}
-  Switch Browser   ${username}
-  Run Keyword If  '${fieldname}' == 'stage2TenderID'  ukrtender.Пошук тендера по ідентифікатору    ${username}   ${tender_uaid}
+#cat  Switch Browser   ${username}
+  Run Keyword If  '${fieldname}' == 'status' or '${fieldname}' == 'enquiryPeriod.endDate'  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+  Run Keyword If  '${fieldname}' == 'stage2TenderID'  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If  "${TEST_NAME}" == 'Неможливість подати цінову пропозицію без нецінових показників'  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If  '${fieldname}' == 'stage2TenderID'  ukrtender.Пошук тендера по ідентифікатору    ${username}   ${tender_uaid}
   Run Keyword And Return  view.Отримати інформацію про ${fieldname}
 
 
 Внести зміни в тендер
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
   Switch Browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   Run Keyword If    '${TEST_NAME}' == 'Неможливість редагувати однопредметний тендер менше ніж за 2 дні до завершення періоду подання пропозицій'    Fail  "Неможливість редагувати однопредметний тендер менше ніж за 2 дні до завершення періоду подання пропозицій"
+  ...  ELSE   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ...  ELSE  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   Run Keyword If  '${fieldname}' == 'tenderPeriod.endDate'  subkeywords.Змінити дату  ${fieldvalue}
   Run Keyword If  '${fieldname}' == 'description'  subkeywords.Змінити опис  ${fieldvalue}
   Sleep  2
   Дочекатися І Клікнути                       xpath=//*[text()="Редагувати закупівлю"]
   Sleep  2
+  Run Keyword If    '${TEST_NAME}' == 'Можливість відповісти на запитання до тендера після продовження періоду прийому пропозицій'    Execute Javascript  quinta.refreshTenderFromProzorro()
+#cat  Sleep  2
+#cat  Run Keyword If    '${TEST_NAME}' == 'Можливість відповісти на запитання до тендера після продовження періоду прийому пропозицій'    Reload Page
 
 
 Завантажити документ
@@ -1093,7 +1144,8 @@ Login
   Log  ${username}
   Log  ${file}
   Log  ${tender_uaid}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    '${TEST_NAME}' == 'Неможливість додати документацію до тендера під час кваліфікації'    Wait Until Keyword Succeeds    400 s    20 s    subkeywords.Wait For PreQualificationPeriod
   Select From List By Value  xpath=//*[@name='tender[document_type]']  biddingDocuments
   Sleep  2
@@ -1113,7 +1165,8 @@ Set Multi Ids
 Отримати інформацію із документа
   [Arguments]  ${username}  ${tender_uaid}  ${doc_id}  ${field}
   Switch browser   ${username}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
   ...  ELSE  Set Variable  1
   Run Keyword If    '${contract_visible}' == 'contract_visible'    Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
@@ -1132,7 +1185,8 @@ Set Multi Ids
 Отримати документ
   [Arguments]  ${username}  ${tender_uaid}  ${doc_id}
   Switch Browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
   ...  ELSE  Set Variable  1
   Run Keyword If    '${contract_visible}' == 'contract_visible'    Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
@@ -1161,7 +1215,8 @@ Set Multi Ids
 
 Видалити предмет закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${item_id}  ${lot_id}=${Empty}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   :FOR    ${INDEX}    IN RANGE    1    45
   \  ${found}  Run Keyword And Return Status  Element Should Be Visible  xpath=//input[contains(@value,"${item_id}")]
   \  Exit For Loop If  ${found}
@@ -1170,7 +1225,10 @@ Set Multi Ids
   ${index_item}=  Get Element Attribute  xpath=//input[contains(@value,"${item_id}")]@name
   ${item_index}=  split_str  ${index_item}
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-item-remove-button-${item_index}']
+  Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Sleep  2
+  Execute Javascript  quinta.refreshTenderFromProzorro()
 
 
 
@@ -1184,7 +1242,8 @@ Set Multi Ids
 
 Створити лот із предметом закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${lot}  ${item}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${index_lot}=    Get matching xpath count    xpath=//*[text()='Видалити лот']
   ${index_item}=    Get matching xpath count    xpath=//*[text()='Видалити позицію']
   ${lot}=  Set Variable If  '${tender_uaid}' != '${None}'  ${lot.data}  ${lot}
@@ -1241,7 +1300,11 @@ Set Multi Ids
   ${lot_item}=  Get Text  xpath=//option[contains(@data-lot-title,"${class}")]
   Select From List By Label  xpath=//select[@name='tender[items][${index_item}][lot]']  ${lot_item}
   Run Keyword If  '${mode}' == "openua_defense" or '${mode}' == "openeu" or '${mode}' == "open_competitive_dialogue"   Input Text  xpath=//*[@name="tender[items][${index_item}][item_name_en]"]  ${item.description_en}
+  Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Sleep  10
+  ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
 
 
 Отримати інформацію із лоту
@@ -1257,7 +1320,8 @@ Set Multi Ids
 
 Змінити лот
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${fieldname}  ${fieldvalue}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Sleep  2
   ${value}=    Run Keyword If  '${fieldname}'!='description'             ukrtender_service.convert_float_to_string                    ${fieldvalue}
   Run Keyword If    '${fieldname}' == 'description'  Input Text  name=tender[lots][0][description]  ${fieldvalue}
@@ -1271,24 +1335,25 @@ Set Multi Ids
 
 Додати предмет закупівлі в лот
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${item}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${Count}=    Get matching xpath count    xpath=//*[text()='Видалити лот']
   ${Count1}=    Get matching xpath count    xpath=//*[text()='Видалити позицію']
   Log Many  CAT888-Count ${Count}
   Log Many  CAT888-Count1 ${Count1}
   Log Many  CAT888item ${lot_id}
-  ${index_lot} =	Set Variable If		
-  ...	${NUMBER_OF_LOTS} == 0	0	
-  ...	${NUMBER_OF_LOTS} == 1	1	
-  ...	${NUMBER_OF_LOTS} == 2	2	
-  ...	${NUMBER_OF_LOTS} > 2	greater than two	
-  ...	${NUMBER_OF_LOTS} < 0	not possible
-  ${index_item} =	Set Variable If		
-  ...	${NUMBER_OF_ITEMS} == 0	0	
-  ...	${NUMBER_OF_ITEMS} == 1	1	
-  ...	${NUMBER_OF_ITEMS} == 2	2	
-  ...	${NUMBER_OF_ITEMS} > 2	greater than two	
-  ...	${NUMBER_OF_ITEMS} < 0	not possible
+#cat  ${index_lot} =	Set Variable If		
+#cat  ...	${NUMBER_OF_LOTS} == 0	0	
+#cat  ...	${NUMBER_OF_LOTS} == 1	1	
+#cat  ...	${NUMBER_OF_LOTS} == 2	2	
+#cat  ...	${NUMBER_OF_LOTS} > 2	greater than two	
+#cat  ...	${NUMBER_OF_LOTS} < 0	not possible
+#cat  ${index_item} =	Set Variable If		
+#cat  ...	${NUMBER_OF_ITEMS} == 0	0	
+#cat  ...	${NUMBER_OF_ITEMS} == 1	1	
+#cat  ...	${NUMBER_OF_ITEMS} == 2	2	
+#cat  ...	${NUMBER_OF_ITEMS} > 2	greater than two	
+#cat  ...	${NUMBER_OF_ITEMS} < 0	not possible
 #Дабавить item 3
 # item 3
   ${index_item}=  Set Variable  ${Count1}
@@ -1331,12 +1396,17 @@ Set Multi Ids
   ${lot_title}=  Get Text  xpath=//select/option[contains(@data-lot-title, "${lot_id}")]
   Select From List By Label  xpath=//select[@name='tender[items][${index_item}][lot]']  ${lot_title}
   Run Keyword If  '${mode}' == "openua_defense" or '${mode}' == "openeu" or '${mode}' == "open_competitive_dialogue"   Input Text  xpath=//*[@name="tender[items][${index_item}][item_name_en]"]  ${item.description_en}
+  Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Sleep  10
+  ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
   
   
 Завантажити документ в лот
   [Arguments]    ${username}    ${filepath}    ${TENDER_UAID}    ${lot_id}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Select From List By Value  xpath=//*[@name='tender[lots][0][document_type]']  biddingDocuments
   Sleep  2
   Choose File       xpath=//*[@name="lot_multifiles[]"]    ${filepath}
@@ -1347,7 +1417,8 @@ Set Multi Ids
 	
 Видалити лот
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   :FOR    ${INDEX}    IN RANGE    1    45
   \  ${found}  Run Keyword And Return Status  Element Should Be Visible  xpath=//input[contains(@value,'${lot_id}')]
   \  Exit For Loop If  ${found}
@@ -1356,9 +1427,12 @@ Set Multi Ids
   ${lot_index}=  split_str  ${index_lot}
   ${item_index}=  Get Element Attribute  xpath=//select/option[contains(@data-lot-title, '${lot_id}') and @selected="selected"]@name
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-item-remove-button-1']
+  Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-lot-remove-button-${lot_index}']
+  Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
 
 Отримати документ до лоту
@@ -1383,10 +1457,11 @@ Set Multi Ids
   ${f.description}=   Run Keyword if   ${Count_tenderer} != 0   Set Variable  ${feature.description}
   ...  ELSE  Set Variable   ${feature.description}
   ${f_enum}  Set Variable If  ${Count_tenderer} != 0   feature  feature
-  Execute Javascript    $("#edit-tender-multinonprices").trigger("click")
   Scroll To Element  id=edit-tender-multinonprices
+  Execute Javascript    $("#edit-tender-multinonprices").trigger("click")
   ${i}  Set Variable  ${0}
   Input Text  xpath=//*[@name='tender[nonprices][${Count_tenderer}][feature_name]']  ${f.title}
+  Wait Until Element Is Visible  xpath=//*[@name='tender[nonprices][${Count_tenderer}][feature_description]']
   Input Text  xpath=//*[@name='tender[nonprices][${Count_tenderer}][feature_description]']  ${f.description}
 
   :FOR    ${index}  ${element}    IN ENUMERATE  @{${f_enum}.enum}
@@ -1435,10 +1510,12 @@ Set Multi Ids
 
 Додати неціновий показник на предмет
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${item_id}
-  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   ${f_var}  Set Variable If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'  ${feature}  ${feature}
   ${num}  Set Variable If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'  1  0
   ${Count_item}=  Get matching xpath count  xpath=//input[contains(@value,"item")]
+  Scroll To Element  xpath=//*[@id='edit-tender-item-0-feature-add']
   Дочекатися і Клікнути  xpath=//*[@id='edit-tender-item-0-feature-add']
   ${i}  Set Variable  ${0}
   Input Text  xpath=//*[@name='tender[items][0][features][${num}][feature_name]']  ${f_var.title}
@@ -1477,7 +1554,8 @@ Set Multi Ids
 
 Додати неціновий показник на лот
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${item_id}
-  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   ${f_var}  Set Variable If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'  ${feature}  ${feature}
   ${num}  Set Variable If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'  1  0
   Scroll To Element  xpath=//*[@id='edit-tender-lot-0-feature-add']
@@ -1537,7 +1615,6 @@ Set Multi Ids
   :FOR   ${index}   IN RANGE   ${enum_length}
   \   Run Keyword if   ${index} != 0   Дочекатися І Клікнути   xpath=//*[@id='edit-tender-multinonprice-item-0-option']
   \   Додати опцію   ${features.enum[${index}]}   ${index}   ${feature_index}
-  Log Many  CAT888 дошли?
   
 Index Should Not Be Zero
   [Arguments]  ${feature_index}
@@ -1577,7 +1654,8 @@ Get Last Feature Index
 
 Видалити неціновий показник
   [Arguments]  ${username}  ${tender_uaid}  ${feature_id}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    '${TEST_NAME}' == 'Можливість видалити неціновий показник на предмет'    Видалити неціновий показник на предмет  ${username}  ${tender_uaid}  ${feature_id}
   Run Keyword If    '${TEST_NAME}' == 'Можливість видалити неціновий показник на лот'    Видалити неціновий показник на лот  ${username}  ${tender_uaid}  ${feature_id}
   Run Keyword If    '${TEST_NAME}' == 'Можливість видалити неціновий показник на тендер'    Видалити неціновий показник на тендер  ${username}  ${tender_uaid}  ${feature_id}
@@ -1604,7 +1682,8 @@ Get Last Feature Index
 
 Видалити неціновий показник на лот
   [Arguments]  ${username}  ${tender_uaid}  ${feature_id}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Scroll To Element  xpath=//*[text()="Додати лот"]
   :FOR    ${INDEX}    IN RANGE    1    50
   \  ${found}  Run Keyword And Return Status  Element Should Be Visible  xpath=//a[@data-prozorro-title-id='${feature_id}' and (contains(.,'-Видалити неціновий критерій'))]
@@ -1623,7 +1702,8 @@ Get Last Feature Index
 
   Switch Browser    ${username}
   Sleep  5
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
   Click Element    xpath=//a[@id='tender-question-list-question-create-button-popup']
   Input Text                          xpath=//*[@name="question[title]"]  ${title}
@@ -1640,7 +1720,8 @@ Get Last Feature Index
 
   Switch Browser    ${username}
   Sleep  5
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
 #cat  Дочекатися І Клікнути    xpath=//a[@href="#tabs_desc_407_2"]
   Дочекатися І Клікнути    xpath=//a[@id='tender-question-list-question-create-button-popup']
@@ -1662,7 +1743,8 @@ Get Last Feature Index
 
   Switch Browser    ${username}
   Sleep  5
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
   Execute Javascript    $("#tender-question-list-question-create-button-popup").trigger("click")
   ${ques}=   Get Value  xpath=//option[@data-index="2"]
@@ -1678,7 +1760,8 @@ Get Last Feature Index
 Отримати інформацію із запитання
   [Arguments]  ${username}  ${tender_uaid}  ${question_id}  ${field_name}
   Switch Browser   ${username}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 #cat  Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
   Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
   ${field_xpath}=    get_xpath.get_question_xpath    ${field_name}    ${question_id}
@@ -1695,15 +1778,17 @@ Get Last Feature Index
   [Arguments]  ${username}  ${tender_uaid}  ${answer_data}  ${question_id}
   ${answer}=     Get From Dictionary    ${answer_data.data}    answer
   Switch Browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
   ${tender_status}=    Get Value    xpath=//*[@name='tender[status]']
   Run Keyword If  '${tender_status}' != 'active.enquiries' and '${mode}' == 'belowThreshold'  Fail    "Період уточнень закінчився"
   # поставить проверку для опен
   Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
-  :FOR    ${INDEX}    IN RANGE    1    2
-  \  Sleep  5
-  \  Reload Page
-  \  Дочекатися І Клікнути                       xpath=//span[text()='Питання та відповіді']
+  Wait Until Keyword Succeeds  300 s  10 s  subkeywords.Wait For QuestionID   ${question_id}
+#cat  :FOR    ${INDEX}    IN RANGE    1    2
+#cat  \  Sleep  5
+#cat  \  Reload Page
+#cat  \  Дочекатися І Клікнути                       xpath=//span[text()='Питання та відповіді']
   Click Element                      xpath=//a[contains(@data-prozorro-id,'${question_id}')]
   Input Text    xpath=//textarea[@name="answer[description]"]    ${answer}
   Sleep  2
@@ -1714,9 +1799,11 @@ Get Last Feature Index
 
 Створити чернетку вимоги про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${claim}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Sleep  2
   Дочекатися І Клікнути    xpath=//a[@id='tender-complaint-edit-button-popup']
   Wait Until Element Is Visible    xpath=//select[@id='complaint-edit-dialog-type']    30
@@ -1728,9 +1815,11 @@ Get Last Feature Index
 Створити чернетку про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${lot_id}
   Switch browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Дочекатися І Клікнути    xpath=//a[@id='tender-complaint-edit-button-popup']
   ${lot1}=   Convert To String     Лот 1
   Run Keyword If    '${TEST_NAME}' == 'Можливість створити і подати вимогу про виправлення умов лоту'    Select From List By Value  xpath=//select[@id='complaint-edit-dialog-type']  ${lot1}
@@ -1751,9 +1840,11 @@ Get Last Feature Index
 
 Створити вимогу про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${document}=${None}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Sleep  2
   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For ComplaintButton
   Дочекатися І Клікнути    xpath=//a[@id='tender-complaint-edit-button-popup']
@@ -1780,10 +1871,12 @@ Get Last Feature Index
 
 Створити вимогу про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${claim}  ${lot_id}  ${document}=${None}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For ComplaintButton
-  Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Sleep  2
   Дочекатися І Клікнути    xpath=//a[@id='tender-complaint-edit-button-popup']
   Sleep  5
@@ -1835,8 +1928,9 @@ Get Last Feature Index
 
 Завантажити документацію до вимоги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${document}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
   Wait Until Element Is Visible    xpath=//*[text()='${complaintID}']    30
   Click Element    xpath=//a[contains(@class,'tender-complaint-list-title-link') and contains(@data-complaint-id,'${complaintID}')]
   Choose File       xpath=//input[@id='complaint-edit-dialog-document']    ${document}
@@ -1846,8 +1940,9 @@ Get Last Feature Index
 
 Завантажити документацію до вимоги про виправлення визначення переможця
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${award_index}  ${document}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
   Wait Until Element Is Visible    xpath=//*[text()='${complaintID}']    30
   Click Element    xpath=//a[contains(@class,'tender-complaint-list-title-link') and contains(@data-complaint-id,'${complaintID}')]
   Choose File       xpath=//input[@id='complaint-edit-dialog-document']    ${document}
@@ -1858,12 +1953,14 @@ Get Last Feature Index
 Відповісти на вимогу про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${answer_data}
   Switch browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Wait Until Keyword Succeeds  10 x  60 s  Run Keywords
   ...  Reload Page
-  ...  AND  Click Element    xpath=//span[contains(.,'Вимоги')]
+  ...  AND  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
   ...  AND  Page Should Contain  ${complaintID}
   
   Дочекатися І Клікнути    xpath=//h3[contains(@data-complaint-id,'${complaintID}')]
@@ -1889,17 +1986,17 @@ Get Last Feature Index
 
 Підтвердити вирішення вимоги про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${confirmation_data}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Дочекатися І Клікнути    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Дочекатися І Клікнути    xpath=//h3[contains(@data-complaint-id,'${complaintID}')]
   Дочекатися І Клікнути    xpath=//a[contains(.,'Оцінити відповідь') and contains(@data-complaint-id,'${complaintID}')]
   ${value}=  Set Variable If  '${confirmation_data.data.satisfied}'  Задоволен  Не задоволен
   Select From List By Label  xpath=//select[@id='tender-complaint-satisfied-dialog-form-satisfied']  ${value}
   Дочекатися І Клікнути    xpath=//button[@id='tender-complaint-satisfied-submit']
-  Capture Page Screenshot
   Sleep  10
-  Capture Page Screenshot
 
 
 Підтвердити вирішення вимоги про виправлення умов лоту
@@ -1914,9 +2011,11 @@ Get Last Feature Index
 
 Скасувати вимогу про виправлення умов закупівлі
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Дочекатися І Клікнути    xpath=//h3[contains(@data-complaint-id,'${complaintID}')]
   Дочекатися І Клікнути    xpath=//a[contains(.,'Відмінити') and contains(@data-complaint-id,'${complaintID}')]
   Input Text    xpath=//textarea[@name='complaint_cancel[reason]']    ${cancellation_data.data.cancellationReason}
@@ -1925,10 +2024,12 @@ Get Last Feature Index
   
 Скасувати вимогу про виправлення умов лоту
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${cancellation_data}
-  ukrtender.Пошук тендера по ідентифікатору    ${username}    ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Switch browser  ${username}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Дочекатися І Клікнути    xpath=//h3[contains(@data-complaint-id,'${complaintID}')]
   Дочекатися І Клікнути    xpath=//a[contains(.,'Відмінити') and contains(@data-complaint-id,'${complaintID}')]
   Input Text    xpath=//textarea[@name='complaint_cancel[reason]']    ${cancellation_data.data.cancellationReason}
@@ -1946,9 +2047,12 @@ Get Last Feature Index
   Switch Browser   ${username}
 
   Run Keyword If    "${TEST_NAME}" == "Відображення кінцевих статусів двох останніх вимог"    Sleep  290
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Execute JavaScript                  window.scrollTo(0, 0)
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   Wait Until Keyword Succeeds  300 s  10 s  subkeywords.Wait For ComplaintID   ${ComplaintID}
   ${index_complaint}=  Get Element Attribute  xpath=//input[contains(@value,"${complaintID}")]@id
   ${complaint_index}=  split_complaint  ${index_complaint}
@@ -1984,9 +2088,10 @@ Get Last Feature Index
 
 Отримати інформацію із документа до скарги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${doc_id}  ${field_name}  ${award_id}=${None}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   ${index_complaint}=  Get Element Attribute  xpath=//input[contains(@value,"${complaintID}")]@id
   ${complaint_index}=  split_complaint  ${index_complaint}
   Sleep  3
@@ -1999,9 +2104,11 @@ Get Last Feature Index
 
 Отримати документ до скарги
   [Arguments]  ${username}  ${tender_uaid}  ${complaintID}  ${doc_id}  ${award_id}=${None}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
-  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
-  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Execute Javascript    $( 'a[href="#tabs_desc_407_3"]' ).trigger( 'click' )
+#cat  Run Keyword If    '${mode}' != 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
+#cat  Run Keyword If    '${mode}' == 'belowThreshold'    Click Element    xpath=//span[contains(.,'Вимоги')]
   ${index_complaint}=  Get Element Attribute  xpath=//input[contains(@value,"${complaintID}")]@id
   ${complaint_index}=  split_complaint  ${index_complaint}
   Sleep  3
@@ -2020,7 +2127,8 @@ Get Last Feature Index
 Подати цінову пропозицію
   [Arguments]  ${username}  ${tender_uaid}  ${bid}  ${lots_ids}=${None}  ${features_ids}=${None}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${tender_status}=  Get Value  xpath=//*[@name="tender[status]"]
   Run Keyword If  '${tender_status}' == 'active.enquiries'  Fail  "Неможливо подати цінову пропозицію в період уточнень"
   Дочекатися І Клікнути    xpath=//*[text()="Створити пропозицію"]
@@ -2053,21 +2161,25 @@ Get Last Feature Index
   
 Змінити цінову пропозицію
   [Arguments]  ${username}  ${tender_uaid}  ${fieldname}  ${fieldvalue}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    '${mode}' == 'belowThreshold'    subkeywords.Змінити цінову пропозицію below    ${fieldvalue}
   ...    ELSE IF    '${mode}' != 'belowThreshold'    subkeywords.Змінити цінову пропозицію open    ${fieldname}    ${fieldvalue}
   
 
 Скасувати цінову пропозицію
   [Arguments]  ${username}  ${tender_uaid}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[@id='mForm:proposalDeleteBtn']
   Click Element    xpath=//*[text='Видалити']
   Sleep  5
 
 Завантажити документ в ставку
-  [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+#cat  [Arguments]  ${path}  ${tender_uaid}  ${doc_type}=documents  ${doc_name}
+  [Arguments]  ${username}  ${path}  ${tender_uaid}  ${doc_type}=documents  ${doc_name}=${None}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
   Sleep  2
@@ -2079,8 +2191,10 @@ Get Last Feature Index
 
 
 Змінити документ в ставці
-  [Arguments]  ${username}  ${tender_uaid}  ${path}  ${doc_id}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  [Arguments]  ${username}  ${tender_uaid}  ${path}  ${doc_id}  ${doc_name}=${None}
+#cat  [Arguments]  ${tender_uaid}  ${path}  ${doc_id}  ${doc_name}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 1000)
   Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
@@ -2093,8 +2207,9 @@ Get Last Feature Index
 
 
 Змінити документацію в ставці
-  [Arguments]  ${username}  ${tender_uaid}  ${doc_data}  ${doc_id}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  [Arguments]  ${username}  ${tender_uaid}  ${doc_data}  ${doc_id}  ${doc_name}=${None}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 800)
   Sleep  2
@@ -2110,7 +2225,8 @@ Get Last Feature Index
 
 Отримати інформацію із пропозиції
   [Arguments]  ${username}  ${tender_uaid}  ${field}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}   ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${present}=  Run Keyword And Return Status    Element Should Be Visible   xpath=//*[text()="Редагувати пропозицію"]
   Run Keyword If    ${present}    Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Log Many  CAT111 ${present}
@@ -2124,7 +2240,8 @@ Get Last Feature Index
 Отримати посилання на аукціон для учасника
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}=${Empty}
   Switch Browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Wait Until Element Is Visible    xpath=//a[contains(@href,'https://auction-sandbox.prozorro.gov.ua/')]    30
   Sleep  2
   ${auction_url}=    Get Element Attribute    xpath=//a[contains(text(), 'https://auction-sandbox.prozorro.gov.ua/')]@href
@@ -2134,7 +2251,8 @@ Get Last Feature Index
 Отримати посилання на аукціон для глядача
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}=${Empty}
   Switch Browser    ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Wait Until Element Is Visible    xpath=//a[contains(@href,'https://auction-sandbox.prozorro.gov.ua/')]    30
   Sleep  2
   ${auction_url}=    Get Element Attribute    xpath=//a[contains(text(), 'https://auction-sandbox.prozorro.gov.ua/')]@href
@@ -2145,8 +2263,8 @@ Get Last Feature Index
 
 Завантажити документ рішення кваліфікаційної комісії
   [Arguments]  ${username}  ${document}  ${tender_uaid}  ${award_num}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Capture Page Screenshot
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   Log Many  CAT ${document} До ЕЦПdocument
   Log Many  CAT ${award_num}До ЕЦПaward_num
@@ -2159,7 +2277,6 @@ Get Last Feature Index
   Run Keyword If    ${award_num}==2     Wait Until Keyword Succeeds  600 s  10 s  subkeywords.Wait For EscoButtonContract
   Run Keyword If    ${award_num}==2    Execute Javascript    $( "#edit-tender-award-item-go-button-3" ).trigger( 'click' )
   Run Keyword If    ${award_num}==2    Sleep  5
-  Capture Page Screenshot
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-award-qualification-form-document-type']  ${qual_doc}
   Sleep  2
@@ -2170,8 +2287,9 @@ Get Last Feature Index
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   Run Keyword If    ${award_num}==0   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For AwardButton1
   Run Keyword If    ${award_num}==1   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For AwardButton2
-  Run Keyword If  '${mode}' in 'belowThreshold openua open_esco open_competitive_dialogue openua_defense'   Run Keywords
-  ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If  '${mode}' in 'belowThreshold openua openeu open_esco open_competitive_dialogue openua_defense'   Run Keywords
+  ...  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   ...  AND  Run Keyword If    ${award_num}==2  Sleep  10
   ...  AND  Run Keyword If    ${award_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-go-button-1']
@@ -2192,7 +2310,8 @@ Get Last Feature Index
   Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
    ...  Page Should Contain  Зверніть увагу
    ...  AND  Wait Element Animation  xpath=//*[contains(text(),"Накласти ЕЦП")]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
 
 Дискваліфікувати постачальника
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
@@ -2204,7 +2323,8 @@ Get Last Feature Index
   \  Reload Page
   \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   Run Keyword If  '${mode}' in 'belowThreshold open_esco'   Run Keywords
-  ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  ...  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ...  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ...  AND  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
   ...  AND  Дочекатися І Клікнути  xpath=//a[@id='edit-tender-award-item-go-button-2']
   ...  AND  Select From List By Label  xpath=//*[@id='edit-tender-dialog-award-qualification-form-document-type']  Повідомлення про рішення
@@ -2222,14 +2342,18 @@ Get Last Feature Index
   Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
    ...  Page Should Contain  Зверніть увагу
    ...  AND  Wait Element Animation  xpath=//*[contains(text(),"Накласти ЕЦП")]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
 
 
 Скасування рішення кваліфікаційної комісії
   [Arguments]  ${username}  ${tender_uaid}  ${award_num}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Run Keyword If    ${award_num}==0   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For EscapePrequalificationButton1
+  Run Keyword If    ${award_num}==1   Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For EscapePrequalificationButton2
   Run Keyword If    ${award_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-escape-button-1']
   Run Keyword If    ${award_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-award-item-escape-button-2']
   Дочекатися І Клікнути  id=edit-tender-dialog-award-qualification-reason1
@@ -2241,7 +2365,8 @@ Get Last Feature Index
   Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
    ...  Page Should Contain  Зверніть увагу
    ...  AND  Wait Element Animation  xpath=//*[contains(text(),"Накласти ЕЦП")]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
   Sleep  30
   
 
@@ -2250,7 +2375,8 @@ Get Last Feature Index
 
 Створити постачальника, додати документацію і підтвердити його
   [Arguments]  ${username}  ${tender_uaid}  ${supplier_data}  ${document}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-supplier']
   Input Text  name=supplier[edrpou]  ${supplier_data.data.suppliers[0].identifier.id}
@@ -2267,24 +2393,33 @@ Get Last Feature Index
   Дочекатися І Клікнути  name=supplier[eligible]
   Дочекатися І Клікнути  name=supplier[qualified]
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-supplier-submit']
+  
+  Run Keyword If  '${MODE}' in 'negotiation reporting'     Wait Until Keyword Succeeds    120 s    20 s    subkeywords.Wait For QualificationButton
+#cat  Reload Page
+#cat  Sleep  5
+#cat  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+#cat  Sleep  5
+  
   Дочекатися І Клікнути  xpath=//a[contains(.,'Кваліфікація')]
   Wait And Select From List By Value  id=edit-tender-dialog-award-qualification-form-action  active
   Choose File       xpath=//input[@id='edit-tender-dialog-award-qualification-form-document']    ${document}
   Sleep  10
-  Capture Page Screenshot
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-award-qualification-form-document-type']  ${qual_doc}
   Дочекатися І Клікнути  xpath=//input[@name='award_qualification[qualified]']
 #cat  Дочекатися І Клікнути  name=award_qualification[eligible]
   Дочекатися І Клікнути  xpath=//button[contains(.,'Підтвердити рішення')]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
 
 
 Створити постачальника, додати документацію і підтвердити його2
   [Arguments]  ${username}  ${tender_uaid}  ${supplier_data}  ${document}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  jquery=span:contains('Оголосити')
   Click Element  xpath=//div[contains(@class, "ui-confirm-dialog") and @aria-hidden="false"]//span[text()="Оголосити"]
   Wait Until Keyword Succeeds  3x  1  Wait Until Element Is Visible  xpath=//span[contains(@class, "ui-button-text ui-c") and text()="Так"]
@@ -2356,17 +2491,18 @@ Get Last Feature Index
 
 Підтвердити підписання контракту
   [Arguments]  ${username}  ${tender_uaid}  ${contract_num}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
-  Run Keyword If  '${MODE}' in 'belowThreshold'  Sleep  30
+#cat#cat  Run Keyword If  '${MODE}' in 'belowThreshold'  Sleep  30
   Sleep  5
   ${contract_num}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
-  ...  ELSE IF  "${SUITE_NAME}" == "Tests Files.Complaints" or '${MODE}' in 'belowThreshold reporting negotiation'  Set Variable  0
+  ...  ELSE IF  "${SUITE_NAME}" == "Tests Files.Complaints" or '${MODE}' in 'belowThreshold reporting negotiation' or '${MODE}' == 'openua_defense'  Set Variable  0
   ...  ELSE  Set Variable  1
-  Run Keyword If  '${MODE}' in 'belowThreshold'     Wait Until Keyword Succeeds    120 s    20 s    subkeywords.Wait For ContractButton   ${contract_num}
+  Run Keyword If  '${MODE}' in 'belowThreshold reporting'     Wait Until Keyword Succeeds    120 s    20 s    subkeywords.Wait For ContractButton   ${contract_num}
   Дочекатися І Клікнути  xpath=//a[contains(.,'Підписати контракт') and contains(@data-index,"${contract_num}")]
-  Sleep  15
-  ${dc_input}  Evaluate  datetime.datetime.now().strftime("%d.%m.%Y %H:%M")  datetime
+#cat#cat  Sleep  15
+  ${dc_input}  Evaluate  datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S")  datetime
   Input Text  xpath=//input[@name='activate_contract[number]']  777
   Run Keyword If  '${MODE}' not in 'openua openeu open_competitive_dialogue openua_defense'  Input Text  xpath=//input[@name='activate_contract[purchase_date]']  ${dc_input}
   Run Keyword If  '${MODE}' not in 'openua openeu open_competitive_dialogue openua_defense'  Input Text  name=activate_contract[start_date]  01.12.2018 00:00:00
@@ -2374,8 +2510,8 @@ Get Last Feature Index
 #cat  Input Text  name=activate_contract[total]  777777
   Дочекатися І Клікнути  xpath=//input[@name='activate_contract[confirm]']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-activate-contract-submit']
-  Накласти ЄЦП
-  
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
 
 
 
@@ -2396,42 +2532,43 @@ Get Last Feature Index
   \   Run Keyword If  ${qualification_num}==0   Run Keywords
   ...  Sleep  5
   ...  AND  Reload Page
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${document}=  get_upload_file_path
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-  Run Keyword If    ${qualification_num}==0  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-0']
+  Run Keyword If    ${qualification_num}==0    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    ${qualification_num}==0  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-0']
   Run Keyword If    ${qualification_num}==0  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
-  Capture Page Screenshot
-  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
   Run Keyword If    ${qualification_num}==1  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
-  Capture Page Screenshot
-  Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  Wait Until Keyword Succeeds  300 s  20 s  subkeywords.Wait For PrequalificationButton2
   Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
   Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
-  Capture Page Screenshot
-  Run Keyword If    ${qualification_num}==2  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    ${qualification_num}==2    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    ${qualification_num}==2  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    ${qualification_num}==2  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
   Run Keyword If    ${qualification_num}==2  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
-  Capture Page Screenshot
-  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
-  Capture Page Screenshot
-  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
 
-  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
-  Capture Page Screenshot
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
   ${qual}=   Convert To String     Допустити до аукціону
-  Capture Page Screenshot
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   
   Дочекатися І Клікнути  name=qualification[permit]
@@ -2442,14 +2579,17 @@ Get Last Feature Index
    ...  Page Should Contain  Зверніть увагу
    ...  AND  Wait Element Animation  xpath=//*[contains(text(),"Накласти ЕЦП")]
   Дочекатися І Клікнути  xpath=//button[contains(.,'Накласти ЕЦП')]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
 
 Відхилити кваліфікацію
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+#cat  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
   Run Keyword If    ${qualification_num}==1  Click Element    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
   ${qual}=   Convert To String     Відмовити в участі в аукціоні
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-qualification-form-action']  ${qual}
@@ -2467,17 +2607,19 @@ Get Last Feature Index
    ...  Page Should Contain  Зверніть увагу
    ...  AND  Wait Element Animation  xpath=//*[contains(text(),"Накласти ЕЦП")]
   Дочекатися І Клікнути  xpath=//button[contains(.,'Накласти ЕЦП')]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
 
 
 Завантажити документ у кваліфікацію
   [Arguments]  ${username}  ${document}  ${tender_uaid}  ${qualification_num}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Log Many  CAT ${document} До ЕЦПdocument
   Log Many  CAT ${qualification_num}До ЕЦПqualification_num
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-0']
-  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-0']
+  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
   Sleep  2
@@ -2489,8 +2631,10 @@ Get Last Feature Index
   [Arguments]  ${username}  ${tender_uaid}  ${qualification_num}
   Switch browser  ${username}
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+#cat  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
   Run Keyword If    ${qualification_num}==1  Sleep  2
+  Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
   Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-escape-button-1']
 
   Wait Until Keyword Succeeds  10 x  1 s  Run Keywords
@@ -2498,11 +2642,13 @@ Get Last Feature Index
    ...  AND  Wait Element Animation  xpath=//*[contains(text(),"Накласти ЕЦП")]
   Sleep  2
   Дочекатися І Клікнути  xpath=//button[contains(.,'Накласти ЕЦП')]
-  Накласти ЄЦП
+  ${active}=  Execute Javascript  return quinta.callEcpCdn()
+  Run Keyword If  (${active} == 0)  Накласти ЄЦП
 
 Затвердити остаточне рішення кваліфікації
   [Arguments]  ${username}  ${tender_uaid}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Sleep  2
   Дочекатися І Клікнути  xpath=//a[contains(.,'Сформувати протокол прекваліфікації')]
   Sleep  1
@@ -2513,7 +2659,8 @@ Get Last Feature Index
 Перевести тендер на статус очікування обробки мостом
   [Arguments]  ${username}  ${tender_uaid}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@id='edit-tender-active-stage2-pending-button']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-propose-stage2-submit']
   
@@ -2529,13 +2676,15 @@ Get Last Feature Index
 Отримати доступ до тендера другого етапу
   [Arguments]  ${username}  ${tender_uaid}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 
 
 Активувати другий етап
   [Arguments]  ${username}  ${tender_uaid}
   Switch browser  ${username}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-redirect-stage1-button']
   Дочекатися І Клікнути  xpath=//input[@id='edit-tender-go-stage2-button']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-go-stage2-submit']
@@ -2614,9 +2763,11 @@ Position Should Equals
 #cat Редагування угоди  ${TENDER['TENDER_UAID']}  ${contract_index}  value.amount  ${amount}
 Редагувати угоду
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${field_name}  ${amount}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   ${contract_index}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
+  ...  ELSE IF   '${MODE}' == 'openua_defense'  Set Variable  0                   
   ...  ELSE  Set Variable  1
   Run Keyword If  '${MODE}' in 'openua openeu open_competitive_dialogue openua_defense open_esco'  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and contains(@data-index,"${contract_index}")]
   Sleep  5
@@ -2627,9 +2778,11 @@ Position Should Equals
   
 Встановити дату підписання угоди
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${dateSigned}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   ${contract_index}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
+  ...  ELSE IF   '${MODE}' == 'openua_defense'  Set Variable  0                   
   ...  ELSE  Set Variable  1
   Run Keyword If  '${MODE}' in 'openua openeu open_competitive_dialogue openua_defense open_esco'  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and contains(@data-index,"${contract_index}")]
   Sleep  5
@@ -2642,9 +2795,11 @@ Position Should Equals
 
 Вказати період дії угоди
   [Arguments]  ${username}  ${tender_uaid}  ${contract_index}  ${startDate}  ${endDate}
-  ukrtender.Пошук тендера по ідентифікатору   ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   ${contract_index}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
+  ...  ELSE IF   '${MODE}' == 'openua_defense'  Set Variable  0                   
   ...  ELSE  Set Variable  1
   Run Keyword If  '${MODE}' in 'openua openeu open_competitive_dialogue openua_defense open_esco'  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and contains(@data-index,"${contract_index}")]
   Sleep  5
@@ -2657,12 +2812,14 @@ Position Should Equals
   
 Завантажити документ в угоду
   [Arguments]  ${username}  ${document}  ${tender_uaid}  ${contract_index}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Log Many  CAT ${document} До ЕЦПdocument
   Log Many  CAT ${contract_index}До ЕЦПqualification_num
   ${contract_index}=  Convert To Integer  ${contract_index}
   Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   ${contract_index}=      Run Keyword If  '${MODE}' in 'open_esco'  Set Variable  2
+  ...  ELSE IF   '${MODE}' == 'openua_defense'  Set Variable  0                   
   ...  ELSE  Set Variable  1
   Run Keyword If  '${MODE}' in 'openua openeu open_competitive_dialogue openua_defense open_esco'  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and contains(@data-index,"${contract_index}")]
   Sleep  5
@@ -2677,13 +2834,15 @@ Position Should Equals
 #                               FUNDERS                                #
 Видалити донора
   [Arguments]  ${username}  ${tender_uaid}  ${funders_index}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  name=tender[has_funder]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
   
 Додати донора
   [Arguments]  ${username}  ${tender_uaid}  ${funders_data}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  name=tender[has_funder]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
 
@@ -2792,7 +2951,7 @@ Position Should Equals
   Input Text  xpath=//input[@name='plan[items][1][delivery_end_date]']  ${enddate}
 
   Дочекатися І Клікнути  xpath=//input[@value='Опублікувати план']
-  Sleep  8
+  Sleep  18
   ${plan_id}  Get Value  xpath=//input[@name='plan[planID]']
   [Return]  ${plan_id}
   
@@ -2943,9 +3102,10 @@ Position Should Equals
 
   Wait Until Keyword Succeeds  20x  20s  Run Keywords
   ...  Click Element  xpath=//input[contains(@data-tab,'3')]
-  ...  AND  Wait Until Element Is Visible  xpath=//a[contains(@id,'plan-list--procuring-link-0') and contains(@data-planid,'${tenderId}')]  10
+  ...  AND  Wait Until Element Is Visible  xpath=//a[contains(@id,'plan-list-3-procuring-link-0') and contains(@data-planid,'${tenderId}')]  10
+#cat  ...  AND  Wait Until Element Is Visible  xpath=//a[contains(@id,'plan-list--procuring-link-0') and contains(@data-planid,'${tenderId}')]  10
 
-  Click Element    xpath=//a[contains(@id,'plan-list--procuring-link-0') and contains(@data-planid,'${tenderId}')]
+  Click Element    xpath=//a[contains(@id,'plan-list-3-procuring-link-0') and contains(@data-planid,'${tenderId}')]
 
 Додати предмети закупівлі в план
     [Arguments]  ${items}
@@ -3056,7 +3216,8 @@ Position Should Equals
 # ESCO   #  
 Отримати індекс елементу поля зі статусом
   [Arguments]  ${username}  ${tender_uaid}  ${field_name}  ${status}
-  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
+  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   ${value}=  Run Keyword If  '${field_name}' == 'awards'  Get Element Attribute  xpath=//*[contains(@award-status,'active')]@award-index
   ...  ELSE IF  '${field_name}' == 'contract' and '${status}' == 'pending'  Get Element Attribute  xpath=//*[contains(@contract-status,'pending')]@contract-index
   ...  ELSE IF  '${field_name}' == 'contract' and '${status}' == 'active'  Get Element Attribute  xpath=//*[contains(@contract-status,'active')]@contract-index
