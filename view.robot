@@ -986,6 +986,10 @@ Resource  ukrtender.robot
 Отримати інформацію про contracts[0].period.startDate
   Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
+  Run Keyword If  '${MODE}' in "openua_defense"   Sleep  20 
+  Run Keyword If  '${MODE}' in "openua_defense"    Reload Page 
+  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
   ${contract_start_date}=  Get Value  name=contract[start_date]
   :FOR    ${INDEX}    IN RANGE    1    30
   \  Run Keyword If    '${contract_start_date}' != ''    Exit For Loop
@@ -1010,7 +1014,7 @@ Resource  ukrtender.robot
 #cat  \  Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
 #cat  ${return_value}  Get Value  name=contract[start_date]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
-#cat12_01_2019  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
+  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-contract-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
@@ -1049,6 +1053,10 @@ Resource  ukrtender.robot
 Отримати інформацію про contracts[0].period.endDate
   Подивитись на учасників
   ${contract_button_is_visible}  Run Keyword And Return Status  Page Should Contain Element    xpath=//a[contains(.,'Контракт')]
+#cat  Run Keyword If  '${MODE}' in "openua_defense"   Sleep  20 
+  Run Keyword If  '${MODE}' in "openua_defense"    Reload Page 
+  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
+  Run Keyword If  '${MODE}' in "openua_defense"    Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="0"]
   ${return_value}  Get Value  name=contract[end_date]
   Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   [return]  ${return_value}
