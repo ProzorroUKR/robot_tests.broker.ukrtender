@@ -590,7 +590,7 @@ Resource  ukrtender.robot
   \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-3"]
 #cat  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-award-complaintperiod-enddate-3"]
   ${return_value}    Set Variable  ${complaintPeriod}
-  Run Keyword If  '${MODE}' in "reporting negotiation openua openeu"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
+  Run Keyword If  '${MODE}' in "reporting negotiation openua openeu open_esco"    Дочекатися І Клікнути  xpath=//button[@id='edit-tender-award-supplier-cancel']
   Дочекатися І Клікнути  xpath=//button[@id='edit-tender-awards-cancel']
   [return]  ${return_value}
 
@@ -601,6 +601,7 @@ Resource  ukrtender.robot
   Run Keyword If  '${MODE}' in 'openua openeu' and '${SUITE NAME}' != 'Tests Files.Complaints'  Visible edit-tender-award-item-supplier  a[@id='edit-tender-award-item-supplier-2']
   Run Keyword If  '${MODE}' in 'openua openeu' and '${SUITE NAME}' != 'Tests Files.Complaints'  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-award-item-supplier-2']
   Run Keyword If  '${MODE}' in 'openua' and '${SUITE NAME}' == 'Tests Files.Complaints'  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-award-item-supplier-1']
+  Run Keyword If  '${MODE}' in "open_esco"    Дочекатися І Клікнути  xpath=//a[@id='edit-tender-award-item-supplier-3']
 
   
 Отримати інформацію про causeDescription
