@@ -2538,11 +2538,13 @@ Get Last Feature Index
   ${qualification_num}=  Convert To Integer  ${qualification_num}
   Run Keyword If    ${qualification_num}==0    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    ${qualification_num}==0  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-0']
+#cat  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-0']
+  Run Keyword If    ${qualification_num}==0  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-0" ).trigger( 'click' )
   Run Keyword If    ${qualification_num}==0  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
+#cat  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    ${qualification_num}==1  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
   Run Keyword If    ${qualification_num}==1  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
@@ -2551,20 +2553,24 @@ Get Last Feature Index
   Run Keyword If    "${mode}" not in "open_competitive_dialogue open_esco" and ${qualification_num}==-1  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   Run Keyword If    ${qualification_num}==2    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    ${qualification_num}==2  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    ${qualification_num}==2  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
+#cat   Run Keyword If    ${qualification_num}==2  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
+  Run Keyword If    ${qualification_num}==2  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-2" ).trigger( 'click' )
   Run Keyword If    ${qualification_num}==2  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
+#cat  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-1  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
+#cat  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-2']
+  Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-2" ).trigger( 'click' )
   Run Keyword If    "${mode}" == "open_competitive_dialogue" and ${qualification_num}==-2  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
 
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
+#cat  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Дочекатися І Клікнути    xpath=//*[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
@@ -2590,7 +2596,8 @@ Get Last Feature Index
   ${qualification_num}=  Convert To Integer  ${qualification_num}
 #cat  Run Keyword If    ${qualification_num}==1  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
-  Run Keyword If    ${qualification_num}==1  Click Element    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
+#cat  Run Keyword If    ${qualification_num}==1  Click Element    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    ${qualification_num}==1  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
   ${qual}=   Convert To String     Відмовити в участі в аукціоні
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   ${qual_doc}=   Convert To String     Повідомлення про рішення
@@ -2618,8 +2625,10 @@ Get Last Feature Index
   Log Many  CAT ${document} До ЕЦПdocument
   Log Many  CAT ${qualification_num}До ЕЦПqualification_num
   ${qualification_num}=  Convert To Integer  ${qualification_num}
-  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-0']
-  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
+#cat  Run Keyword If    ${qualification_num}==0  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-0']
+#cat  Run Keyword If    ${qualification_num}==1  Дочекатися І Клікнути    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
+  Run Keyword If    ${qualification_num}==0  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-0" ).trigger( 'click' )
+  Run Keyword If    ${qualification_num}==1  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
   Sleep  2
