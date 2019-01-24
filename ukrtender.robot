@@ -216,10 +216,10 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
   
-  Input text                          name=tender[amount]   ${budget2}
-  Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
   LOG  list("${step_rate}")
-  Input text  name=tender[rate_amount]  ${step_rate}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
   Input text                          xpath=//*[@name="tender[specification_period_start]"]  ${enquiry_period_start_date}
@@ -357,9 +357,9 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
 
-  Input text                          name=tender[amount]   ${budget2}
-  Дочекатися І Клікнути  name=tender[rate_amount]
-  Input text  name=tender[rate_amount]  ${step_rate}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Дочекатися І Клікнути  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
   Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
@@ -673,10 +673,10 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
 
-  Input text                          name=tender[amount]   ${budget2}
-  Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
   ${step_rate3}=        convert_float_to_string  ${prepared_tender_data.minimalStep.amount}
-  Input text  name=tender[rate_amount]  ${step_rate3}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate3}
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
 
@@ -805,12 +805,12 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
 
-  Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
 #cat  Sleep  10
-  Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
 #cat  Sleep  2
 #cat  LOG  list("${step_rate}")
-  Input text  name=tender[rate_amount]  ${step_rate}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
 #cat  Sleep  2
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
@@ -3174,7 +3174,7 @@ Position Should Equals
 Видалити предмет закупівлі плану
   [Arguments]  ${tender_owner}  ${tender_uaid}  ${item}
   ukrtender.Пошук плану по ідентифікатору  ${tender_owner}  ${tender_uaid}
-  Дочекатися І Клікнути  xpath=//input[@value='Видалити товар або послугу' and contains(@data-index,'2')]
+  Дочекатися І Клікнути  xpath=//input[@value='Видалити товар або послугу' and contains(@data-index,'1')]
   Дочекатися І Клікнути  xpath=//input[@value='Редагувати план']
 
 
