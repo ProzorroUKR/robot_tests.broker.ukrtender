@@ -127,6 +127,11 @@ Login
   Execute Javascript  quinta.showLoader()
   Дочекатися І Клікнути                       xpath=//*[text()="Оголосити закупівлю"]
 #cat  Sleep  15
+  Sleep  1
+  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-information-dialog-submit']  10
+  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']
+  Sleep  1
+
   Sleep  5
   ${loader_visible}=  Get Value  xpath=//input[@name="loader_exists"]
 #  Run Keyword If  "${loader_visible}" == "1"  Waiting for sync
