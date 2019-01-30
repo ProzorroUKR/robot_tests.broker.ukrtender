@@ -229,7 +229,7 @@ Waiting for sync
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
   Input text                          xpath=//*[@name="tender[specification_period_start]"]  ${enquiry_period_start_date}
   Input text                          xpath=//*[@name="tender[specification_period]"]  ${enquiry_period_end_date}
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
 
@@ -365,7 +365,7 @@ Waiting for sync
   Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
   Run Keyword If  ${NUMBER_OF_LOTS} == 0      Дочекатися І Клікнути  name=tender[rate_amount]
   Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
@@ -685,7 +685,7 @@ Waiting for sync
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
 
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
@@ -820,7 +820,7 @@ Waiting for sync
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
 
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
@@ -952,7 +952,7 @@ Waiting for sync
   Input text                          xpath=//input[@name='tender[nbu_rate_percent]']  ${nbu_rate_percent}
   Input text                          xpath=//input[@name='tender[minimal_step_percentage]']  ${minimal_step_percentage}
 
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
