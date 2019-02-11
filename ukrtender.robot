@@ -781,13 +781,6 @@ Waiting for sync
   ...  Click Element  xpath=//input[@id='purchase-button-search-1']
   ...  AND  Wait Until Element Is Visible  xpath=//a[contains(@data-tenderid, '${tender_uaid}')]  10
   Click Element    xpath=//a[contains(@data-tenderid, '${tender_uaid}')]
-  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-action"]
-  :FOR    ${INDEX}    IN RANGE    1    5
-  \  Run Keyword If    '${complaintPeriod}' == ''    Exit For Loop
-  \  Sleep  5
-  \  Reload Page
-  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-  \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-action"]
 
   
 Оновити сторінку з тендером
@@ -957,7 +950,7 @@ Set Multi Ids
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
   Input text                          name=tender[items][${index_item}][item_name]    ${item.description}
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][unit]']  ${item.unit.name}
-  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][${index_item}][dk_021_2015][title]']   90
   Input text                          name=tender[items][${index_item}][dk_021_2015][title]    ${item.classification.description}
   ${class1}=  conc_class  ${item.classification.description}  ${item.classification.id}
@@ -968,8 +961,8 @@ Set Multi Ids
   ${is_CPV_other}=  Run Keyword And Return Status  Should Be Equal  '${item.classification.id}'  '99999999-9'
   ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${item.additionalClassifications[0].scheme}'  'INN'
   Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор2  ${item}  1  ${is_MOZ}
-  Input Text                          xpath=//*[@name='tender[items][${index_item}][reception_from]']  ${delivery_start_date2}
-  Input text                          xpath=//*[@name='tender[items][${index_item}][reception_to]']  ${delivery_end_date2}
+  Run Keyword And Ignore Error  Input Text                          xpath=//*[@name='tender[items][${index_item}][reception_from]']  ${delivery_start_date2}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name='tender[items][${index_item}][reception_to]']  ${delivery_end_date2}
   Click Element                       xpath=//*[@name='tender[items][${index_item}][region]']
   Sleep  2
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][region]']  ${item_delivery_region2}
@@ -991,9 +984,9 @@ Set Multi Ids
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
   Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  10
-  ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
-  Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
-  Run Keyword If  ${is_visible}    Run Keyword And Ignore Error  Редагувати закупівлю
+#cat  ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
+#cat  Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
+#cat  Run Keyword If  ${is_visible}    Run Keyword And Ignore Error  Редагувати закупівлю
 
 
 Отримати інформацію із лоту
