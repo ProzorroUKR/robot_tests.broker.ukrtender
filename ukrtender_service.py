@@ -71,12 +71,15 @@ def parse_date(date_str):
     date = datetime.strptime(date_str, "%d.%m.%Y %H:%M:%S")
     return TZ.localize(date).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
 
-
 def convert_date_to_string(date):
     date = dateutil.parser.parse(date)
     date = date.strftime("%d.%m.%Y %H:%M")
     return date
 
+def convert_delivery_date_to_string(date):
+    date = dateutil.parser.parse(date)
+    date = date.strftime("%d.%m.%Y")
+    return date
 
 def parse_complaintPeriod_date(date_string):
     date_str = datetime.strptime(date_string, "%d.%m.%Y %H:%M")
@@ -241,7 +244,12 @@ def convert_float_to_string(number):
 	
 def convert_float_to_string2(number):
 
-    return repr(float(number));
+    return repr(float(number))
+
+def convert_float_to_string3(number):
+    parts = number.split('.', 2)
+    result = parts[0] + "." + parts[1][:2]
+    return result
 
 def convert_string_to_float(number):
 
