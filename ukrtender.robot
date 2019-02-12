@@ -1114,9 +1114,9 @@ Set Multi Ids
   ${item_index}=  Get Element Attribute  xpath=//select/option[contains(@data-lot-title, '${lot_id}') and @selected="selected"]@name
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-item-remove-button-1']
   Sleep  3
-  Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
-  Run Keyword And Ignore Error  Редагувати закупівлю
-  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+#cat  Run Keyword And Ignore Error  Редагувати закупівлю
+#cat  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-lot-remove-button-${lot_index}']
   Sleep  3
