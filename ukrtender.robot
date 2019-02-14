@@ -2270,8 +2270,8 @@ Get Last Feature Index
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
-  ${qual}=   Run Keyword If    '${MODE}' not in 'open_competitive_dialogue'  Convert To String     Допустити до аукціону
   ${qual}=   Run Keyword If    '${MODE}' in 'open_competitive_dialogue'  Convert To String     Допустити до переговорів
+  ...  ELSE  Convert To String     Допустити до аукціону
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   
   Дочекатися І Клікнути  name=qualification[permit]
@@ -2295,8 +2295,8 @@ Get Last Feature Index
   Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    ${qualification_num}==1  Click Element    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
   Run Keyword If    ${qualification_num}==1  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
-  ${qual}=   Run Keyword If    '${MODE}' not in 'open_competitive_dialogue'  Convert To String     Відмовити в участі в аукціоні
   ${qual}=   Run Keyword If    '${MODE}' in 'open_competitive_dialogue'  Convert To String     Відмовити в переговорах
+  ...  ELSE  Convert To String     Відмовити в участі в аукціоні
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
