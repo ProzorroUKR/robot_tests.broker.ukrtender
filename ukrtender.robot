@@ -2027,7 +2027,8 @@ Get Last Feature Index
   ...  AND  Sleep  2
   ...  AND  Choose File       xpath=//*[@name="multifiles[]"]    ${CURDIR}/Key-6.dat
   ...  AND  Sleep  10
-  ${qual}=   Convert To String     Учасник переговорів
+#cat  ${qual}=   Convert To String     Учасник переговорів
+  ${qual}=   Convert To String     Відхилити пропозицію
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-award-qualification-form-action']  ${qual}
   Дочекатися І Клікнути  id=edit-tender-dialog-award-qualification-reason1
   Дочекатися І Клікнути  id=edit-tender-dialog-award-qualification-reason2
