@@ -2271,9 +2271,11 @@ Get Last Feature Index
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
-  ${qual}=   Run Keyword If    '${MODE}' in 'open_competitive_dialogue'  Convert To String     Допустити до переговорів
-  ...  ELSE  Convert To String     Допустити до аукціону
-  Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
+  ${qual}=   Convert To String     active
+#cat  ${qual}=   Run Keyword If    '${MODE}' in 'open_competitive_dialogue'  Convert To String     Допустити до переговорів
+#cat  ...  ELSE  Convert To String     Допустити до аукціону
+#cat  Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
+  Select From List By Value  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   
   Дочекатися І Клікнути  name=qualification[permit]
   Дочекатися І Клікнути  name=qualification[law]
