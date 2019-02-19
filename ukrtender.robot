@@ -640,6 +640,8 @@ Waiting for sync
   ${delivery_start_date}=    Run Keyword If  "${mode}" not in "open_esco"  ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Run Keyword If  "${mode}" not in "open_esco"  Get From Dictionary   ${items[0].deliveryDate}   endDate
   ${delivery_end_date}=      Run Keyword If  "${mode}" not in "open_esco"  ukrtender_service.convert_date_to_string  ${delivery_end_date}
+  ${item_quantity}=        convert_float_to_string  ${items[0].quantity}
+
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
   Input text                          name=tender[items][0][dk_021_2015][title]    ${items[0].classification.description}
   Дочекатися І Клікнути  xpath=//*[@name='tender[items][0][dk_021_2015][title]']
@@ -657,7 +659,7 @@ Waiting for sync
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${items[0].deliveryLocation.latitude}
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${items[0].deliveryLocation.longitude}
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${items[0].deliveryAddress.region}
-  Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${items[0].quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${item_quantity}
 
   Run Keyword And Ignore Error  Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
   Run Keyword And Ignore Error  Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
