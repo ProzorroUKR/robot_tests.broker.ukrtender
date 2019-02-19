@@ -826,11 +826,15 @@ Waiting for sync
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    '${TEST_NAME}' == 'Неможливість додати документацію до тендера під час кваліфікації'    Wait Until Keyword Succeeds    400 s    20 s    subkeywords.Wait For PreQualificationPeriod
+  Дочекатися І Клікнути                       xpath=//a[contains(@class,'button edit-tender-add-document')]
+  Wait Until Element Is Visible  xpath=//*[@name='tender[document_type]']  5
   Select From List By Value  xpath=//*[@name='tender[document_type]']  biddingDocuments
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]    ${file}
+  Choose File       xpath=//*[@id="edit-tender-document"]    ${file}
   Sleep  10
-  Click Element                       xpath=//*[text()="Редагувати закупівлю"]
+#cat  Choose File       xpath=//*[@name="multifiles[]"]    ${file}
+
+  Дочекатися І Клікнути                       xpath=//button[@name='document[save]']
+  Дочекатися І Клікнути                       xpath=//*[text()="Редагувати закупівлю"]
   Run Keyword And Ignore Error  Редагувати закупівлю
 
 Set Multi Ids
