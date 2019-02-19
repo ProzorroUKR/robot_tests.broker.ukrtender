@@ -57,7 +57,7 @@ def get_type_field(field):
 def get_delivery_region(region):
      return region
 
-def convert_float_to_string(number):
+def convert_float_to_string1(number):
     return format(number, '.2f')
 
 def convert_coordinates_to_string(number):
