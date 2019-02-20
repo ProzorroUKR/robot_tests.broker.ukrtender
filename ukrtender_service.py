@@ -251,6 +251,10 @@ def convert_float_to_string3(number):
     result = parts[0] + "." + parts[1][:2]
     return result
 
+def convert_float_to_string_3f(number):
+
+    return '{0:.3f}'.format(float(number))
+	
 def convert_string_to_float(number):
 
     return float(number)

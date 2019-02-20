@@ -206,7 +206,7 @@ Waiting for sync
   Log Many  CAT777delivery_end_date ${delivery_end_date}
   Input text                          name=tender[items][0][item_name]    ${item_description}
   Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  ${item_quantity}=        convert_float_to_string  ${items[0].quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
   Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${item_quantity}
   Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
   Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
@@ -415,7 +415,7 @@ Waiting for sync
   Input text                          name=tender[items][0][item_name]    ${item_description}
   Sleep  2
   Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  ${item_quantity}=        convert_float_to_string  ${items[0].quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
   Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${item_quantity}
   Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
   Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
@@ -438,7 +438,7 @@ Waiting for sync
   Дочекатися І Клікнути               name=tender[items][1][item_name]
   Input text                          name=tender[items][1][item_name]    ${items[1].description} 
   Select From List By Label  xpath=//*[@name='tender[items][1][unit]']  ${unit_name2}
-  ${item_quantity2}=        convert_float_to_string  ${items[1].quantity}
+  ${item_quantity2}=        convert_float_to_string_3f  ${items[1].quantity}
   Run Keyword And Ignore Error  Input text                          name=tender[items][1][item_quantity]   ${item_quantity2}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][1][dk_021_2015][title]']   90
   Input text                          name=tender[items][1][dk_021_2015][title]    ${dk_21_desc2}
@@ -643,7 +643,7 @@ Waiting for sync
   ${delivery_start_date}=    Run Keyword If  "${mode}" not in "open_esco"  ukrtender_service.convert_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Run Keyword If  "${mode}" not in "open_esco"  Get From Dictionary   ${items[0].deliveryDate}   endDate
   ${delivery_end_date}=      Run Keyword If  "${mode}" not in "open_esco"  ukrtender_service.convert_date_to_string  ${delivery_end_date}
-  ${item_quantity}=        convert_float_to_string  ${items[0].quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
 
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
   Input text                          name=tender[items][0][dk_021_2015][title]    ${items[0].classification.description}
@@ -959,7 +959,7 @@ Set Multi Ids
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
   Input text                          name=tender[items][${index_item}][item_name]    ${item.description}
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][unit]']  ${item.unit.name}
-  ${item_quantity}=        convert_float_to_string  ${items.quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${item.quantity}
   Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item_quantity}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][${index_item}][dk_021_2015][title]']   90
   Input text                          name=tender[items][${index_item}][dk_021_2015][title]    ${item.classification.description}
@@ -1045,7 +1045,7 @@ Set Multi Ids
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
   Input text                          name=tender[items][${index_item}][item_name]    ${item.description}
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][unit]']  ${item.unit.name}
-  ${item_quantity}=        convert_float_to_string  ${items.quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${item.quantity}
   Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item_quantity}
 #cat  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][${index_item}][dk_021_2015][title]']   90
@@ -2633,7 +2633,7 @@ Position Should Equals
   Run Keyword If  '${items[0].additionalClassifications[0].scheme}' != 'ДКПП' or ${is_MOZ1}  Вибрати додатковий класифікатор предмету плану  ${items}  0  ${is_MOZ1}
 
   Input Text  xpath=//input[@name='plan[items][0][name]']  ${items[0].description}
-  ${item_quantity}=        convert_float_to_string  ${items[0].quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
   Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${item_quantity}
   Select From List By Label  xpath=//select[@name='plan[items][0][unit]']  ${items[0].unit.name}
   ${enddate}=  ukrtender_service.convert_date_to_string  ${items[0].deliveryDate.endDate}
@@ -2657,7 +2657,7 @@ Position Should Equals
   Run Keyword If  '${items[1].additionalClassifications[0].scheme}' != 'ДКПП' or ${is_MOZ1}  Вибрати додатковий класифікатор предмету плану  ${items}  1  ${is_MOZ1}
 
   Input Text  xpath=//input[@name='plan[items][1][name]']  ${items[1].description}
-  ${item_quantity1}=        convert_float_to_string  ${items[1].quantity}
+  ${item_quantity1}=        convert_float_to_string_3f  ${items[1].quantity}
   Input Text  xpath=//input[contains(@name,'plan[items][1][quantity]')]  ${item_quantity1}
   Select From List By Label  xpath=//select[@name='plan[items][1][unit]']  ${items[1].unit.name}
   Select From List By Label  xpath=//select[@name='plan[items][1][unit]']  ${items[1].unit.name}
@@ -2829,7 +2829,7 @@ Position Should Equals
     \  ${index_xpath}=  privatmarket_service.sum_of_numbers  ${index}  1
     \  Run Keyword If  ${index} > 0  Click Element  xpath=//button[@data-id='actAddItem']
     \  Wait Element Visibility And Input Text  xpath=(//input[@data-id='description'])[${index_xpath}]  ${items[${index}].description}
-    \  ${item_quantity}=        convert_float_to_string  ${items[index].quantity}
+    \  ${item_quantity}=        convert_float_to_string_3f  ${items[index].quantity}
 #cat    \  Input Text  xpath=(//input[@data-id='quantity'])[${index_xpath}]  ${items[${index}].quantity}
     \  Input Text  xpath=(//input[@data-id='quantity'])[${index_xpath}]  ${item_quantity}
     \  Select From List By Label  xpath=(//select[@data-id='unit'])[${index_xpath}]  ${items[${index}].unit.name}
@@ -2874,7 +2874,7 @@ Position Should Equals
   Run Keyword If  '${item.additionalClassifications[0].scheme}' != 'ДКПП' or ${is_MOZ1}  Вибрати додатковий класифікатор предмету плану2  ${item}  2  ${is_MOZ1}
 
   Input Text  xpath=//input[@name='plan[items][2][name]']  ${item.description}
-  ${item_quantity}=        convert_float_to_string  ${items.quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${item.quantity}
   Input Text  xpath=//input[contains(@name,'plan[items][2][quantity]')]  ${item_quantity}
   Select From List By Label  xpath=//select[@name='plan[items][2][unit]']  ${item.unit.name}
 
