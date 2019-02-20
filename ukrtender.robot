@@ -959,7 +959,8 @@ Set Multi Ids
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
   Input text                          name=tender[items][${index_item}][item_name]    ${item.description}
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][unit]']  ${item.unit.name}
-  Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
+  ${item_quantity}=        convert_float_to_string  ${items.quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item_quantity}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][${index_item}][dk_021_2015][title]']   90
   Input text                          name=tender[items][${index_item}][dk_021_2015][title]    ${item.classification.description}
   ${class1}=  conc_class  ${item.classification.description}  ${item.classification.id}
@@ -2846,7 +2847,7 @@ Position Should Equals
   Run Keyword If  '${parameter}' == 'budget.amount'  Input Text  xpath=//input[@name='plan[amount]']  ${amount}
 
   Run Keyword If  '${parameter}' == 'items[0].quantity'  Clear Element Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]
-  Run Keyword If  '${parameter}' == 'items[0].quantity'  ${item_quantity}=        convert_float_to_string  ${value}
+  ${item_quantity}=    Run Keyword If  '${parameter}' == 'items[0].quantity'      convert_float_to_string  ${value}
   Run Keyword If  '${parameter}' == 'items[0].quantity'  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${item_quantity}
 #cat  Run Keyword If  '${parameter}' == 'items[0].quantity'  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${value}
   ${enddate}=  Run Keyword If  '${parameter}' == 'items[0].deliveryDate.endDate'  ukrtender_service.convert_date_to_string  ${value}
