@@ -879,7 +879,8 @@ Set Multi Ids
   ...  ELSE  Set Variable  1
   Run Keyword If    '${contract_visible}' == 'contract_visible'    Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   Run Keyword If    '${contract_visible}' == 'contract_visible'    Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
-  ${url_doc}=    Get Element Attribute    xpath=//a[contains(text(), '${doc_id}')]@href
+#cat  ${url_doc}=    Get Element Attribute    xpath=//a[contains(text(), '${doc_id}')]@href
+  ${url_doc}=    Get Element Attribute    xpath=//a[contains(text(), '${doc_id}')]@data-url
   ${file_name}=    Get Text    xpath=//a[contains(text(), '${doc_id}')]
   ${file_name}=    Convert To String    ${file_name}
   ukrtender_service.download_file    ${url_doc}    ${file_name}    ${OUTPUT_DIR}
