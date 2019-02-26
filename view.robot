@@ -1162,6 +1162,12 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про qualificationPeriod.endDate
+  ${end_date}=  Get Value  xpath=//*[@name='tender[qualification_period_end]']
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${end_date}' != ''    Exit For Loop
+  \  Sleep  5
+  \  Reload Page
+  \  ${end_date}=  Get Value  xpath=//*[@name='tender[qualification_period_end]']
   ${return_value}  Get Value  xpath=//*[@name='tender[qualification_period_end]']
   [return]  ${return_value}  
 
