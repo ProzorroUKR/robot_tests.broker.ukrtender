@@ -835,7 +835,8 @@ Waiting for sync
   Wait Until Element Is Visible  xpath=//*[@name='tender[document_type]']  5
   Select From List By Value  xpath=//*[@name='tender[document_type]']  biddingDocuments
   Choose File       xpath=//*[@id="edit-tender-document"]    ${file}
-  Sleep  10
+  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+#cat  Sleep  10
 #cat  Choose File       xpath=//*[@name="multifiles[]"]    ${file}
 
   Дочекатися І Клікнути                       xpath=//button[@name='document[save]']
