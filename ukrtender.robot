@@ -290,7 +290,7 @@ Waiting for sync
   ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${tender_data.data.description_en}
   ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${tender_data.data.lots[0].title_en}
 #cat  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
-
+  
 Заповнити поля для переговорної процедури
 #cat переносим в допороговую + reporting
   [Arguments]  ${tender_data}
@@ -834,10 +834,8 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//a[contains(@class,'button edit-tender-add-document')]
   Wait Until Element Is Visible  xpath=//*[@name='tender[document_type]']  5
   Select From List By Value  xpath=//*[@name='tender[document_type]']  biddingDocuments
-  Choose File       xpath=//*[@id="edit-tender-document"]    ${file}
+  Choose File       xpath=//*[@id='edit-tender-document']    ${file}
   Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
-#cat  Sleep  10
-#cat  Choose File       xpath=//*[@name="multifiles[]"]    ${file}
 
   Дочекатися І Клікнути                       xpath=//button[@name='document[save]']
   Дочекатися І Клікнути                       xpath=//*[text()="Редагувати закупівлю"]
@@ -1094,10 +1092,19 @@ Set Multi Ids
   [Arguments]    ${username}    ${filepath}    ${TENDER_UAID}    ${lot_id}
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Select From List By Value  xpath=//*[@name='tender[lots][0][document_type]']  biddingDocuments
-  Sleep  2
-  Choose File       xpath=//*[@name="lot_multifiles[]"]    ${filepath}
-  Sleep  10
+#cat#cat  Select From List By Value  xpath=//*[@name='tender[lots][0][document_type]']  biddingDocuments
+#cat#cat  Sleep  2
+#cat#cat#cat#cat  Choose File       xpath=//*[@name="lot_multifiles[]"]    ${filepath}
+#cat#cat  Sleep  10
+  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-lot-add-document-0']
+  Wait Until Element Is Visible  xpath=//*[@name='lot_document[document_type]']  5
+  Select From List By Value  xpath=//*[@name='lot_document[document_type]']  biddingDocuments
+#cat#cat#cat#cat  Дочекатися І Клікнути                       xpath=//label[@for='edit-tender-lot-document']
+  Choose File       xpath=//*[@id='edit-tender-lot-document']    ${filepath}
+  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+
+  Дочекатися І Клікнути                       xpath=//button[@id='edit-tender-lot-document-save']
+
   Дочекатися І Клікнути    xpath=//*[text()="Редагувати закупівлю"]
   Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  3
@@ -2949,7 +2956,7 @@ Position Should Equals
   Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']
   Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-confirm-dialog-submit']  5
   Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-confirm-dialog-submit']
-  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//*[text()="Редагувати закупівлю"]  5
-  Run Keyword And Ignore Error  Click Element   xpath=//*[text()="Редагувати закупівлю"]
+#cat  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//*[text()="Редагувати закупівлю"]  5
+#cat  Run Keyword And Ignore Error  Click Element   xpath=//*[text()="Редагувати закупівлю"]
   Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-information-dialog-submit']  5
   Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']
