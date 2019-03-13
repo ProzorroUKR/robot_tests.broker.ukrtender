@@ -1861,7 +1861,7 @@ Get Last Feature Index
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
 
-  Run Keyword If  ${NUMBER_OF_LOTS}==1 and "Неможливість подати цінову пропозицію без прив" not in "${TEST_NAME}" and '${mode}' not in 'open_esco'  Дочекатися І Клікнути    xpath=//input[@id='edit-bid-lot-add-0']
+  Run Keyword If  ${NUMBER_OF_LOTS}==1 and "Неможливість подати цінову пропозицію без прив" not in "${TEST_NAME}" and '${mode}' not in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@class,'purchase edit-bid-submit-button')]
   Run Keyword If  '${mode}' in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@value,'Подати пропозицію')]
   
 Змінити цінову пропозицію
@@ -1886,13 +1886,32 @@ Get Last Feature Index
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
-  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
-  Sleep  10
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
-  Sleep  25
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-add-document')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-lot-add-document-0')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Select From List By Value  xpath=//select[contains(@name,'tender[document_type]')]  commercialProposal
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']
+
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//select[contains(@name,'lot_document[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Select From List By Value  xpath=//select[contains(@name,'lot_document[document_type]')]  commercialProposal
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Choose File       xpath=//*[@id='edit-bid-lot-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
+
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  
+#cat  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
+#cat  Sleep  2
+#cat  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
+#cat  Sleep  10
+#cat  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
+#cat  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+#cat  Sleep  25
 
 
 Змінити документ в ставці
@@ -1901,13 +1920,22 @@ Get Last Feature Index
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
+  Click Element    xpath=//a[contains(.,'${doc_id}')]
   Execute JavaScript                  window.scrollTo(0, 1000)
-  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
-  Sleep  10
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']
+
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//select[contains(@name,'lot_document[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Choose File       xpath=//*[@id='edit-bid-lot-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
+
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
   Sleep  25
 
 

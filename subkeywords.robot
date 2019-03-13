@@ -354,6 +354,7 @@ Switch new lot
   [Arguments]  ${bid}  ${lots_ids}  ${features_ids}
 
   Log Many  CAT777 ${lots_ids}
+  Дочекатися І Клікнути                       xpath=//input[@class='edit-bid-lot-enable']
   ${input_selector}=  Set Variable If  ${NUMBER_OF_LOTS}==0  //*[@name='bid[common_cost]']  //input[@id='edit-bid-lot-cost-0']
   Wait Until Element Is Visible    xpath=${input_selector}    30
   ${float_amount}=  Set Variable If  ${NUMBER_OF_LOTS}==0  ${bid.data.value.amount}  ${bid.data.lotValues[0].value.amount}
@@ -517,8 +518,8 @@ Switch new lot
   Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
   Run Keyword If    ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Подати пропозицію"]
-  Run Keyword If    ${NUMBER_OF_LOTS}!=0  Scroll To Element    xpath=//input[@id='edit-bid-lot-add-0']
-  Run Keyword If    ${NUMBER_OF_LOTS}!=0  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+  Run Keyword If    ${NUMBER_OF_LOTS}!=0  Scroll To Element    xpath=//input[contains(@class,'purchase edit-bid-submit-button')]
+  Run Keyword If    ${NUMBER_OF_LOTS}!=0  Click Element    xpath=//input[contains(@class,'purchase edit-bid-submit-button')]
   Sleep  15
 
 
@@ -526,7 +527,8 @@ Switch new lot
   Wait Until Keyword Succeeds  420 s  15 s  subkeywords.Wait For Status
   Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
-  Дочекатися І Клікнути    xpath=//*[@value="Підтвердити участь"]
+  Дочекатися І Клікнути    xpath=//input[contains(@class,'purchase edit-bid-submit-button')]
+#cat  Дочекатися І Клікнути    xpath=//*[@value="Підтвердити участь"]
   Sleep  30
   
 Очікування зміни відредагованої вартості угоди
