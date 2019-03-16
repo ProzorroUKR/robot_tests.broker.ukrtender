@@ -1856,10 +1856,13 @@ Get Last Feature Index
 #cat  Run Keyword If  ${NUMBER_OF_LOTS}==1 and '${mode}' == 'open_competitive_dialogue' and '${DIALOGUE_TYPE}' == 'EU'  Set Suite Variable    @{ID}    ${lots_ids}
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@class='edit-bid-lot-enable']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@class='edit-bid-lot-enable']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@class='edit-bid-lot-enable']
 
   Run Keyword If  ${NUMBER_OF_LOTS}==1 and "Неможливість подати цінову пропозицію без прив" not in "${TEST_NAME}" and '${mode}' not in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@class,'purchase edit-bid-submit-button')]
   Run Keyword If  '${mode}' in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@value,'Подати пропозицію')]
@@ -1920,8 +1923,8 @@ Get Last Feature Index
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
-  Click Element    xpath=//a[contains(.,'${doc_id}')]
   Execute JavaScript                  window.scrollTo(0, 1000)
+  Click Element    xpath=//a[contains(.,'${doc_id}')]
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
