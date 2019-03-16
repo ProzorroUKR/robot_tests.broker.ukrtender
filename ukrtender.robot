@@ -1892,13 +1892,13 @@ Get Last Feature Index
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-add-document')]
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-lot-add-document-0')]
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Select From List By Value  xpath=//select[contains(@name,'tender[document_type]')]  commercialProposal
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Select From List By Value  xpath=//select[contains(@name,'tender[document_type]')]  qualificationDocuments
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']
 
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//select[contains(@name,'lot_document[document_type]')]  5
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Select From List By Value  xpath=//select[contains(@name,'lot_document[document_type]')]  commercialProposal
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Select From List By Value  xpath=//select[contains(@name,'lot_document[document_type]')]  qualificationDocuments
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Choose File       xpath=//*[@id='edit-bid-lot-document']    ${path}
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
@@ -1908,7 +1908,7 @@ Get Last Feature Index
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
   
-#cat  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
+#cat  Select From List By Value  xpath=//*[@name='bid[document_type]']  qualificationDocuments
 #cat  Sleep  2
 #cat  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
 #cat  Sleep  10
@@ -1949,13 +1949,14 @@ Get Last Feature Index
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 800)
   Sleep  2
-  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]        ${CURDIR}/Key-6.dat
-  Sleep  10
-  Click Element    xpath=//input[@id='edit-bid-document-private']
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+  Click Element    xpath=//a[contains(.,'${doc_id}')]
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-decision')]
+  Run Keyword If  '${mode}' in 'openeu'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-confidentiality')]
+  Run Keyword If  '${mode}' in 'openeu'  Input text    xpath=//textarea[contains(@name,'lot_document[confidentiality_rationale]')]  Пояснення причини конфіденційності документа
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
   Sleep  25
 
 
