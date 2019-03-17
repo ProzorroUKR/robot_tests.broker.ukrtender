@@ -657,7 +657,7 @@ Waiting for sync
   Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор  ${items}  0  ${is_MOZ}
 
   Input text                          name=tender[items][0][item_name]    ${items[0].description}
-  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${items[0].unit.name}
+  Run Keyword And Ignore Error  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${items[0].unit.name}
 
   ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${items[0].deliveryLocation.latitude}
   ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${items[0].deliveryLocation.longitude}
