@@ -589,6 +589,7 @@ Waiting for sync
 
   Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${tender_data.data.procurementMethodType}
   Click Element  name=tender[multi_lot]
+  Select From List By Value  xpath=//select[@name='tender[funding]']  ${tender_data.data.fundingKind}
   Input text                          name=tender[lots][0][name]   ${tender_data.data.lots[0].title}
   Input text                          name=tender[lots][0][description]   ${tender_data.data.lots[0].description}
   ${minimalStepPercentage1}=        set_value_minimalStepPercentage  ${tender_data.data.lots[0].minimalStepPercentage}
@@ -612,13 +613,12 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${tender_data.data.procuringEntity.contactPoint.telephone}
 
-  Select From List By Value  xpath=//select[@name='tender[funding]']  ${tender_data.data.fundingKind}
   ${nbu_rate_percent}=        set_value_minimalStepPercentage  ${tender_data.data.NBUdiscountRate}
   ${nbu_rate_percent}=        convert_esco__float_to_string  ${nbu_rate_percent}
   ${minimal_step_percentage}=        set_value_minimalStepPercentage  ${tender_data.data.minimalStepPercentage}
   ${minimal_step_percentage}=        convert_esco__float_to_string  ${minimal_step_percentage}
   Input text                          xpath=//input[@name='tender[nbu_rate_percent]']  ${nbu_rate_percent}
-  Input text                          xpath=//input[@name='tender[minimal_step_percentage]']  ${minimal_step_percentage}
+  Run Keyword And Ignore Error  Input text                          xpath=//input[@name='tender[minimal_step_percentage]']  ${minimal_step_percentage}
 
   ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.startDate}
   ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.endDate}
