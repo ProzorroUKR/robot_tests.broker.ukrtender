@@ -1949,10 +1949,12 @@ Get Last Feature Index
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 800)
   Sleep  2
-  Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
+#cat  Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
+  Дочекатися І Клікнути    xpath=//a[contains(@class,'edit-bid-lot-replace-document')]
   Run Keyword If  '${mode}' in 'open_competitive_dialogue'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-decision')]
   Run Keyword If  '${mode}' in 'openeu'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-confidentiality')]
-  Run Keyword If  '${mode}' in 'openeu'  Input text    xpath=//textarea[contains(@name,'lot_document[confidentiality_rationale]')]  Пояснення причини конфіденційності документа
+  Run Keyword If  '${mode}' in 'openeu'  Input text    xpath=//textarea[contains(@name,'lot_document[confidentiality_rationale]')]  ${doc_data.confidentialityRationale}
+  Run Keyword And Ignore Error  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
   Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
