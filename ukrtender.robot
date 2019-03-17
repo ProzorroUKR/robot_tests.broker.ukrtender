@@ -1924,7 +1924,7 @@ Get Last Feature Index
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 1000)
-  Click Element    xpath=//a[contains(.,'${doc_id}')]
+  Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
@@ -1949,7 +1949,7 @@ Get Last Feature Index
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 800)
   Sleep  2
-  Click Element    xpath=//a[contains(.,'${doc_id}')]
+  Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
   Run Keyword If  '${mode}' in 'open_competitive_dialogue'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-decision')]
   Run Keyword If  '${mode}' in 'openeu'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-confidentiality')]
   Run Keyword If  '${mode}' in 'openeu'  Input text    xpath=//textarea[contains(@name,'lot_document[confidentiality_rationale]')]  Пояснення причини конфіденційності документа
