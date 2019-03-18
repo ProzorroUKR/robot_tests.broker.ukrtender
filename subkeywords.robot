@@ -389,6 +389,7 @@ Switch new lot
 Подати цінову пропозицію для esco
   [Arguments]  ${bid}  ${lots_ids}  ${features_ids}
   Log Many  CAT777 ${bid}
+  Дочекатися І Клікнути                       xpath=//input[@class='edit-bid-lot-enable']
   ${float_yearlyPaymentsPercentage}=  Set Variable  ${bid.data.lotValues[0].value.yearlyPaymentsPercentage}
   ${yearlyPaymentsPercentage}=    ukrtender_service.convert_esco__float_to_string    ${float_yearlyPaymentsPercentage}
   Sleep  1
