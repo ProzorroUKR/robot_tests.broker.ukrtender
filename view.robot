@@ -661,7 +661,8 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про documents[0].title
-  ${return_value}  Get Value  xpath=//*[@name='tender[documents]']
+#cat  ${return_value}  Get Value  xpath=//*[@name='tender[documents]']
+  ${return_value}  Get Text  xpath=//div[@id='edit-tender-document-container-0']//a[@class='edit-tender-general-document']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].documents[0].title
