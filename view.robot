@@ -42,7 +42,7 @@ Resource  ukrtender.robot
   ${value_below}=  Get Value    xpath=//*[@name='tender[rate_amount]']
 #cat  ${value_open}=  Get Value           xpath=//*[@name='tender[rate_amount]']
   ${value_open}=  Get Value           xpath=//*[@name='tender[lots][0][minimal_step]']
-  ${return_value}=    Set Variable If    '${type_tender}' == 'Допорогові закупівлі'    ${value_open}    ${value_below}
+  ${return_value}=    Set Variable If    '${type_tender}' == 'Допорогові закупівлі'    ${value_below}   ${value_open}
   ${return_value}=  ukrtender_service.convert_float_to_string    ${return_value}
   ${return_value}=  Convert To Number    ${return_value}    2
   [return]  ${return_value}
