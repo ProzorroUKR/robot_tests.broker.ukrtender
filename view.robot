@@ -40,7 +40,8 @@ Resource  ukrtender.robot
 Отримати інформацію про minimalStep.amount
   ${type_tender}=    Get Text            xpath=//*[@name='tender[procedure_type]']
   ${value_below}=  Get Value    xpath=//*[@name='tender[rate_amount]']
-  ${value_open}=  Get Value           xpath=//*[@name='tender[rate_amount]']
+#cat  ${value_open}=  Get Value           xpath=//*[@name='tender[rate_amount]']
+  ${value_open}=  Get Value           xpath=//*[@name='tender[lots][0][minimal_step]']
   ${return_value}=    Set Variable If    '${type_tender}' == 'Допорогові закупівлі'    ${value_open}    ${value_below}
   ${return_value}=  ukrtender_service.convert_float_to_string    ${return_value}
   ${return_value}=  Convert To Number    ${return_value}    2
