@@ -134,7 +134,8 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[0].deliveryDate.startDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][reception_from]"]
-  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+#cat  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+  ${return_value}=  ukrtender_service.convert_delivery_date_to_string  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryDate.endDate
