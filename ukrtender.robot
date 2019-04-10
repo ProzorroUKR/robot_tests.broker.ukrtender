@@ -1468,12 +1468,12 @@ Get Last Feature Index
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 #cat  Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
-  Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
+  Дочекатися І Клікнути      xpath=//span[contains(.,'Питання та відповіді')]
   ${field_xpath}=    get_xpath.get_question_xpath    ${field_name}    ${question_id}
   Log Many  CAT field_xpath= ${field_xpath}
   Wait Until Keyword Succeeds  5 x  20 s  Run Keywords
   ...  Reload Page
-  ...  AND    Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
+  ...  AND    Дочекатися І Клікнути      xpath=//span[contains(.,'Питання та відповіді')]
   ...  AND  Wait Until Element Is Visible  xpath=${field_xpath}
 
   ${value}=    Get Text    xpath=${field_xpath}
@@ -1488,7 +1488,7 @@ Get Last Feature Index
   ${tender_status}=    Get Value    xpath=//*[@name='tender[status]']
   Run Keyword If  '${tender_status}' != 'active.enquiries' and '${mode}' == 'belowThreshold'  Fail    "Період уточнень закінчився"
   # поставить проверку для опен
-  Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
+  Дочекатися І Клікнути      xpath=//span[contains(.,'Питання та відповіді')]
   Wait Until Keyword Succeeds  300 s  10 s  subkeywords.Wait For QuestionID   ${question_id}
 #cat  :FOR    ${INDEX}    IN RANGE    1    2
 #cat  \  Sleep  5
@@ -1891,8 +1891,8 @@ Get Last Feature Index
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-add-document')]
   Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-lot-add-document-0')]
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Select From List By Value  xpath=//select[contains(@name,'tender[document_type]')]  qualificationDocuments
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'document[type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Select From List By Value  xpath=//select[contains(@name,'document[type]')]  qualificationDocuments
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']
@@ -1925,7 +1925,7 @@ Get Last Feature Index
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 1000)
   Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'tender[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'document[type]')]  5
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
   Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']

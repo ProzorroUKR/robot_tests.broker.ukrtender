@@ -1232,7 +1232,7 @@ Resource  ukrtender.robot
 Отримати інформацію про funders[0].name
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
 #cat  ${return_value}=  Set Variable If  '${value}' == 'World Bank'  World Bank  none
-  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  Світовий Банк  none
+  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  Світовий Банк  Глобальний фонд
   [return]  ${return_value}
 
 Отримати інформацію про funders[0].address.locality
@@ -1261,7 +1261,7 @@ Resource  ukrtender.robot
   
 Отримати інформацію про funders[0].identifier.id
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  44000  none
+  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  44000  47045
   [return]  ${return_value}
 
 Отримати інформацію про funders[0].identifier.legalName
@@ -1271,7 +1271,7 @@ Resource  ukrtender.robot
   
 Отримати інформацію про funders[0].identifier.scheme
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  XM-DAC  none
+  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  XM-DAC  XM-DAC
   [return]  ${return_value}
 
 #                                  ESCO                          #
