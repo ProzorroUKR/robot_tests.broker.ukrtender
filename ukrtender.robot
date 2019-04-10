@@ -45,11 +45,11 @@ ${password_sign_in}                                             id=user_password
 Login
   [Arguments]  ${username}
   Дочекатися І Клікнути   xpath=//nav[@id="site-navigation"]/descendant::a[@class="menu-login"]
-  Sleep   1
+#cat  Sleep   1
   Input text      xpath=//input[@id='username-34']          ${USERS.users['${username}'].login}
   Input text      xpath=//input[@id='user_password-34']       ${USERS.users['${username}'].password}
   Дочекатися І Клікнути    xpath=//input[@id='um-submit-btn']
-  Sleep   2
+#cat  Sleep   2
 
 
 #                                    TENDER OPERATIONS                                           #
@@ -59,75 +59,36 @@ Login
   [Documentation]
   ...      ${ARGUMENTS[0]} ==  username
   ...      ${ARGUMENTS[1]} ==  tender_data
-  #${file_path}=        local_path_to_file   TestDocument.docx
-  ${prepared_tender_data}=   Get From Dictionary    ${ARGUMENTS[1]}                       data
-  ${items}=                  Get From Dictionary    ${prepared_tender_data}               items
-  #${features}=               Get From Dictionary    ${prepared_tender_data}               features
-  ${proc_name}=              Get From Dictionary    ${prepared_tender_data.procuringEntity}               name
-  ${proc_telephone}=              Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}               telephone
-  ${title}=                  Get From Dictionary    ${prepared_tender_data}               title
-  ${title_en}=               Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description}=            Get From Dictionary    ${prepared_tender_data}               description
-  ${description_en}=         Get From Dictionary    ${prepared_tender_data}               description_en
-
-  ${budget}=  Run Keyword If  '${mode}' not in "open_esco"                   Get From Dictionary    ${prepared_tender_data.value}         amount
-  ${budget}=  Run Keyword If  '${mode}' not in "open_esco"                   ukrtender_service.convert_float_to_string                    ${budget}
-  ${step_rate}=  Run Keyword If  '${mode}' not in "reporting negotiation open_esco"                          Get From Dictionary    ${prepared_tender_data.minimalStep}   amount
-  ${step_rate}=  Run Keyword If  '${mode}' not in "reporting negotiation open_esco"                          ukrtender_service.convert_float_to_string                    ${step_rate}
-  ${enquiry_period}=  Run Keyword If  '${mode}'=='belowThreshold'          Get From Dictionary   ${prepared_tender_data}                enquiryPeriod
-  ${enquiry_period_start_date}=  Run Keyword If  '${mode}'=='belowThreshold'          ukrtender_service.convert_date_to_string            ${enquiry_period.startDate}
-  ${enquiry_period_end_date}=  Run Keyword If  '${mode}'=='belowThreshold'          ukrtender_service.convert_date_to_string            ${enquiry_period.endDate}
-  ${tender_period}=  Run Keyword If  '${mode}' not in "reporting negotiation"                      Get From Dictionary   ${prepared_tender_data}                tenderPeriod
-  ${tender_period_start_date}=  Run Keyword If  '${mode}' not in "reporting negotiation"              ukrtender_service.convert_date_to_string  ${tender_period.startDate}
-  ${tender_period_end_date}=  Run Keyword If  '${mode}' not in "reporting negotiation"              ukrtender_service.convert_date_to_string  ${tender_period.endDate}
-  ${countryName}=   Get From Dictionary   ${prepared_tender_data.procuringEntity.address}       countryName
-  ${item_description}=    Get From Dictionary    ${items[0]}    description
-  ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
-  ${delivery_start_date}=  Run Keyword If  '${mode}' not in "open_esco"     Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=  Run Keyword If  '${mode}' not in "open_esco"     ukrtender_service.convert_date_to_string    ${delivery_start_date}
-  ${delivery_end_date}=  Run Keyword If  '${mode}' not in "open_esco"       Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=  Run Keyword If  '${mode}' not in "open_esco"        ukrtender_service.convert_date_to_string  ${delivery_end_date}
-  ${item_delivery_country}=      Get From Dictionary    ${items[0].deliveryAddress}    countryName
-  ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
-  ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
-  ${item_locality}=  Get From Dictionary  ${items[0].deliveryAddress}  locality
-  ${item_delivery_address_street_address}=  Get From Dictionary  ${items[0].deliveryAddress}  streetAddress
-  ${item_delivery_postal_code}=  Get From Dictionary  ${items[0].deliveryAddress}  postalCode
-  ${latitude}=  Get From Dictionary  ${items[0].deliveryLocation}  latitude
-  ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
-  ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
-  ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
-  ${dkpp_id1}=        Convert To String     Не визначено
-  ${budget2}=  Run Keyword If  '${mode}' not in "open_esco"          convert_float_to_string  ${budget}
- 
-  ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
-  ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
-  ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
-  ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  ${mainProcurementCategory}=                  Get From Dictionary    ${prepared_tender_data}               mainProcurementCategory
 
   Switch Browser     ${ARGUMENTS[0]}
   Дочекатися І Клікнути  xpath=//nav[@id="site-navigation"]/descendant::a[@class="menu-tenders"]
   Дочекатися І Клікнути  xpath=//a[contains(.,'Нова закупівля')]
   Дочекатися І Клікнути   xpath=//*[@name='tender[procedure_type]']
   Scroll To Element       xpath=//*[@name='tender[procedure_type]']
-  Sleep  1
-  Log Many  CAT888 mode= ${mode}
-   Run Keyword If  "${mode}" == "belowThreshold"  Заповнити поля для допорогової закупівлі  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" == "openua"   Заповнити поля для понадпорогів укр  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" == "openeu"   Заповнити поля для понадпорогів укр  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" == "open_competitive_dialogue"   Заповнити поля для КД  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" in "negotiation reporting"   Заповнити поля для переговорної процедури  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" in "openua_defense"   Заповнити поля для ПППО  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" in "below_funders"   Заповнити поля для допорогової закупівлі  ${ARGUMENTS[1]}
-   ...  ELSE IF  "${mode}" in "open_esco"   Заповнити поля для esco  ${ARGUMENTS[1]}
+  Run Keyword If  "${mode}" == "belowThreshold"  Заповнити поля для допорогової закупівлі  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" == "openua"   Заповнити поля для понадпорогів укр  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" == "openeu"   Заповнити поля для понадпорогів укр  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" == "open_competitive_dialogue"   Заповнити поля для КД  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" in "negotiation reporting"   Заповнити поля для переговорної процедури  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" in "openua_defense"   Заповнити поля для ПППО  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" in "below_funders"   Заповнити поля для допорогової закупівлі  ${ARGUMENTS[1]}
+  ...  ELSE IF  "${mode}" in "open_esco"   Заповнити поля для esco  ${ARGUMENTS[1]}
   
   Sleep  3
   Execute Javascript  quinta.showLoader()
   Дочекатися І Клікнути                       xpath=//*[text()="Оголосити закупівлю"]
 #cat  Sleep  15
-  Sleep  5
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-information-dialog-submit']  5
+  Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-confirm-dialog-submit']  5
+  Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-confirm-dialog-submit']
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//*[text()="Оголосити закупівлю"]  5
+  Run Keyword And Ignore Error  Click Element   xpath=//*[text()="Оголосити закупівлю"]
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-information-dialog-submit']  5
+  Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']
+#cat  Sleep  1
+
+#cat  Sleep  5
   ${loader_visible}=  Get Value  xpath=//input[@name="loader_exists"]
 #  Run Keyword If  "${loader_visible}" == "1"  Waiting for sync
   Waiting for sync
@@ -175,9 +136,11 @@ Waiting for sync
   ${item_description}=    Get From Dictionary    ${items[0]}    description
   ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
   ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
+#cat  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
+  ${delivery_start_date}=    ukrtender_service.convert_delivery_date_to_string    ${delivery_start_date}
   ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
+#cat  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
+  ${delivery_end_date}=      ukrtender_service.convert_delivery_date_to_string  ${delivery_end_date}
   ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
   ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
   ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
@@ -216,15 +179,15 @@ Waiting for sync
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
   Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
   
-  Input text                          name=tender[amount]   ${budget2}
-  Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
   LOG  list("${step_rate}")
-  Input text  name=tender[rate_amount]  ${step_rate}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
   Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
   Input text                          xpath=//*[@name="tender[specification_period_start]"]  ${enquiry_period_start_date}
   Input text                          xpath=//*[@name="tender[specification_period]"]  ${enquiry_period_end_date}
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
 
@@ -239,9 +202,12 @@ Waiting for sync
   ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${items[0].additionalClassifications[0].scheme}'  'INN'
   Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор  ${items}  0  ${is_MOZ}
 
+  Log Many  CAT777delivery_start_date ${delivery_start_date}
+  Log Many  CAT777delivery_end_date ${delivery_end_date}
   Input text                          name=tender[items][0][item_name]    ${item_description}
   Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${item_quantity}
   Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
   Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
   Click Element                       xpath=//*[@name='tender[items][0][region]']
@@ -274,141 +240,57 @@ Waiting for sync
 Заповнити поля для понадпорогів укр
 #cat переносим в допороговую
   [Arguments]  ${tender_data}
-##### Дубляж  
   ${prepared_tender_data}=   Get From Dictionary    ${tender_data}                       data
   ${items}=                  Get From Dictionary    ${prepared_tender_data}               items
   ${lots}                    Get From Dictionary   ${prepared_tender_data}                   lots
-  ${lot_title}               Get From Dictionary   ${lots[0]}                             title
-  ${lot_desc}                Get From Dictionary   ${lots[0]}                             description
-  ${lot_value_amount}        Get From Dictionary   ${lots[0].value}                       amount
-  ${lot_value_amount2}=        convert_float_to_string  ${lot_value_amount}
-  ${lot_step_rate}           Get From Dictionary   ${lots[0].minimalStep}                 amount
-  ${lot_step_rate2}=        convert_float_to_string  ${lot_step_rate}
-  ${features}=               Run Keyword If  ${tender_meat}    Get From Dictionary    ${prepared_tender_data}               features
-  ${proc_name}=              Get From Dictionary    ${prepared_tender_data.procuringEntity}               name
-  ${proc_telephone}=              Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}               telephone
-  ${title}=                  Get From Dictionary    ${prepared_tender_data}               title
-  ${title_en}=               Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description}=            Get From Dictionary    ${prepared_tender_data}               description
-  ${description_en}=         Get From Dictionary    ${prepared_tender_data}               description_en
 
-  ${budget}=                 Get From Dictionary    ${prepared_tender_data.value}         amount
-  ${budget}=                 ukrtender_service.convert_float_to_string                    ${budget}
-  ${step_rate}=              Get From Dictionary    ${prepared_tender_data.minimalStep}   amount
-  ${step_rate}=              ukrtender_service.convert_float_to_string                    ${step_rate}
-  ${tender_period}=          Get From Dictionary   ${prepared_tender_data}                tenderPeriod
-  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_period.startDate}
-  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_period.endDate}
-  ${countryName}=   Get From Dictionary   ${prepared_tender_data.procuringEntity.address}       countryName
-  ${item_description}=    Get From Dictionary    ${items[0]}    description
-  ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
-  ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
-  ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
-  ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
-  ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
-  ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
-  ${item_locality}=  Get From Dictionary  ${items[0].deliveryAddress}  locality
-  ${item_delivery_address_street_address}=  Get From Dictionary  ${items[0].deliveryAddress}  streetAddress
-  ${item_delivery_postal_code}=  Get From Dictionary  ${items[0].deliveryAddress}  postalCode
-  ${latitude}=  Get From Dictionary  ${items[0].deliveryLocation}  latitude
-  ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
-  ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
-  ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
-  ${dkpp_id1}=        Convert To String     Не визначено
-  ${budget2}=        convert_float_to_string  ${budget}
- 
-  ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
-  ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
-  ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
-  ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
-##### Дубляж  
-  ${title_en}=  Run Keyword If  '${mode}'=='openeu'  Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description_en}=  Run Keyword If  '${mode}'=='openeu'  Get From Dictionary    ${prepared_tender_data}         description_en
-  ${item_description_en}=  Run Keyword If  '${mode}'=='openeu'  Get From Dictionary    ${items[0]}    description_en
-  ${name_en}=  Run Keyword If  '${mode}'=='openeu'  Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  ${lot_title_en}=  Run Keyword If  '${mode}'=='openeu'               Get From Dictionary   ${lots[0]}                             title_en
-  ${proc_name_en}=  Run Keyword If  '${mode}'=='openeu'               Get From Dictionary    ${prepared_tender_data.procuringEntity}               name_en
+  ${lot_value_amount2}=        convert_float_to_string  ${tender_data.data.lots[0].value.amount}
+  ${lot_step_rate2}=        convert_float_to_string  ${tender_data.data.lots[0].minimalStep.amount}
 
-  Run Keyword If  ${tender_meat}  Execute Javascript    quinta.loadTender( '{ "lots": [{"id":"${lots[0].id}"}], "items": [{"id":"${items[0].id}"}], "features": [{"code": "${features[0].code}","featureOf": "${features[0].featureOf}", "relatedItem": "${features[0].relatedItem}"}, {"code": "${features[1].code}", "featureOf": "${features[1].featureOf}"}, {"code": "${features[2].code}", "featureOf": "${features[2].featureOf}", "relatedItem": "${features[2].relatedItem}"}] }')
-  ${acc}=      Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"   Get From Dictionary   ${prepared_tender_data}    procurementMethodDetails
-  Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"  Execute Javascript  quinta.initAccelerator('${acc}')
-  Run Keyword If  "${SUITE_NAME}" == "Tests Files.Complaints"  Execute Javascript  quinta.skipAuction()
-  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${procurement_type}
-  Дочекатися І Клікнути  name=tender[multi_lot]
-#cat  Run Keyword If  ${tender_meat}  Execute Javascript    quinta.loadTender( '{ "lots": [{"id":"${lots[0].id}"}], "items": [{"id":"${items[0].id}"}], "features": [{"code": "${features[0].code}","featureOf": "${features[0].featureOf}", "relatedItem": "${features[0].relatedItem}"}, {"code": "${features[1].code}", "featureOf": "${features[1].featureOf}"}, {"code": "${features[2].code}", "featureOf": "${features[2].featureOf}", "relatedItem": "${features[2].relatedItem}"}] }')
-#cat  Run Keyword If  ${tender_meat}  Execute Javascript    $('input[name="tender[lots][0][id]"]').val( '${lots[0].id}"}], "items' );
-  Input text                          name=tender[lots][0][name]   ${lot_title}
-  Input text                          name=tender[lots][0][description]   ${lot_desc}
+  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${tender_data.data.procurementMethodType}
+  Click Element  name=tender[multi_lot]
+
+  Input text                          name=tender[lots][0][name]   ${tender_data.data.lots[0].title}
+  Input text                          name=tender[lots][0][description]   ${tender_data.data.lots[0].description}
   Input text                          name=tender[lots][0][amount]   ${lot_value_amount2}
   Input text                          name=tender[lots][0][minimal_step]   ${lot_step_rate2}
-  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
-  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
 
   Дочекатися І Клікнути               name=tender[name]  
-  Input text                          name=tender[name]     ${title}
-  Input text                          name=tender[description]     ${description}
+  Input text                          name=tender[name]     ${tender_data.data.title}
+  Input text                          name=tender[description]     ${tender_data.data.description}
+  Sleep  2
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][legalname]"]
   Clear Element Text    xpath=//*[@name="tender[procuringentity][legalname]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${proc_name}
+  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${tender_data.data.procuringEntity.name}
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
+  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${tender_data.data.procuringEntity.contactPoint.telephone}
 
-  Input text                          name=tender[amount]   ${budget2}
-  Дочекатися І Клікнути  name=tender[rate_amount]
-  Input text  name=tender[rate_amount]  ${step_rate}
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  ${budget}=                 ukrtender_service.convert_float_to_string                    ${tender_data.data.value.amount}
+  ${step_rate}=              ukrtender_service.convert_float_to_string                    ${tender_data.data.minimalStep.amount}
+  ${budget2}=        convert_float_to_string  ${budget}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
+
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${tender_data.data.mainProcurementCategory}
+
+  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.startDate}
+  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.endDate}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
-  
+
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
-  
-  Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
+  ${items}=         Get From Dictionary   ${tender_data.data}               items
+  Додати предмет при створенні  ${items}
 
- 
-  Input text                          name=tender[items][0][dk_021_2015][title]    ${dk_21_desc}
-  Sleep  3
-  Дочекатися І Клікнути  xpath=//*[@name='tender[items][0][dk_021_2015][title]']
-  Wait Until Element Is Visible  xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
-  Дочекатися І Клікнути                       xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
-  
-
-  ${dk_status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${item[0]}  additionalClassifications
-  ${is_CPV_other}=  Run Keyword And Return Status  Should Be Equal  '${items[0].classification.id}'  '99999999-9'
-  ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${items[0].additionalClassifications[0].scheme}'  'INN'
-  Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор  ${items}  0  ${is_MOZ}
-
-  Sleep  1
-  Input text                          name=tender[items][0][item_name]    ${item_description}
-  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
-  Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
-  Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
-  Click Element                       xpath=//*[@name='tender[items][0][region]']
-  
-  Select From List By Label  xpath=//*[@name='tender[items][0][region]']  ${item_delivery_region}
-  Дочекатися І Клікнути                       xpath=//*[@name='tender[items][0][country]']
-  Select From List By Label  xpath=//*[@name='tender[items][0][country]']  ${item_delivery_country}
-  Input Text                          xpath=//*[@name='tender[items][0][locality]']    ${item_locality}
-  Input text                          name=tender[items][0][post_index]  ${item_delivery_postal_code}
-  Input text                          xpath=//*[@name='tender[items][0][address]']  ${item_delivery_address_street_address}
-  Input text                          xpath=//*[@name='tender[items][0][latitude]']  ${latitude}
-  Input text                          xpath=//*[@name='tender[items][0][longitude]']  ${longitude}
-
-  Select From List By Label  xpath=//select[@name='tender[items][0][lot]']   Лот 1
-  
-  Sleep  2
-  Run Keyword if   '${mode}' == 'multi'   Додати предмет   items
   Run Keyword If  '${mode}' == 'openeu'   Run Keywords
-  ...  Log Many  CAT англ яз
-  ...  AND  Input Text  xpath=//*[@name="tender[procuringentity][name_en]"]   ${proc_name_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${description_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${lot_title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
-
+  ...  Input Text  xpath=//*[@name="tender[procuringentity][name_en]"]   ${tender_data.data.procuringEntity.name_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${tender_data.data.title_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${tender_data.data.description_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${tender_data.data.lots[0].title_en}
+#cat  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
+  
 Заповнити поля для переговорної процедури
 #cat переносим в допороговую + reporting
   [Arguments]  ${tender_data}
@@ -501,11 +383,11 @@ Waiting for sync
 
   Дочекатися І Клікнути               name=tender[name]  
   Input text  name=tender[name]     ${tender_data.data.title}
-  Input Text  name=tender[name_en]  ${tender_data.data.title_en}
-  Input Text  name=tender[name_ru]  ${tender_data.data.title_ru}
+  Run Keyword And Ignore Error  Input Text  name=tender[name_en]  ${tender_data.data.title_en}
+  Run Keyword And Ignore Error  Input Text  name=tender[name_ru]  ${tender_data.data.title_ru}
   Input text  name=tender[description]     ${tender_data.data.description}
-  Input Text  name=tender[description_en]  ${tender_data.data.description_en}
-  Input Text  name=tender[description_ru]  ${tender_data.data.description_ru}
+  Run Keyword And Ignore Error  Input Text  name=tender[description_en]  ${tender_data.data.description_en}
+  Run Keyword And Ignore Error  Input Text  name=tender[description_ru]  ${tender_data.data.description_ru}
   Sleep  2
   Clear Element Text    xpath=//*[@name="tender[procuringentity][legalname]"]
   Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${prepared_tender_data.procuringEntity.name}
@@ -533,7 +415,8 @@ Waiting for sync
   Input text                          name=tender[items][0][item_name]    ${item_description}
   Sleep  2
   Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${item_quantity}
   Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
   Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
   Click Element                       xpath=//*[@name='tender[items][0][region]']
@@ -555,7 +438,8 @@ Waiting for sync
   Дочекатися І Клікнути               name=tender[items][1][item_name]
   Input text                          name=tender[items][1][item_name]    ${items[1].description} 
   Select From List By Label  xpath=//*[@name='tender[items][1][unit]']  ${unit_name2}
-  Input text                          name=tender[items][1][item_quantity]   ${quantity2}
+  ${item_quantity2}=        convert_float_to_string_3f  ${items[1].quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][1][item_quantity]   ${item_quantity2}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][1][dk_021_2015][title]']   90
   Input text                          name=tender[items][1][dk_021_2015][title]    ${dk_21_desc2}
 
@@ -597,327 +481,117 @@ Waiting for sync
 
 Заповнити поля для КД
   [Arguments]  ${tender_data}
-##### Дубляж  
-  ${prepared_tender_data}=   Get From Dictionary    ${tender_data}                       data
-  ${items}=                  Get From Dictionary    ${prepared_tender_data}               items
-  ${lots}                    Get From Dictionary   ${prepared_tender_data}                   lots
-  ${lot_title}               Get From Dictionary   ${lots[0]}                             title
-  ${lot_desc}                Get From Dictionary   ${lots[0]}                             description
-  ${lot_value_amount}        Get From Dictionary   ${lots[0].value}                       amount
-  ${lot_value_amount2}=        convert_float_to_string  ${lot_value_amount}
-  #${features}=               Get From Dictionary    ${prepared_tender_data}               features
-  ${proc_name}=              Get From Dictionary    ${prepared_tender_data.procuringEntity}               name
-  ${proc_telephone}=              Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}               telephone
-  ${title}=                  Get From Dictionary    ${prepared_tender_data}               title
-  ${title_en}=               Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description}=            Get From Dictionary    ${prepared_tender_data}               description
-  ${description_en}=         Get From Dictionary    ${prepared_tender_data}               description_en
 
-  ${budget}=                 Get From Dictionary    ${prepared_tender_data.value}         amount
-  ${budget}=                 ukrtender_service.convert_float_to_string                    ${budget}
-  ${step_rate}=              Get From Dictionary    ${prepared_tender_data.minimalStep}   amount
-  ${step_rate2}=              ukrtender_service.convert_float_to_string                    ${step_rate}
-  ${tender_period}=          Get From Dictionary   ${prepared_tender_data}                tenderPeriod
-  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_period.startDate}
-  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_period.endDate}
-  ${countryName}=   Get From Dictionary   ${prepared_tender_data.procuringEntity.address}       countryName
-  ${item_description}=    Get From Dictionary    ${items[0]}    description
-  ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
-  ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
-  ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
-  ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
-  ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
-  ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
-  ${item_locality}=  Get From Dictionary  ${items[0].deliveryAddress}  locality
-  ${item_delivery_address_street_address}=  Get From Dictionary  ${items[0].deliveryAddress}  streetAddress
-  ${item_delivery_postal_code}=  Get From Dictionary  ${items[0].deliveryAddress}  postalCode
-  ${latitude}=  Get From Dictionary  ${items[0].deliveryLocation}  latitude
-  ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
-  ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
-  ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
-  ${dkpp_id1}=        Convert To String     Не визначено
-  ${budget2}=        convert_float_to_string  ${budget}
- 
-  ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
-  ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
-  ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
-  ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
-##### Дубляж  
-  ${title_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'  Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'  Get From Dictionary    ${prepared_tender_data}         description_en
-  ${item_description_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'  Get From Dictionary    ${items[0]}    description_en
-  ${name_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'  Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  ${lot_title_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'               Get From Dictionary   ${lots[0]}                             title_en
-  ${proc_name_en}=  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'               Get From Dictionary    ${prepared_tender_data.procuringEntity}               name_en
-  
+  ${lot_value_amount2}=        convert_float_to_string  ${tender_data.data.lots[0].value.amount}
+  ${lot_step_rate2}=        convert_float_to_string  ${tender_data.data.lots[0].minimalStep.amount}
 
-  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${procurement_type}
+  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${tender_data.data.procurementMethodType}
   Click Element  name=tender[multi_lot]
-  Input text                          name=tender[lots][0][name]   ${lot_title}
-  Input text                          name=tender[lots][0][description]   ${lot_desc}
-  Input text                          name=tender[lots][0][amount]   ${lot_value_amount2}
-  ${lot_step_rate3}=        convert_float_to_string  ${lots[0].minimalStep.amount}
-  Input text                          name=tender[lots][0][minimal_step]   ${lot_step_rate3}
 
-  Дочекатися І Клікнути               name=tender[name]  
-  Input text                          name=tender[name]     ${title}
-  Input text                          name=tender[description]     ${description}
-  Sleep  2
-  Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][legalname]"]
-  Clear Element Text    xpath=//*[@name="tender[procuringentity][legalname]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${proc_name}
-  Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
-
-  Input text                          name=tender[amount]   ${budget2}
-  Click Element  name=tender[rate_amount]
-  ${step_rate3}=        convert_float_to_string  ${prepared_tender_data.minimalStep.amount}
-  Input text  name=tender[rate_amount]  ${step_rate3}
-  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
-  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
-
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
-  Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
-  
-  Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
-  
-  Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
-
-  Input text                          name=tender[items][0][dk_021_2015][title]    ${dk_21_desc}
-  Дочекатися І Клікнути  xpath=//*[@name='tender[items][0][dk_021_2015][title]']
-  Wait Until Element Is Visible  xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
-  Дочекатися І Клікнути                       xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
-
-  ${dk_status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${item[0]}  additionalClassifications
-  ${is_CPV_other}=  Run Keyword And Return Status  Should Be Equal  '${items[0].classification.id}'  '99999999-9'
-  ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${items[0].additionalClassifications[0].scheme}'  'INN'
-  Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор  ${items}  0  ${is_MOZ}
-
-  Input text                          name=tender[items][0][item_name]    ${item_description}
-  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
-
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
-  Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
-  Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
-  Click Element                       xpath=//*[@name='tender[items][0][region]']
-  
-  Select From List By Label  xpath=//*[@name='tender[items][0][region]']  ${item_delivery_region}
-  Click Element                       xpath=//*[@name='tender[items][0][country]']
-  Select From List By Label  xpath=//*[@name='tender[items][0][country]']  ${item_delivery_country}
-  
-  Input Text                          xpath=//*[@name='tender[items][0][locality]']    ${item_locality}
-  Input text                          name=tender[items][0][post_index]  ${item_delivery_postal_code}
-  Input text                          xpath=//*[@name='tender[items][0][address]']  ${item_delivery_address_street_address}
-  Input text                          xpath=//*[@name='tender[items][0][latitude]']  ${latitude}
-  Input text                          xpath=//*[@name='tender[items][0][longitude]']  ${longitude}
-
-  Select From List By Label  xpath=//select[@name='tender[items][0][lot]']   Лот 1
-
-  Run Keyword if   '${mode}' == 'multi'   Додати предмет   items
-  Run Keyword If  '${procurement_type}'=='competitiveDialogueEU'   Run Keywords
-  ...  Log Many  CAT англ яз
-  ...  AND  Input Text  xpath=//*[@name="tender[procuringentity][name_en]"]   ${proc_name_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${description_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${lot_title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
-  
-
-Заповнити поля для ПППО
-  [Arguments]  ${tender_data}
-##### Дубляж  
-  ${prepared_tender_data}=   Get From Dictionary    ${tender_data}                       data
-  ${items}=                  Get From Dictionary    ${prepared_tender_data}               items
-  ${lots}                    Get From Dictionary   ${prepared_tender_data}                   lots
-  ${lot_title}               Get From Dictionary   ${lots[0]}                             title
-  ${lot_desc}                Get From Dictionary   ${lots[0]}                             description
-  ${lot_value_amount}        Get From Dictionary   ${lots[0].value}                       amount
-  ${lot_value_amount2}=        convert_float_to_string  ${lot_value_amount}
-  ${lot_step_rate}           Get From Dictionary   ${lots[0].minimalStep}                 amount
-  ${lot_step_rate2}=        convert_float_to_string  ${lot_step_rate}
-  ${features}=               Get From Dictionary    ${prepared_tender_data}               features
-  ${proc_name}=              Get From Dictionary    ${prepared_tender_data.procuringEntity}               name
-  ${proc_telephone}=              Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}               telephone
-  ${title}=                  Get From Dictionary    ${prepared_tender_data}               title
-  ${title_en}=               Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description}=            Get From Dictionary    ${prepared_tender_data}               description
-  ${description_en}=         Get From Dictionary    ${prepared_tender_data}               description_en
-
-  ${budget}=                 Get From Dictionary    ${prepared_tender_data.value}         amount
-  ${budget}=                 ukrtender_service.convert_float_to_string                    ${budget}
-  ${step_rate}=              Get From Dictionary    ${prepared_tender_data.minimalStep}   amount
-  ${step_rate}=              ukrtender_service.convert_float_to_string                    ${step_rate}
-  ${tender_period}=          Get From Dictionary   ${prepared_tender_data}                tenderPeriod
-  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_period.startDate}
-  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_period.endDate}
-  ${countryName}=   Get From Dictionary   ${prepared_tender_data.procuringEntity.address}       countryName
-  ${item_description}=    Get From Dictionary    ${items[0]}    description
-  ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
-  ${delivery_start_date}=    Get From Dictionary    ${items[0].deliveryDate}   startDate
-  ${delivery_start_date}=    ukrtender_service.convert_date_to_string    ${delivery_start_date}
-  ${delivery_end_date}=      Get From Dictionary   ${items[0].deliveryDate}   endDate
-  ${delivery_end_date}=      ukrtender_service.convert_date_to_string  ${delivery_end_date}
-  ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
-  ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
-  ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
-  ${item_locality}=  Get From Dictionary  ${items[0].deliveryAddress}  locality
-  ${item_delivery_address_street_address}=  Get From Dictionary  ${items[0].deliveryAddress}  streetAddress
-  ${item_delivery_postal_code}=  Get From Dictionary  ${items[0].deliveryAddress}  postalCode
-  ${latitude}=  Get From Dictionary  ${items[0].deliveryLocation}  latitude
-  ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
-  ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
-  ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
-  ${dkpp_id1}=        Convert To String     Не визначено
-  ${budget2}=        convert_float_to_string  ${budget}
- 
-  ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
-  ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
-  ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
-  ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
-##### Дубляж  
-  ${title_en}=  Run Keyword If  '${mode}' in 'openeu openua_defense'  Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description_en}=  Run Keyword If  '${mode}' in "openua_defense openeu"  Get From Dictionary    ${prepared_tender_data}         description_en
-  ${item_description_en}=  Run Keyword If  '${mode}' in "openua_defense openeu"  Get From Dictionary    ${items[0]}    description_en
-  ${lot_title_en}=  Run Keyword If  '${mode}' in "openua_defense openeu"               Get From Dictionary   ${lots[0]}                             title_en
-  
-  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${procurement_type}
-  Execute Javascript    quinta.loadTender( '{ "lots": [{"id":"${lots[0].id}"}], "items": [{"id":"${items[0].id}"}], "features": [{"code": "${features[0].code}","featureOf": "${features[0].featureOf}", "relatedItem": "${features[0].relatedItem}"}, {"code": "${features[1].code}", "featureOf": "${features[1].featureOf}"}, {"code": "${features[2].code}", "featureOf": "${features[2].featureOf}", "relatedItem": "${features[2].relatedItem}"}] }')
-  Click Element  name=tender[multi_lot]
-  Input text                          name=tender[lots][0][name]   ${lot_title}
-  Input text                          name=tender[lots][0][description]   ${lot_desc}
+  Input text                          name=tender[lots][0][name]   ${tender_data.data.lots[0].title}
+  Input text                          name=tender[lots][0][description]   ${tender_data.data.lots[0].description}
   Input text                          name=tender[lots][0][amount]   ${lot_value_amount2}
   Input text                          name=tender[lots][0][minimal_step]   ${lot_step_rate2}
 
   Дочекатися І Клікнути               name=tender[name]  
-  Input text                          name=tender[name]     ${title}
-  Input text                          name=tender[description]     ${description}
+  Input text                          name=tender[name]     ${tender_data.data.title}
+  Input text                          name=tender[description]     ${tender_data.data.description}
   Sleep  2
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][legalname]"]
   Clear Element Text    xpath=//*[@name="tender[procuringentity][legalname]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${proc_name}
+  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${tender_data.data.procuringEntity.name}
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
+  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${tender_data.data.procuringEntity.contactPoint.telephone}
 
-  Input text                          name=tender[amount]   ${budget2}
-#cat  Sleep  10
-  Click Element  name=tender[rate_amount]
-#cat  Sleep  2
-#cat  LOG  list("${step_rate}")
-  Input text  name=tender[rate_amount]  ${step_rate}
-#cat  Sleep  2
+  ${budget}=                 ukrtender_service.convert_float_to_string                    ${tender_data.data.value.amount}
+  ${step_rate}=              ukrtender_service.convert_float_to_string                    ${tender_data.data.minimalStep.amount}
+  ${budget2}=        convert_float_to_string  ${budget}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
+
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
-  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${tender_data.data.mainProcurementCategory}
 
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.startDate}
+  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.endDate}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
+
+  Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
+  ${items}=         Get From Dictionary   ${tender_data.data}               items
+  Додати предмет при створенні  ${items}
+
+  Run Keyword If  '${tender_data.data.procurementMethodType}'=='competitiveDialogueEU'   Run Keywords
+  ...  Input Text  xpath=//*[@name="tender[procuringentity][name_en]"]   ${tender_data.data.procuringEntity.name_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${tender_data.data.title_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${tender_data.data.description_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${tender_data.data.lots[0].title_en}
+#cat  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
+  
+
+Заповнити поля для ПППО
+  [Arguments]  ${tender_data}
+  ${prepared_tender_data}=   Get From Dictionary    ${tender_data}                       data
+  ${items}=                  Get From Dictionary    ${prepared_tender_data}               items
+  ${lots}                    Get From Dictionary   ${prepared_tender_data}                   lots
+  ${features}=               Get From Dictionary    ${prepared_tender_data}               features
+
+  ${lot_value_amount2}=        convert_float_to_string  ${tender_data.data.lots[0].value.amount}
+  ${lot_step_rate2}=        convert_float_to_string  ${tender_data.data.lots[0].minimalStep.amount}
+
+  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${tender_data.data.procurementMethodType}
+  Execute Javascript    quinta.loadTender( '{ "lots": [{"id":"${lots[0].id}"}], "items": [{"id":"${items[0].id}"}], "features": [{"code": "${features[0].code}","featureOf": "${features[0].featureOf}", "relatedItem": "${features[0].relatedItem}"}, {"code": "${features[1].code}", "featureOf": "${features[1].featureOf}"}, {"code": "${features[2].code}", "featureOf": "${features[2].featureOf}", "relatedItem": "${features[2].relatedItem}"}] }')
+  Click Element  name=tender[multi_lot]
+  Input text                          name=tender[lots][0][name]   ${tender_data.data.lots[0].title}
+  Input text                          name=tender[lots][0][description]   ${tender_data.data.lots[0].description}
+  Input text                          name=tender[lots][0][amount]   ${lot_value_amount2}
+  Input text                          name=tender[lots][0][minimal_step]   ${lot_step_rate2}
+
+  Дочекатися І Клікнути               name=tender[name]  
+  Input text                          name=tender[name]     ${tender_data.data.title}
+  Input text                          name=tender[description]     ${tender_data.data.description}
+  Sleep  2
+  Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][legalname]"]
+  Clear Element Text    xpath=//*[@name="tender[procuringentity][legalname]"]
+  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${tender_data.data.procuringEntity.name}
+  Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
+  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${tender_data.data.procuringEntity.contactPoint.telephone}
+
+  ${budget}=                 ukrtender_service.convert_float_to_string                    ${tender_data.data.value.amount}
+  ${step_rate}=              ukrtender_service.convert_float_to_string                    ${tender_data.data.minimalStep.amount}
+  ${budget2}=        convert_float_to_string  ${budget}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text                          name=tender[amount]   ${budget2}
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Click Element  name=tender[rate_amount]
+  Run Keyword If  ${NUMBER_OF_LOTS} == 0      Input text  name=tender[rate_amount]  ${step_rate}
+
+  Click Element                       xpath=//*[@name='tender[main_procurement_category]']
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${tender_data.data.mainProcurementCategory}
+
+  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.startDate}
+  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.endDate}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
-  Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
-
-  Input text                          name=tender[items][0][dk_021_2015][title]    ${dk_21_desc}
-  Дочекатися І Клікнути  xpath=//*[@name='tender[items][0][dk_021_2015][title]']
-  Wait Until Element Is Visible  xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
-  Дочекатися І Клікнути                       xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
-
-  ${dk_status}=  Run Keyword And Return Status  Dictionary Should Contain Key  ${item[0]}  additionalClassifications
-  ${is_CPV_other}=  Run Keyword And Return Status  Should Be Equal  '${items[0].classification.id}'  '99999999-9'
-  ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${items[0].additionalClassifications[0].scheme}'  'INN'
-  Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор  ${items}  0  ${is_MOZ}
-
-  Sleep  2
-  Input text                          name=tender[items][0][item_name]    ${item_description}
-#cat  Sleep  2
-  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
-  Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
-  Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
-  Click Element                       xpath=//*[@name='tender[items][0][region]']
-  
-#cat  Sleep  2
-  Select From List By Label  xpath=//*[@name='tender[items][0][region]']  ${item_delivery_region}
-#cat  Sleep  2
-  Click Element                       xpath=//*[@name='tender[items][0][country]']
-  Select From List By Label  xpath=//*[@name='tender[items][0][country]']  ${item_delivery_country}
-  
-  Input Text                          xpath=//*[@name='tender[items][0][locality]']    ${item_locality}
-  Input text                          name=tender[items][0][post_index]  ${item_delivery_postal_code}
-  Input text                          xpath=//*[@name='tender[items][0][address]']  ${item_delivery_address_street_address}
-  Input text                          xpath=//*[@name='tender[items][0][latitude]']  ${latitude}
-  Input text                          xpath=//*[@name='tender[items][0][longitude]']  ${longitude}
-
-  Select From List By Label  xpath=//select[@name='tender[items][0][lot]']   Лот 1
-#cat  Sleep  2
-  Run Keyword if   '${mode}' == 'multi'   Додати предмет   items
+#cat  ${items}=         Get From Dictionary   ${tender_data.data}               items
+  Додати предмет при створенні  ${items}
 
   Run Keyword If  '${mode}' == 'openua_defense'   Run Keywords
-  ...  Log Many  CAT англ яз
-  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${description_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${lot_title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
+  ...  Input Text  xpath=//*[@name="tender[name_en]"]   ${tender_data.data.title_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${tender_data.data.description_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${tender_data.data.lots[0].title_en}
+#cat  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
   
 
 Заповнити поля для esco
   [Arguments]  ${tender_data}
-##### Дубляж  
-  ${prepared_tender_data}=   Get From Dictionary    ${tender_data}                       data
-  ${items}=                  Get From Dictionary    ${prepared_tender_data}               items
-  ${lots}                    Get From Dictionary   ${prepared_tender_data}                   lots
-  ${lot_title}               Get From Dictionary   ${lots[0]}                             title
-  ${lot_desc}                Get From Dictionary   ${lots[0]}                             description
-  #${features}=               Get From Dictionary    ${prepared_tender_data}               features
-  ${proc_name}=              Get From Dictionary    ${prepared_tender_data.procuringEntity}               name
-  ${proc_telephone}=              Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}               telephone
-  ${title}=                  Get From Dictionary    ${prepared_tender_data}               title
-  ${title_en}=               Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description}=            Get From Dictionary    ${prepared_tender_data}               description
-  ${description_en}=         Get From Dictionary    ${prepared_tender_data}               description_en
 
-  ${tender_period}=          Get From Dictionary   ${prepared_tender_data}                tenderPeriod
-  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_period.startDate}
-  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_period.endDate}
-  ${countryName}=   Get From Dictionary   ${prepared_tender_data.procuringEntity.address}       countryName
-  ${item_description}=    Get From Dictionary    ${items[0]}    description
-  ${item_description_en}=    Get From Dictionary    ${items[0]}    description_en
-  ${item_delivery_country}=     Get From Dictionary    ${items[0].deliveryAddress}    countryName
-  ${item_delivery_region}=      Get From Dictionary    ${items[0].deliveryAddress}    region
-  ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${item_delivery_region}
-  ${item_locality}=  Get From Dictionary  ${items[0].deliveryAddress}  locality
-  ${item_delivery_address_street_address}=  Get From Dictionary  ${items[0].deliveryAddress}  streetAddress
-  ${item_delivery_postal_code}=  Get From Dictionary  ${items[0].deliveryAddress}  postalCode
-  ${latitude}=  Get From Dictionary  ${items[0].deliveryLocation}  latitude
-  ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${latitude}
-  ${longitude}=  Get From Dictionary  ${items[0].deliveryLocation}    longitude
-  ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${longitude}
-  ${dk_21_desc}=  Get From Dictionary   ${items[0].classification}         description
-  ${dkpp_id1}=        Convert To String     Не визначено
- 
-  ${unit_name}=                 Get From Dictionary         ${items[0].unit}                name
-#cat когда правильно заработает ${unit_name}=        Convert To String     послуга
-  ${unit_code}=                 Get From Dictionary         ${items[0].unit}                code
-  ${quantity}=      Get From Dictionary   ${items[0]}                        quantity
-  ${name}=      Get From Dictionary   ${prepared_tender_data.procuringEntity.contactPoint}       name
-  ${procurement_type}=      Get From Dictionary   ${prepared_tender_data}   procurementMethodType
-##### Дубляж  
-  ${title_en}=  Run Keyword If  '${procurement_type}'=='esco'  Get From Dictionary    ${prepared_tender_data}               title_en
-  ${description_en}=  Run Keyword If  '${procurement_type}'=='esco'  Get From Dictionary    ${prepared_tender_data}         description_en
-  ${item_description_en}=  Run Keyword If  '${procurement_type}'=='esco'  Get From Dictionary    ${items[0]}    description_en
-  ${name_en}=  Run Keyword If  '${procurement_type}'=='esco'  Get From Dictionary    ${prepared_tender_data.procuringEntity.contactPoint}     name_en
-  ${lot_title_en}=  Run Keyword If  '${procurement_type}'=='esco'               Get From Dictionary   ${lots[0]}                             title_en
-  ${proc_name_en}=  Run Keyword If  '${procurement_type}'=='esco'               Get From Dictionary    ${prepared_tender_data.procuringEntity}               name_en
-  
-
-  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${procurement_type}
+  Select From List By Value  xpath=//*[@name='tender[procedure_type]']  ${tender_data.data.procurementMethodType}
   Click Element  name=tender[multi_lot]
-  Input text                          name=tender[lots][0][name]   ${lot_title}
-  Input text                          name=tender[lots][0][description]   ${lot_desc}
+  Select From List By Value  xpath=//select[@name='tender[funding]']  ${tender_data.data.fundingKind}
+  Input text                          name=tender[lots][0][name]   ${tender_data.data.lots[0].title}
+  Input text                          name=tender[lots][0][description]   ${tender_data.data.lots[0].description}
   ${minimalStepPercentage1}=        set_value_minimalStepPercentage  ${tender_data.data.lots[0].minimalStepPercentage}
   ${yearlyPaymentsPercentageRange1}=        set_value_minimalStepPercentage  ${tender_data.data.lots[0].yearlyPaymentsPercentageRange}
   ${minimalStepPercentage1}=        ukrtender_service.convert_esco__float_to_string  ${minimalStepPercentage1}
@@ -927,34 +601,52 @@ Waiting for sync
   Input text                          xpath=//input[@name='tender[lots][0][yearly_payment_percentage_range]']  ${yearlyPaymentsPercentageRange1}
 
   Click Element                       xpath=//*[@name='tender[main_procurement_category]']
-  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${prepared_tender_data.mainProcurementCategory}
+  Select From List By Value  xpath=//*[@name='tender[main_procurement_category]']  ${tender_data.data.mainProcurementCategory}
   
   Дочекатися І Клікнути               name=tender[name]  
-  Input text                          name=tender[name]     ${title}
-  Input text                          name=tender[description]     ${description}
+  Input text                          name=tender[name]     ${tender_data.data.title}
+  Input text                          name=tender[description]     ${tender_data.data.description}
   Sleep  2
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][legalname]"]
   Clear Element Text    xpath=//*[@name="tender[procuringentity][legalname]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${proc_name}
+  Input text                          xpath=//*[@name="tender[procuringentity][legalname]"]   ${tender_data.data.procuringEntity.name}
   Дочекатися І Клікнути                       xpath=//*[@name="tender[procuringentity][phone]"]
-  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${proc_telephone}
+  Input text                          xpath=//*[@name="tender[procuringentity][phone]"]   ${tender_data.data.procuringEntity.contactPoint.telephone}
 
-  Select From List By Value  xpath=//select[@name='tender[funding]']  ${tender_data.data.fundingKind}
   ${nbu_rate_percent}=        set_value_minimalStepPercentage  ${tender_data.data.NBUdiscountRate}
   ${nbu_rate_percent}=        convert_esco__float_to_string  ${nbu_rate_percent}
   ${minimal_step_percentage}=        set_value_minimalStepPercentage  ${tender_data.data.minimalStepPercentage}
   ${minimal_step_percentage}=        convert_esco__float_to_string  ${minimal_step_percentage}
   Input text                          xpath=//input[@name='tender[nbu_rate_percent]']  ${nbu_rate_percent}
-  Input text                          xpath=//input[@name='tender[minimal_step_percentage]']  ${minimal_step_percentage}
+  Run Keyword And Ignore Error  Input text                          xpath=//input[@name='tender[minimal_step_percentage]']  ${minimal_step_percentage}
 
-  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
+  ${tender_period_start_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.startDate}
+  ${tender_period_end_date}=  ukrtender_service.convert_date_to_string  ${tender_data.data.tenderPeriod.endDate}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name="tender[reception_from]"]  ${tender_period_start_date}
   Input text                          xpath=//*[@name="tender[reception_to]"]  ${tender_period_end_date}
   
   Run Keyword If  ${tender_meat}  ukrtender.Додати нецінові критерії2  ${tender_data}
   
-  Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
+  ${items}=         Get From Dictionary   ${tender_data.data}               items
+  Додати предмет при створенні  ${items}
+  Run Keyword If  '${tender_data.data.procurementMethodType}'=='esco'   Run Keywords
+  ...  Input Text  xpath=//*[@name="tender[procuringentity][name_en]"]   ${tender_data.data.procuringEntity.name_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${tender_data.data.title_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${tender_data.data.description_en}
+  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${tender_data.data.lots[0].title_en}
+#cat  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${items[0].description_en}
 
-  Input text                          name=tender[items][0][dk_021_2015][title]    ${dk_21_desc}
+
+Додати предмет при створенні
+  [Arguments]  ${items}
+  ${delivery_start_date}=    Run Keyword If  "${mode}" not in "open_esco"  Get From Dictionary    ${items[0].deliveryDate}   startDate
+  ${delivery_start_date}=    Run Keyword If  "${mode}" not in "open_esco"  ukrtender_service.convert_date_to_string    ${delivery_start_date}
+  ${delivery_end_date}=      Run Keyword If  "${mode}" not in "open_esco"  Get From Dictionary   ${items[0].deliveryDate}   endDate
+  ${delivery_end_date}=      Run Keyword If  "${mode}" not in "open_esco"  ukrtender_service.convert_date_to_string  ${delivery_end_date}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
+
+  Wait Until Element Is Visible       xpath=//*[@name='tender[items][0][dk_021_2015][title]']   90
+  Input text                          name=tender[items][0][dk_021_2015][title]    ${items[0].classification.description}
   Дочекатися І Клікнути  xpath=//*[@name='tender[items][0][dk_021_2015][title]']
   Wait Until Element Is Visible  xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
   Дочекатися І Клікнути                       xpath=//*[contains(@class, 'dk_021_2015_hightlight')]
@@ -964,35 +656,33 @@ Waiting for sync
   ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${items[0].additionalClassifications[0].scheme}'  'INN'
   Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор  ${items}  0  ${is_MOZ}
 
-  Input text                          name=tender[items][0][item_name]    ${item_description}
-  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${unit_name}
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
+  Input text                          name=tender[items][0][item_name]    ${items[0].description}
+  Run Keyword And Ignore Error  Select From List By Label  xpath=//*[@name='tender[items][0][unit]']  ${items[0].unit.name}
 
-  Input text                          name=tender[items][0][item_quantity]   ${quantity}
+  ${latitude}=  ukrtender_service.convert_coordinates_to_string    ${items[0].deliveryLocation.latitude}
+  ${longitude}=  ukrtender_service.convert_coordinates_to_string    ${items[0].deliveryLocation.longitude}
+  ${item_delivery_region}=     ukrtender_service.get_delivery_region    ${items[0].deliveryAddress.region}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][0][item_quantity]   ${item_quantity}
+
+  Run Keyword And Ignore Error  Input Text                          xpath=//*[@name='tender[items][0][reception_from]']  ${delivery_start_date}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name='tender[items][0][reception_to]']  ${delivery_end_date}
   Click Element                       xpath=//*[@name='tender[items][0][region]']
   
   Select From List By Label  xpath=//*[@name='tender[items][0][region]']  ${item_delivery_region}
   Click Element                       xpath=//*[@name='tender[items][0][country]']
-  Select From List By Label  xpath=//*[@name='tender[items][0][country]']  ${item_delivery_country}
+  Select From List By Label  xpath=//*[@name='tender[items][0][country]']  ${items[0].deliveryAddress.countryName}
   
-  Input Text                          xpath=//*[@name='tender[items][0][locality]']    ${item_locality}
-  Input text                          name=tender[items][0][post_index]  ${item_delivery_postal_code}
-  Input text                          xpath=//*[@name='tender[items][0][address]']  ${item_delivery_address_street_address}
+  Input Text                          xpath=//*[@name='tender[items][0][locality]']    ${items[0].deliveryAddress.locality}
+  Input text                          name=tender[items][0][post_index]  ${items[0].deliveryAddress.postalCode}
+  Input text                          xpath=//*[@name='tender[items][0][address]']  ${items[0].deliveryAddress.streetAddress}
   Input text                          xpath=//*[@name='tender[items][0][latitude]']  ${latitude}
   Input text                          xpath=//*[@name='tender[items][0][longitude]']  ${longitude}
 
   Select From List By Label  xpath=//select[@name='tender[items][0][lot]']   Лот 1
 
-  Run Keyword if   '${mode}' == 'multi'   Додати предмет   items
-  Run Keyword If  '${procurement_type}'=='esco'   Run Keywords
-  ...  Log Many  CAT англ яз
-  ...  AND  Input Text  xpath=//*[@name="tender[procuringentity][name_en]"]   ${proc_name_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[name_en]"]   ${title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[description_en]"]   ${description_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[lots][0][name_en]"]      ${lot_title_en}
-  ...  AND  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${item_description_en}
+  Run Keyword If  "${mode}" in "open_esco openua_defense openeu open_competitive_dialogue"   Run Keyword And Ignore Error  Input Text  xpath=//*[@name="tender[items][0][item_name_en]"]  ${items[0].description_en}
 
-
+  
 Вибрати додатковий класифікатор
   [Arguments]  ${items}  ${index}  ${is_MOZ}
   Log Many  CAT888 ${items[${index}].additionalClassifications[0].scheme}
@@ -1096,13 +786,6 @@ Waiting for sync
   ...  Click Element  xpath=//input[@id='purchase-button-search-1']
   ...  AND  Wait Until Element Is Visible  xpath=//a[contains(@data-tenderid, '${tender_uaid}')]  10
   Click Element    xpath=//a[contains(@data-tenderid, '${tender_uaid}')]
-  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-action"]
-  :FOR    ${INDEX}    IN RANGE    1    5
-  \  Run Keyword If    '${complaintPeriod}' == ''    Exit For Loop
-  \  Sleep  5
-  \  Reload Page
-  \  Дочекатися І Клікнути                       xpath=//input[@value='Пропозиції']
-  \  ${complaintPeriod}=  Get Value  xpath=//*[@id="edit-tender-action"]
 
   
 Оновити сторінку з тендером
@@ -1134,6 +817,7 @@ Waiting for sync
   Sleep  2
   Дочекатися І Клікнути                       xpath=//*[text()="Редагувати закупівлю"]
   Sleep  2
+  Run Keyword And Ignore Error  Редагувати закупівлю
   Run Keyword If    '${TEST_NAME}' == 'Можливість відповісти на запитання до тендера після продовження періоду прийому пропозицій'    Execute Javascript  quinta.refreshTenderFromProzorro()
 #cat  Sleep  2
 #cat  Run Keyword If    '${TEST_NAME}' == 'Можливість відповісти на запитання до тендера після продовження періоду прийому пропозицій'    Reload Page
@@ -1147,12 +831,15 @@ Waiting for sync
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Run Keyword If    '${TEST_NAME}' == 'Неможливість додати документацію до тендера під час кваліфікації'    Wait Until Keyword Succeeds    400 s    20 s    subkeywords.Wait For PreQualificationPeriod
+  Дочекатися І Клікнути                       xpath=//a[contains(@class,'button edit-tender-add-document')]
+  Wait Until Element Is Visible  xpath=//*[@name='tender[document_type]']  5
   Select From List By Value  xpath=//*[@name='tender[document_type]']  biddingDocuments
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]    ${file}
-  Sleep  10
-  Click Element                       xpath=//*[text()="Редагувати закупівлю"]
-  
+  Choose File       xpath=//*[@id='edit-tender-document']    ${file}
+  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+
+  Дочекатися І Клікнути                       xpath=//button[@name='document[save]']
+  Дочекатися І Клікнути                       xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Редагувати закупівлю
 
 Set Multi Ids
   [Arguments]  @{ARGUMENTS}
@@ -1191,7 +878,8 @@ Set Multi Ids
   ...  ELSE  Set Variable  1
   Run Keyword If    '${contract_visible}' == 'contract_visible'    Дочекатися І Клікнути  xpath=//input[@value='Пропозиції']
   Run Keyword If    '${contract_visible}' == 'contract_visible'    Дочекатися І Клікнути  xpath=//a[contains(.,'Контракт') and @data-index="${contract_num}"]
-  ${url_doc}=    Get Element Attribute    xpath=//a[contains(text(), '${doc_id}')]@href
+#cat  ${url_doc}=    Get Element Attribute    xpath=//a[contains(text(), '${doc_id}')]@href
+  ${url_doc}=    Get Element Attribute    xpath=//a[contains(text(), '${doc_id}')]@data-url
   ${file_name}=    Get Text    xpath=//a[contains(text(), '${doc_id}')]
   ${file_name}=    Convert To String    ${file_name}
   ukrtender_service.download_file    ${url_doc}    ${file_name}    ${OUTPUT_DIR}
@@ -1227,6 +915,7 @@ Set Multi Ids
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-item-remove-button-${item_index}']
   Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  2
   Execute Javascript  quinta.refreshTenderFromProzorro()
 
@@ -1270,7 +959,8 @@ Set Multi Ids
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
   Input text                          name=tender[items][${index_item}][item_name]    ${item.description}
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][unit]']  ${item.unit.name}
-  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${item.quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item_quantity}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][${index_item}][dk_021_2015][title]']   90
   Input text                          name=tender[items][${index_item}][dk_021_2015][title]    ${item.classification.description}
   ${class1}=  conc_class  ${item.classification.description}  ${item.classification.id}
@@ -1281,8 +971,8 @@ Set Multi Ids
   ${is_CPV_other}=  Run Keyword And Return Status  Should Be Equal  '${item.classification.id}'  '99999999-9'
   ${is_MOZ}=  Run Keyword And Return Status  Should Be Equal  '${item.additionalClassifications[0].scheme}'  'INN'
   Run Keyword If  ${dk_status} or ${is_MOZ}  Вибрати додатковий класифікатор2  ${item}  1  ${is_MOZ}
-  Input Text                          xpath=//*[@name='tender[items][${index_item}][reception_from]']  ${delivery_start_date2}
-  Input text                          xpath=//*[@name='tender[items][${index_item}][reception_to]']  ${delivery_end_date2}
+  Run Keyword And Ignore Error  Input Text                          xpath=//*[@name='tender[items][${index_item}][reception_from]']  ${delivery_start_date2}
+  Run Keyword And Ignore Error  Input text                          xpath=//*[@name='tender[items][${index_item}][reception_to]']  ${delivery_end_date2}
   Click Element                       xpath=//*[@name='tender[items][${index_item}][region]']
   Sleep  2
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][region]']  ${item_delivery_region2}
@@ -1302,9 +992,11 @@ Set Multi Ids
   Run Keyword If  '${mode}' == "openua_defense" or '${mode}' == "openeu" or '${mode}' == "open_competitive_dialogue"   Input Text  xpath=//*[@name="tender[items][${index_item}][item_name_en]"]  ${item.description_en}
   Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  10
-  ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
-  Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
+#cat  ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
+#cat  Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
+#cat  Run Keyword If  ${is_visible}    Run Keyword And Ignore Error  Редагувати закупівлю
 
 
 Отримати інформацію із лоту
@@ -1330,6 +1022,7 @@ Set Multi Ids
   Sleep  2
   Scroll To Element    xpath=//*[text()="Редагувати закупівлю"]
   Дочекатися І Клікнути                       xpath=//a[contains(.,'Редагувати закупівлю')]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  2
 
 
@@ -1342,18 +1035,6 @@ Set Multi Ids
   Log Many  CAT888-Count ${Count}
   Log Many  CAT888-Count1 ${Count1}
   Log Many  CAT888item ${lot_id}
-#cat  ${index_lot} =	Set Variable If		
-#cat  ...	${NUMBER_OF_LOTS} == 0	0	
-#cat  ...	${NUMBER_OF_LOTS} == 1	1	
-#cat  ...	${NUMBER_OF_LOTS} == 2	2	
-#cat  ...	${NUMBER_OF_LOTS} > 2	greater than two	
-#cat  ...	${NUMBER_OF_LOTS} < 0	not possible
-#cat  ${index_item} =	Set Variable If		
-#cat  ...	${NUMBER_OF_ITEMS} == 0	0	
-#cat  ...	${NUMBER_OF_ITEMS} == 1	1	
-#cat  ...	${NUMBER_OF_ITEMS} == 2	2	
-#cat  ...	${NUMBER_OF_ITEMS} > 2	greater than two	
-#cat  ...	${NUMBER_OF_ITEMS} < 0	not possible
 #Дабавить item 3
 # item 3
   ${index_item}=  Set Variable  ${Count1}
@@ -1364,7 +1045,9 @@ Set Multi Ids
   Дочекатися І Клікнути               name=tender[items][${index_item}][item_name]
   Input text                          name=tender[items][${index_item}][item_name]    ${item.description}
   Select From List By Label  xpath=//*[@name='tender[items][${index_item}][unit]']  ${item.unit.name}
-  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${item.quantity}
+  Run Keyword And Ignore Error  Input text                          name=tender[items][${index_item}][item_quantity]   ${item_quantity}
+#cat  Input text                          name=tender[items][${index_item}][item_quantity]   ${item.quantity}
   Wait Until Element Is Visible       xpath=//*[@name='tender[items][${index_item}][dk_021_2015][title]']   90
   Input text                          name=tender[items][${index_item}][dk_021_2015][title]    ${item.classification.description}
   ${class1}=  conc_class  ${item.classification.description}  ${item.classification.id}
@@ -1398,20 +1081,32 @@ Set Multi Ids
   Run Keyword If  '${mode}' == "openua_defense" or '${mode}' == "openeu" or '${mode}' == "open_competitive_dialogue"   Input Text  xpath=//*[@name="tender[items][${index_item}][item_name_en]"]  ${item.description_en}
   Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  10
   ${is_visible}=  Run Keyword And Return Status  Element Should Be Visible  xpath=//*[text()="Редагувати закупівлю"]
   Run Keyword If  ${is_visible}  Дочекатися І Клікнути  xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  ${is_visible}    Run Keyword And Ignore Error  Редагувати закупівлю
   
   
 Завантажити документ в лот
   [Arguments]    ${username}    ${filepath}    ${TENDER_UAID}    ${lot_id}
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Select From List By Value  xpath=//*[@name='tender[lots][0][document_type]']  biddingDocuments
-  Sleep  2
-  Choose File       xpath=//*[@name="lot_multifiles[]"]    ${filepath}
-  Sleep  10
+#cat#cat  Select From List By Value  xpath=//*[@name='tender[lots][0][document_type]']  biddingDocuments
+#cat#cat  Sleep  2
+#cat#cat#cat#cat  Choose File       xpath=//*[@name="lot_multifiles[]"]    ${filepath}
+#cat#cat  Sleep  10
+  Дочекатися І Клікнути                       xpath=//a[@id='edit-tender-lot-add-document-0']
+  Wait Until Element Is Visible  xpath=//*[@name='lot_document[document_type]']  5
+  Select From List By Value  xpath=//*[@name='lot_document[document_type]']  biddingDocuments
+#cat#cat#cat#cat  Дочекатися І Клікнути                       xpath=//label[@for='edit-tender-lot-document']
+  Choose File       xpath=//*[@id='edit-tender-lot-document']    ${filepath}
+  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+
+  Дочекатися І Клікнути                       xpath=//button[@id='edit-tender-lot-document-save']
+
   Дочекатися І Клікнути    xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   Sleep  3
 
 	
@@ -1428,12 +1123,14 @@ Set Multi Ids
   ${item_index}=  Get Element Attribute  xpath=//select/option[contains(@data-lot-title, '${lot_id}') and @selected="selected"]@name
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-item-remove-button-1']
   Sleep  3
-  Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
-  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
+#cat  Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+#cat  Run Keyword And Ignore Error  Редагувати закупівлю
+#cat  Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Дочекатися І Клікнути  xpath=//a[@id='edit-tender-lot-remove-button-${lot_index}']
   Sleep  3
   Дочекатися І Клікнути    xpath=//a[contains(.,'Редагувати закупівлю')]
+  Run Keyword And Ignore Error  Редагувати закупівлю
 
 Отримати документ до лоту
   [Arguments]  ${username}  ${tender_uaid}  ${lot_id}  ${doc_id}
@@ -1472,6 +1169,7 @@ Set Multi Ids
   \  ${value}  ukrtender_service.convert_float_to_string  ${element.value}
   \  Input Text     xpath=//*[@name='tender[nonprices][${Count_tenderer}][enum][${index}][value]']    ${value}
   Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на тендер'  Click Element  xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на тендер'    Run Keyword And Ignore Error  Редагувати закупівлю
 
 
 Додати неціновий показник на тендер при створенні
@@ -1507,6 +1205,7 @@ Set Multi Ids
   \  ${value}  ukrtender_service.convert_float_to_string  ${element.value}
   \  Input Text     xpath=//*[@name='tender[items][0][features][${num}][enum][${index}][value]']    ${value}
   Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'    Click Element                       xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'      Run Keyword And Ignore Error  Редагувати закупівлю
 
 Додати неціновий показник на предмет
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${item_id}
@@ -1530,6 +1229,7 @@ Set Multi Ids
   \  ${value}  ukrtender_service.convert_float_to_string  ${element.value}
   \  Input Text     xpath=//*[@name='tender[items][0][features][${num}][enum][${index}][value]']    ${value}
   Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'    Дочекатися і Клікнути                       xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший предмет'      Run Keyword And Ignore Error  Редагувати закупівлю
 
 Додати неціновий показник на лот при створенні
   [Arguments]  ${username}  ${tender_uaid}  ${features}  ${item_id}
@@ -1551,6 +1251,7 @@ Set Multi Ids
   \  ${value}  ukrtender_service.convert_float_to_string  ${element.value}
   \  Input Text     xpath=//*[@name='tender[lots][0][features][${num}][enum][${index}][value]']    ${value}
   Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'  Click Element  xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'    Run Keyword And Ignore Error  Редагувати закупівлю
 
 Додати неціновий показник на лот
   [Arguments]  ${username}  ${tender_uaid}  ${feature}  ${item_id}
@@ -1572,7 +1273,8 @@ Set Multi Ids
   \  ${value}  ukrtender_service.convert_float_to_string  ${element.value}
   \  Input Text     xpath=//*[@name='tender[lots][0][features][${num}][enum][${index}][value]']    ${value}
   Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'  Click Element  xpath=//*[text()="Редагувати закупівлю"]
-
+  Run Keyword If  '${TEST_NAME}' == 'Можливість додати неціновий показник на перший лот'    Run Keyword And Ignore Error  Редагувати закупівлю
+  
 Додати нецінову опцію
   [Arguments]  ${enum}  ${index}
   ${enum_value}=   ukrtender_service.convert_float_to_string  ${enum.value}
@@ -1669,6 +1371,7 @@ Get Last Feature Index
   \  Sleep  5
   Дочекатися І Клікнути  xpath=//a[@data-prozorro-title-id='${feature_id}' and (contains(.,'-Видалити неціновий критерій'))]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Редагувати закупівлю
 
 Видалити неціновий показник на предмет
   [Arguments]  ${username}  ${tender_uaid}  ${feature_id}
@@ -1679,6 +1382,7 @@ Get Last Feature Index
   \  Sleep  5
   Дочекатися І Клікнути  xpath=//a[@data-prozorro-title-id='${feature_id}' and (contains(.,'-Видалити неціновий критерій'))]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Редагувати закупівлю
 
 Видалити неціновий показник на лот
   [Arguments]  ${username}  ${tender_uaid}  ${feature_id}
@@ -1691,6 +1395,7 @@ Get Last Feature Index
   \  Sleep  5
   Дочекатися І Клікнути  xpath=//a[@data-prozorro-title-id='${feature_id}' and (contains(.,'-Видалити неціновий критерій'))]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   
 
 #                                    QUESTION                                               #
@@ -1763,12 +1468,12 @@ Get Last Feature Index
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
 #cat  Execute Javascript    $( 'a[href="#tabs_desc_407_2"]' ).trigger( 'click' )
-  Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
+  Дочекатися І Клікнути      xpath=//span[contains(.,'Питання та відповіді')]
   ${field_xpath}=    get_xpath.get_question_xpath    ${field_name}    ${question_id}
   Log Many  CAT field_xpath= ${field_xpath}
   Wait Until Keyword Succeeds  5 x  20 s  Run Keywords
   ...  Reload Page
-  ...  AND    Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
+  ...  AND    Дочекатися І Клікнути      xpath=//span[contains(.,'Питання та відповіді')]
   ...  AND  Wait Until Element Is Visible  xpath=${field_xpath}
 
   ${value}=    Get Text    xpath=${field_xpath}
@@ -1783,7 +1488,7 @@ Get Last Feature Index
   ${tender_status}=    Get Value    xpath=//*[@name='tender[status]']
   Run Keyword If  '${tender_status}' != 'active.enquiries' and '${mode}' == 'belowThreshold'  Fail    "Період уточнень закінчився"
   # поставить проверку для опен
-  Дочекатися І Клікнути      xpath=//span[text()='Питання та відповіді']
+  Дочекатися І Клікнути      xpath=//span[contains(.,'Питання та відповіді')]
   Wait Until Keyword Succeeds  300 s  10 s  subkeywords.Wait For QuestionID   ${question_id}
 #cat  :FOR    ${INDEX}    IN RANGE    1    2
 #cat  \  Sleep  5
@@ -2151,12 +1856,15 @@ Get Last Feature Index
 #cat  Run Keyword If  ${NUMBER_OF_LOTS}==1 and '${mode}' == 'open_competitive_dialogue' and '${DIALOGUE_TYPE}' == 'EU'  Set Suite Variable    @{ID}    ${lots_ids}
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію першим учасником"  Дочекатися І Клікнути    xpath=//input[@class='edit-bid-lot-enable']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію другим учасником"  Дочекатися І Клікнути    xpath=//input[@class='edit-bid-lot-enable']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
   Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue' and "${TEST_NAME}" == "Можливість подати пропозицію третім учасником"  Дочекатися І Клікнути    xpath=//input[@class='edit-bid-lot-enable']
 
-  Run Keyword If  ${NUMBER_OF_LOTS}==1 and "Неможливість подати цінову пропозицію без прив" not in "${TEST_NAME}" and '${mode}' not in 'open_esco'  Дочекатися І Клікнути    xpath=//input[@id='edit-bid-lot-add-0']
+  Run Keyword If  ${NUMBER_OF_LOTS}==1 and "Неможливість подати цінову пропозицію без прив" not in "${TEST_NAME}" and '${mode}' not in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@class,'purchase edit-bid-submit-button')]
   Run Keyword If  '${mode}' in 'open_esco'  Дочекатися І Клікнути    xpath=//input[contains(@value,'Подати пропозицію')]
   
 Змінити цінову пропозицію
@@ -2181,13 +1889,32 @@ Get Last Feature Index
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
-  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
-  Sleep  10
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
-  Sleep  25
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-add-document')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//a[contains(@id,'edit-bid-lot-add-document-0')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'document[type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Select From List By Value  xpath=//select[contains(@name,'document[type]')]  qualificationDocuments
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']
+
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//select[contains(@name,'lot_document[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Select From List By Value  xpath=//select[contains(@name,'lot_document[document_type]')]  qualificationDocuments
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Choose File       xpath=//*[@id='edit-bid-lot-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
+
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  
+#cat  Select From List By Value  xpath=//*[@name='bid[document_type]']  qualificationDocuments
+#cat  Sleep  2
+#cat  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
+#cat  Sleep  10
+#cat  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
+#cat  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+#cat  Sleep  25
 
 
 Змінити документ в ставці
@@ -2197,12 +1924,21 @@ Get Last Feature Index
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 1000)
-  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]    ${path}
-  Sleep  10
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+  Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//select[contains(@name,'document[type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Choose File       xpath=//*[@id='edit-bid-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-document-save']
+
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//select[contains(@name,'lot_document[document_type]')]  5
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Choose File       xpath=//*[@id='edit-bid-lot-document']    ${path}
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Wait Until Element Is Visible  xpath=//a[contains(@class,'areaukrzak-delete-link purchase_button')]  15
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
+
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
   Sleep  25
 
 
@@ -2213,13 +1949,16 @@ Get Last Feature Index
   Click Element    xpath=//*[text()="Редагувати пропозицію"]
   Execute JavaScript                  window.scrollTo(0, 800)
   Sleep  2
-  Select From List By Value  xpath=//*[@name='bid[document_type]']  commercialProposal
-  Sleep  2
-  Choose File       xpath=//*[@name="multifiles[]"]        ${CURDIR}/Key-6.dat
-  Sleep  10
-  Click Element    xpath=//input[@id='edit-bid-document-private']
-  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//*[@value="Редагувати пропозицію"]
-  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[@id='edit-bid-lot-add-0']
+#cat  Дочекатися І Клікнути    xpath=//a[contains(text(),'${doc_id}')]
+  Дочекатися І Клікнути    xpath=//a[contains(@class,'edit-bid-lot-replace-document')]
+  Run Keyword If  '${mode}' in 'open_competitive_dialogue'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-decision')]
+  Run Keyword If  '${mode}' in 'openeu'  Click Element    xpath=//input[contains(@id,'edit-bid-lot-document-confidentiality')]
+  Run Keyword If  '${mode}' in 'openeu'  Input text    xpath=//textarea[contains(@name,'lot_document[confidentiality_rationale]')]  ${doc_data.data.confidentialityRationale}
+  Run Keyword And Ignore Error  Дочекатися І Клікнути                       xpath=//button[@id='edit-bid-lot-document-save']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[absense]']
+  Run Keyword If  '${mode}' not in 'belowThreshold'  Дочекатися І Клікнути    xpath=//input[@name='bid[confirmation]']
+  Run Keyword If  ${NUMBER_OF_LOTS}==0  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
+  Run Keyword If  ${NUMBER_OF_LOTS}==1  Click Element    xpath=//input[contains(@class,'button_purchase edit-bid-submit-button')]
   Sleep  25
 
 
@@ -2331,7 +2070,8 @@ Get Last Feature Index
   ...  AND  Sleep  2
   ...  AND  Choose File       xpath=//*[@name="multifiles[]"]    ${CURDIR}/Key-6.dat
   ...  AND  Sleep  10
-  ${qual}=   Convert To String     Учасник переговорів
+#cat  ${qual}=   Convert To String     Учасник переговорів
+  ${qual}=   Convert To String     Відхилити пропозицію
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-award-qualification-form-action']  ${qual}
   Дочекатися І Клікнути  id=edit-tender-dialog-award-qualification-reason1
   Дочекатися І Клікнути  id=edit-tender-dialog-award-qualification-reason2
@@ -2574,8 +2314,11 @@ Get Last Feature Index
   Run Keyword If    ${qualification_num}==-1 and '${MODE}' in 'open_esco'  Choose File       xpath=//*[@id="edit-tender-dialog-qualification-form-document"]    ${CURDIR}/Key-6.dat
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
-  ${qual}=   Convert To String     Допустити до аукціону
-  Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
+  ${qual}=   Convert To String     active
+#cat  ${qual}=   Run Keyword If    '${MODE}' in 'open_competitive_dialogue'  Convert To String     Допустити до переговорів
+#cat  ...  ELSE  Convert To String     Допустити до аукціону
+#cat  Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
+  Select From List By Value  xpath=//*[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   
   Дочекатися І Клікнути  name=qualification[permit]
   Дочекатися І Клікнути  name=qualification[law]
@@ -2598,7 +2341,8 @@ Get Last Feature Index
   Run Keyword If    ${qualification_num}==1    Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  Run Keyword If    ${qualification_num}==1  Click Element    xpath=//a[@id='edit-tender-prequalification-qualification-go-button-1']
   Run Keyword If    ${qualification_num}==1  Execute Javascript    $( "#edit-tender-prequalification-qualification-go-button-1" ).trigger( 'click' )
-  ${qual}=   Convert To String     Відмовити в участі в аукціоні
+  ${qual}=   Run Keyword If    '${MODE}' in 'open_competitive_dialogue'  Convert To String     Відмовити в переговорах
+  ...  ELSE  Convert To String     Відмовити в участі в аукціоні
   Select From List By Label  xpath=//select[@id='edit-tender-dialog-qualification-form-action']  ${qual}
   ${qual_doc}=   Convert To String     Повідомлення про рішення
   Select From List By Label  xpath=//*[@id='edit-tender-dialog-qualification-form-document-type']  ${qual_doc}
@@ -2749,7 +2493,7 @@ Position Should Equals
   Wait Until Keyword Succeeds  30 x  1 s  Page Should Contain Element  id=SignDataButton
   Wait Until Page Does Not Contain  Зчитування ключа  30
   Execute Javascript  $(".fade.modal.in").scrollTop(2000)
-#новшество  
+#новшество  Макуха Юрій
   Run Keyword If  '${MODE}' in "reporting negotiation belowThreshold openua openeu open_competitive_dialogue openua_defense open_esco"  Wait And Select From List By Label  id=CAsServersSelect  Тестовий ЦСК АТ "ІІТ"
   ${status}=  Run Keyword And Return Status  Page Should Contain  Оберіть файл з особистим ключем (зазвичай з ім'ям Key-6.dat) та вкажіть пароль захисту
   Capture Page Screenshot
@@ -2762,7 +2506,7 @@ Position Should Equals
   ...  AND  Capture Page Screenshot
   ...  AND  Дочекатися І Клікнути  id=PKeyReadButton
   ...  AND  Capture Page Screenshot
-  ...  AND  Wait Until Page Contains  Макуха Юрій  10
+  ...  AND  Wait Until Page Contains  Користувач Укртендерс  10
   ...  AND  Capture Page Screenshot
   Дочекатися І Клікнути  id=SignDataButton
   Capture Page Screenshot
@@ -2847,14 +2591,16 @@ Position Should Equals
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
   Click Element  name=tender[has_funder]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Редагувати закупівлю
   
 Додати донора
   [Arguments]  ${username}  ${tender_uaid}  ${funders_data}
   Go To  http://test.ukrtender.com.ua/tender-detail/?id=${tender_uaid}
 #cat  ukrtender.Пошук тендера по ідентифікатору  ${username}  ${tender_uaid}
-  Click Element  name=tender[has_funder]
+  Дочекатися І Клікнути  name=tender[has_funder]
   Дочекатися І Клікнути               xpath=//*[text()="Редагувати закупівлю"]
-
+  Run Keyword And Ignore Error  Редагувати закупівлю
+  
 Пошук тендера за кошти донора
   [Arguments]  ${username}  ${funder_id}
   Switch browser   ${username}
@@ -2930,7 +2676,8 @@ Position Should Equals
   Run Keyword If  '${items[0].additionalClassifications[0].scheme}' != 'ДКПП' or ${is_MOZ1}  Вибрати додатковий класифікатор предмету плану  ${items}  0  ${is_MOZ1}
 
   Input Text  xpath=//input[@name='plan[items][0][name]']  ${items[0].description}
-  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${items[0].quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${items[0].quantity}
+  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${item_quantity}
   Select From List By Label  xpath=//select[@name='plan[items][0][unit]']  ${items[0].unit.name}
   ${enddate}=  ukrtender_service.convert_date_to_string  ${items[0].deliveryDate.endDate}
   Input Text  xpath=//input[@name='plan[items][0][delivery_end_date]']  ${enddate}
@@ -2953,7 +2700,8 @@ Position Should Equals
   Run Keyword If  '${items[1].additionalClassifications[0].scheme}' != 'ДКПП' or ${is_MOZ1}  Вибрати додатковий класифікатор предмету плану  ${items}  1  ${is_MOZ1}
 
   Input Text  xpath=//input[@name='plan[items][1][name]']  ${items[1].description}
-  Input Text  xpath=//input[contains(@name,'plan[items][1][quantity]')]  ${items[1].quantity}
+  ${item_quantity1}=        convert_float_to_string_3f  ${items[1].quantity}
+  Input Text  xpath=//input[contains(@name,'plan[items][1][quantity]')]  ${item_quantity1}
   Select From List By Label  xpath=//select[@name='plan[items][1][unit]']  ${items[1].unit.name}
   Select From List By Label  xpath=//select[@name='plan[items][1][unit]']  ${items[1].unit.name}
   ${enddate}=  ukrtender_service.convert_date_to_string  ${items[1].deliveryDate.endDate}
@@ -3124,7 +2872,9 @@ Position Should Equals
     \  ${index_xpath}=  privatmarket_service.sum_of_numbers  ${index}  1
     \  Run Keyword If  ${index} > 0  Click Element  xpath=//button[@data-id='actAddItem']
     \  Wait Element Visibility And Input Text  xpath=(//input[@data-id='description'])[${index_xpath}]  ${items[${index}].description}
-    \  Input Text  xpath=(//input[@data-id='quantity'])[${index_xpath}]  ${items[${index}].quantity}
+    \  ${item_quantity}=        convert_float_to_string_3f  ${items[index].quantity}
+#cat    \  Input Text  xpath=(//input[@data-id='quantity'])[${index_xpath}]  ${items[${index}].quantity}
+    \  Input Text  xpath=(//input[@data-id='quantity'])[${index_xpath}]  ${item_quantity}
     \  Select From List By Label  xpath=(//select[@data-id='unit'])[${index_xpath}]  ${items[${index}].unit.name}
     \  Set Date In Item  ${index}  deliveryDate  endDate  ${items[${index}].deliveryDate.endDate}
     Дочекатися І Клікнути  xpath=//input[@value='Редагувати план']
@@ -3140,7 +2890,9 @@ Position Should Equals
   Run Keyword If  '${parameter}' == 'budget.amount'  Input Text  xpath=//input[@name='plan[amount]']  ${amount}
 
   Run Keyword If  '${parameter}' == 'items[0].quantity'  Clear Element Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]
-  Run Keyword If  '${parameter}' == 'items[0].quantity'  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${value}
+  ${item_quantity}=    Run Keyword If  '${parameter}' == 'items[0].quantity'      convert_float_to_string  ${value}
+  Run Keyword If  '${parameter}' == 'items[0].quantity'  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${item_quantity}
+#cat  Run Keyword If  '${parameter}' == 'items[0].quantity'  Input Text  xpath=//input[contains(@name,'plan[items][0][quantity]')]  ${value}
   ${enddate}=  Run Keyword If  '${parameter}' == 'items[0].deliveryDate.endDate'  ukrtender_service.convert_date_to_string  ${value}
   Run Keyword If  '${parameter}' == 'items[0].deliveryDate.endDate'  Clear Element Text  xpath=//input[@name='plan[items][0][delivery_end_date]']
   Run Keyword If  '${parameter}' == 'items[0].deliveryDate.endDate'  Input Text  xpath=//input[@name='plan[items][0][delivery_end_date]']  ${enddate}
@@ -3165,7 +2917,8 @@ Position Should Equals
   Run Keyword If  '${item.additionalClassifications[0].scheme}' != 'ДКПП' or ${is_MOZ1}  Вибрати додатковий класифікатор предмету плану2  ${item}  2  ${is_MOZ1}
 
   Input Text  xpath=//input[@name='plan[items][2][name]']  ${item.description}
-  Input Text  xpath=//input[contains(@name,'plan[items][2][quantity]')]  ${item.quantity}
+  ${item_quantity}=        convert_float_to_string_3f  ${item.quantity}
+  Input Text  xpath=//input[contains(@name,'plan[items][2][quantity]')]  ${item_quantity}
   Select From List By Label  xpath=//select[@name='plan[items][2][unit]']  ${item.unit.name}
 
   Дочекатися І Клікнути  xpath=//input[@value='Редагувати план']
@@ -3174,7 +2927,7 @@ Position Should Equals
 Видалити предмет закупівлі плану
   [Arguments]  ${tender_owner}  ${tender_uaid}  ${item}
   ukrtender.Пошук плану по ідентифікатору  ${tender_owner}  ${tender_uaid}
-  Дочекатися І Клікнути  xpath=//input[@value='Видалити товар або послугу' and contains(@data-index,'2')]
+  Дочекатися І Клікнути  xpath=//input[@value='Видалити товар або послугу' and contains(@data-index,'1')]
   Дочекатися І Клікнути  xpath=//input[@value='Редагувати план']
 
 
@@ -3215,8 +2968,8 @@ Position Should Equals
 
   ${value}=  Run Keyword If  '${field_name}' == 'budget.amount'  convert_string_to_float  ${value}
   ...  ELSE IF  '${field_name}' == 'tender.tenderPeriod.startDate'  ukrtender_service.convert_time  ${value}
-  ...  ELSE IF  '${field_name}' == 'items[0].quantity'  Convert To Integer  ${value}
-  ...  ELSE IF  '${field_name}' == 'items[1].quantity'  Convert To Integer  ${value}
+  ...  ELSE IF  '${field_name}' == 'items[0].quantity'  convert_string_to_float  ${value}
+  ...  ELSE IF  '${field_name}' == 'items[1].quantity'  convert_string_to_float  ${value}
   ...  ELSE  Set Variable  ${value}
   ${value}=  Run Keyword If  '${field_name}' == 'tender.tenderPeriod.startDate'  ukrtender_service.data_zone  ${value}
   ...  ELSE  Set Variable  ${value}
@@ -3231,3 +2984,13 @@ Position Should Equals
   ...  ELSE IF  '${field_name}' == 'contract' and '${status}' == 'pending'  Get Element Attribute  xpath=//*[contains(@contract-status,'pending')]@contract-index
   ...  ELSE IF  '${field_name}' == 'contract' and '${status}' == 'active'  Get Element Attribute  xpath=//*[contains(@contract-status,'active')]@contract-index
   [Return]  ${value}
+
+Редагувати закупівлю
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-information-dialog-submit']  5
+  Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-confirm-dialog-submit']  5
+  Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-confirm-dialog-submit']
+#cat  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//*[text()="Редагувати закупівлю"]  5
+#cat  Run Keyword And Ignore Error  Click Element   xpath=//*[text()="Редагувати закупівлю"]
+  Run Keyword And Ignore Error  Wait Until Element Is Visible  xpath=//button[@id='edit-tender-information-dialog-submit']  5
+  Run Keyword And Ignore Error  Click Element   xpath=//button[@id='edit-tender-information-dialog-submit']

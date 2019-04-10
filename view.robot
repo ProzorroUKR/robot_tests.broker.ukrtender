@@ -40,8 +40,9 @@ Resource  ukrtender.robot
 Отримати інформацію про minimalStep.amount
   ${type_tender}=    Get Text            xpath=//*[@name='tender[procedure_type]']
   ${value_below}=  Get Value    xpath=//*[@name='tender[rate_amount]']
-  ${value_open}=  Get Value           xpath=//*[@name='tender[rate_amount]']
-  ${return_value}=    Set Variable If    '${type_tender}' == 'Допорогові закупівлі'    ${value_open}    ${value_below}
+#cat  ${value_open}=  Get Value           xpath=//*[@name='tender[rate_amount]']
+  ${value_open}=  Get Value           xpath=//*[@name='tender[lots][0][minimal_step]']
+  ${return_value}=    Set Variable If    '${type_tender}' == 'Допорогові закупівлі'    ${value_below}   ${value_open}
   ${return_value}=  ukrtender_service.convert_float_to_string    ${return_value}
   ${return_value}=  Convert To Number    ${return_value}    2
   [return]  ${return_value}
@@ -134,12 +135,14 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[0].deliveryDate.startDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][reception_from]"]
-  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+#cat  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+  ${return_value}=  ukrtender_service.convert_delivery_date_to_string  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryDate.endDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][0][reception_to]"]
-  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+#cat  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+  ${return_value}=  ukrtender_service.convert_delivery_date_to_string  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[0].deliveryLocation.latitude
@@ -237,7 +240,8 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[1].deliveryDate.endDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][1][reception_to]"]
-  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+#cat  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+  ${return_value}=  ukrtender_service.convert_delivery_date_to_string  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[1].deliveryLocation.latitude
@@ -335,7 +339,8 @@ Resource  ukrtender.robot
 
 Отримати інформацію про items[2].deliveryDate.endDate
   ${return_value}=  Get Value           xpath=//*[@name="tender[items][2][reception_to]"]
-  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+#cat  ${return_value}=  ukrtender_service.parse_date  ${return_value}
+  ${return_value}=  ukrtender_service.convert_delivery_date_to_string  ${return_value}
   [return]  ${return_value}
 
 Отримати інформацію про items[2].deliveryLocation.latitude
@@ -658,7 +663,8 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про documents[0].title
-  ${return_value}  Get Value  xpath=//*[@name='tender[documents]']
+#cat  ${return_value}  Get Value  xpath=//*[@name='tender[documents]']
+  ${return_value}  Get Text  xpath=//div[@id='edit-tender-document-container-0']//a[@class='edit-tender-general-document']
   [return]  ${return_value}
 
 Отримати інформацію про awards[0].documents[0].title
@@ -1162,6 +1168,12 @@ Resource  ukrtender.robot
   [return]  ${return_value}
 
 Отримати інформацію про qualificationPeriod.endDate
+  ${end_date}=  Get Value  xpath=//*[@name='tender[qualification_period_end]']
+  :FOR    ${INDEX}    IN RANGE    1    30
+  \  Run Keyword If    '${end_date}' != ''    Exit For Loop
+  \  Sleep  5
+  \  Reload Page
+  \  ${end_date}=  Get Value  xpath=//*[@name='tender[qualification_period_end]']
   ${return_value}  Get Value  xpath=//*[@name='tender[qualification_period_end]']
   [return]  ${return_value}  
 
@@ -1220,7 +1232,7 @@ Resource  ukrtender.robot
 Отримати інформацію про funders[0].name
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
 #cat  ${return_value}=  Set Variable If  '${value}' == 'World Bank'  World Bank  none
-  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  Світовий Банк  none
+  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  Світовий Банк  Глобальний фонд
   [return]  ${return_value}
 
 Отримати інформацію про funders[0].address.locality
@@ -1249,7 +1261,7 @@ Resource  ukrtender.robot
   
 Отримати інформацію про funders[0].identifier.id
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  44000  none
+  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  44000  47045
   [return]  ${return_value}
 
 Отримати інформацію про funders[0].identifier.legalName
@@ -1259,7 +1271,7 @@ Resource  ukrtender.robot
   
 Отримати інформацію про funders[0].identifier.scheme
   ${value}  Get Value  xpath=//input[@name='tender[funders][0][name]']
-  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  XM-DAC  none
+  ${return_value}=  Set Variable If  '${value}' == 'Світовий Банк'  XM-DAC  XM-DAC
   [return]  ${return_value}
 
 #                                  ESCO                          #
